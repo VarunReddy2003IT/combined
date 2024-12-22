@@ -1,28 +1,34 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './components/AuthContext'; // Import AuthProvider for state management
 import Header from './Header';
-import Home from './components/Home';
-import About from './components/About';
+import Navbar from './Navbar';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Navbar from './Navbar';
-import SuccessPage from './components/SuccessPage'; // New component for success page
+import Clubs from './components/Clubs';
+import Profile from './components/Profile';
+import Home from './components/Home';
+import About from './components/About';
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <Navbar />
-      <div className="content">
+    <AuthProvider> {/* Wrap the application in AuthProvider */}
+      <Router>
+        <Header />
+        <Navbar /> {/* Navbar dynamically updates based on login state */}
         <Routes>
+          {/* Default route */}
+          <Route path="/" element={<Home />} />
+          {/* Other routes */}
           <Route path="/app" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/success" element={<SuccessPage />} /> {/* Route for success page */}
+          <Route path="/clubs" element={<Clubs />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
