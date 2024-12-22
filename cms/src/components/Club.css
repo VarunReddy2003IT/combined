@@ -1,0 +1,55 @@
+/* Overall container styling */
+.club-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh; /* Full screen height */
+    text-align: center;
+    background-color: #f8f9fa; /* Light background for contrast */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Title styling */
+  .club-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Button group container */
+  .button-group {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    gap: 20px; /* Space between buttons */
+  }
+  
+  /* Button styling */
+  .club-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 200px; /* Fixed button width for uniformity */
+    text-align: center;
+  }
+  
+  /* Button hover effect */
+  .club-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slight zoom-in effect */
+  }
+  
+  /* Responsive design for larger screens */
+  @media (min-width: 768px) {
+    .button-group {
+      flex-direction: row; /* Arrange buttons horizontally */
+      gap: 30px; /* Increase spacing between buttons */
+    }
+  }
+  

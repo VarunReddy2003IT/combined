@@ -6,8 +6,8 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-left: 4vw;
-  margin-right: 4vw;
+  margin-left: 3vw;
+  margin-right: 3vw;
 }
 
 /* List styling for navbar items */
@@ -22,7 +22,7 @@
 
 /* Styling for each navbar item */
 .navbar li {
-  margin: 5px 8px; /* Reduced margin for closer links */
+  margin: 5px 3px; /* Reduced margin for closer links */
 }
 
 /* Link styling */
@@ -48,7 +48,7 @@
   }
 
   .navbar li {
-    margin: 0 5px; /* Further reduce the margin between links */
+    margin: 0 1px; /* Further reduce the margin between links */
   }
 
   .navbar a {
@@ -60,5 +60,8 @@
 @media (max-width: 480px) {
   .navbar a {
     font-size: 14px; /* Even smaller font size for very small screens */
+  }
+  .navbar li {
+    margin: 0 1px; /* Further reduce the margin between links */
   }
 }

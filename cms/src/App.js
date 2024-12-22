@@ -5,11 +5,13 @@ import Header from './Header';
 import Navbar from './Navbar';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Clubs from './components/Clubs';
+import Clubs from './components/Club';
 import Profile from './components/Profile';
 import Home from './components/Home';
 import About from './components/About';
-
+import Technical from './ClubTypes/Technical';
+import Social from './ClubTypes/Social';
+import Cultural from './ClubTypes/Cultural';
 function App() {
   return (
     <AuthProvider> {/* Wrap the application in AuthProvider */}
@@ -26,6 +28,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/clubs" element={<Clubs />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/clubs/technical" element={<Technical />} />
+          <Route path="/clubs/social" element={<Social />} />
+          <Route path="/clubs/cultural" element={<Cultural />} />
         </Routes>
       </Router>
     </AuthProvider>
