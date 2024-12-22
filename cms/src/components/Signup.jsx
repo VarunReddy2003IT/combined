@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './Signup.css';
 
@@ -7,9 +7,8 @@ function Signup() {
   const [collegeId, setCollegeId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
   const [role, setRole] = useState('member'); // Default role as 'member'
-  const [loading, setLoading] = useState(false);  // To track loading state
+  const [loading, setLoading] = useState(false); // To track loading state
   const [error, setError] = useState(''); // To track error messages
 
   // Handle form input changes
@@ -23,8 +22,6 @@ function Signup() {
       setEmail(value);
     } else if (name === 'password') {
       setPassword(value);
-    } else if (name === 'rePassword') {
-      setRePassword(value);
     } else if (name === 'role') {
       setRole(value);
     }
@@ -33,20 +30,14 @@ function Signup() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);  // Set loading to true while making the request
+    setLoading(true); // Set loading to true while making the request
 
     // Clear previous error
     setError('');
 
     // Validations
-    if (!name.trim() || !collegeId.trim() || !email.trim() || !password || !rePassword) {
+    if (!name.trim() || !collegeId.trim() || !email.trim() || !password) {
       setError('Please fill in all fields');
-      setLoading(false);
-      return;
-    }
-
-    if (password !== rePassword) {
-      setError('Passwords do not match');
       setLoading(false);
       return;
     }
@@ -74,7 +65,6 @@ function Signup() {
       setCollegeId('');
       setEmail('');
       setPassword('');
-      setRePassword('');
       setLoading(false);
     } catch (error) {
       setError(error.response?.data.message || 'Failed to create account. Please try again later.');
@@ -116,14 +106,6 @@ function Signup() {
           value={password}
           onChange={handleInputChange}
           placeholder="Enter your password"
-        />
-
-        <input
-          type="password"
-          name="rePassword"
-          value={rePassword}
-          onChange={handleInputChange}
-          placeholder="Re-enter your password"
         />
 
         <select name="role" value={role} onChange={handleInputChange}>
