@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import './Signup.css';
 
@@ -60,7 +60,7 @@ function Signup() {
 
     try {
       // Send signup data to backend
-      const response = await axios.post('http://localhost:5000/api/signup', { 
+      const response = await axios.post('https://finalbackend-8.onrender.com/api/signup', { 
         name, 
         collegeId, 
         email, 
@@ -86,7 +86,6 @@ function Signup() {
     <div className='overall'>
       <h3>Signup</h3>
       <form onSubmit={handleSubmit}>
-        {/* Name Input */}
         <input
           type="text"
           name="name"
@@ -95,7 +94,6 @@ function Signup() {
           placeholder="Enter your name"
         />
 
-        {/* College ID Input */}
         <input
           type="text"
           name="collegeId"
@@ -104,7 +102,6 @@ function Signup() {
           placeholder="Enter your College ID"
         />
 
-        {/* Email Input */}
         <input
           type="email"
           name="email"
@@ -113,7 +110,6 @@ function Signup() {
           placeholder="Enter your email"
         />
 
-        {/* Password Input */}
         <input
           type="password"
           name="password"
@@ -122,7 +118,6 @@ function Signup() {
           placeholder="Enter your password"
         />
 
-        {/* Re-enter Password Input */}
         <input
           type="password"
           name="rePassword"
@@ -131,17 +126,14 @@ function Signup() {
           placeholder="Re-enter your password"
         />
 
-        {/* Role Dropdown */}
         <select name="role" value={role} onChange={handleInputChange}>
           <option value="admin">Admin</option>
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
 
-        {/* Error Message */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Submit Button */}
         <div className="button-container">
           <button type="submit" disabled={loading}>
             {loading ? 'Processing...' : 'Submit'}
