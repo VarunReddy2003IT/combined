@@ -1,0 +1,64 @@
+/* General navbar styling */
+.navbar {
+  background-color: #333;
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 4vw;
+  margin-right: 4vw;
+}
+
+/* List styling for navbar items */
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Styling for each navbar item */
+.navbar li {
+  margin: 5px 8px; /* Reduced margin for closer links */
+}
+
+/* Link styling */
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for links */
+.navbar a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: row; /* Ensure links are in a single line */
+    justify-content: space-between; /* Spread links across the navbar */
+  }
+
+  .navbar li {
+    margin: 0 5px; /* Further reduce the margin between links */
+  }
+
+  .navbar a {
+    font-size: 16px; /* Slightly smaller font size for mobile */
+  }
+}
+
+/* Media query for very small screens (portrait mobile) */
+@media (max-width: 480px) {
+  .navbar a {
+    font-size: 14px; /* Even smaller font size for very small screens */
+  }
+}

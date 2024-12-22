@@ -1,0 +1,114 @@
+/* Reset and box-sizing setup for consistent layout */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Ensures padding and border don't cause overflow */
+}
+
+/* General container styling for the About page */
+.about-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2vh auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Prevents any overflow */
+}
+
+/* Title styling for the About page */
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Description text styling */
+.about-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #555;
+  text-align: justify;
+  margin-bottom: 2rem;
+}
+
+/* Mission and Vision sections */
+section {
+  margin-top: 3rem;
+}
+
+section h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Styling for the content inside each section */
+section p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666;
+  text-align: justify;
+}
+
+/* Team section styling */
+.team p {
+  font-style: italic;
+  color: #777;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .about-container {
+    padding: 4vw;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  section h2 {
+    font-size: 1.8rem;
+  }
+
+  .about-description, section p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  section h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-description, section p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  section h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-description, section p {
+    font-size: 0.9rem;
+  }
+
+  .about-container {
+    padding: 6vw;
+  }
+}
