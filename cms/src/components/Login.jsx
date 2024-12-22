@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
@@ -9,8 +9,6 @@ function Login() {
   const [role, setRole] = useState('member'); // Default role
   const [message, setMessage] = useState(''); // For feedback messages
   const navigate = useNavigate(); // For navigation
-
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,16 +42,23 @@ function Login() {
       setEmail('');
       setPassword('');
 
-      // Store user info in localStorage
-      const userData = { email, role };
-      localStorage.setItem('user', JSON.stringify(userData));
+      // Check if localStorage is available before setting data
+      try {
+        if (typeof localStorage !== 'undefined') {
+          const userData = { email, role };
+          localStorage.setItem('user', JSON.stringify(userData));
 
-      // Set a timer to log out the user after 2 minutes (120,000ms)
-      setTimeout(() => {
-        localStorage.removeItem('user'); // Remove user data from localStorage
-        alert('You have been logged out due to inactivity.');
-        navigate('/login'); // Redirect to the login page
-      }, 120000); // 120,000 ms = 2 minutes
+          // Set a timer to log out the user after 2 minutes (120,000ms)
+          setTimeout(() => {
+            localStorage.removeItem('user'); // Remove user data from localStorage
+            alert('You have been logged out due to inactivity.');
+            navigate('/login'); // Redirect to the login page
+          }, 120000); // 120,000 ms = 2 minutes
+        }
+      } catch (e) {
+        console.error('LocalStorage error:', e);
+        sessionStorage.setItem('user', JSON.stringify({ email, role })); // Fallback to sessionStorage
+      }
 
       // Navigate to the success page with role information
       navigate(`/success?role=${role}`);
