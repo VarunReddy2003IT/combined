@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom'; // Make sure 'Link' is imported
 import { AuthContext } from './components/AuthContext';
 import './Navbar.css';
 
@@ -9,18 +9,18 @@ function Navbar() {
   return (
     <nav className="navbar">
       <ul>
-        <li><Link to="/app">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
+        <li><NavLink to="/app" activeClassName="active">Home</NavLink></li>
+        <li><NavLink to="/about" activeClassName="active">About</NavLink></li>
         {isLoggedIn ? (
           <>
-            <li><Link to="/clubs">Clubs</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/login" onClick={logout}>Logout</Link></li>
+            <li><NavLink to="/clubs" activeClassName="active">Clubs</NavLink></li>
+            <li><NavLink to="/profile" activeClassName="active">Profile</NavLink></li>
+            <li><Link to="/logout" onClick={logout}>Logout</Link></li> {/* Directly call logout here */}
           </>
         ) : (
           <>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Signup</Link></li>
+            <li><NavLink to="/login" activeClassName="active">Login</NavLink></li>
+            <li><NavLink to="/signup" activeClassName="active">Signup</NavLink></li>
           </>
         )}
       </ul>

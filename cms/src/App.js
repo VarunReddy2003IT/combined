@@ -12,6 +12,8 @@ import About from './components/About';
 import Technical from './ClubTypes/Technical';
 import Social from './ClubTypes/Social';
 import Cultural from './ClubTypes/Cultural';
+import ProtectedRoute from './ProtectedRoute'; // Import the ProtectedRoute component
+
 function App() {
   return (
     <AuthProvider> {/* Wrap the application in AuthProvider */}
@@ -24,13 +26,15 @@ function App() {
           {/* Other routes */}
           <Route path="/app" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/clubs" element={<Clubs />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/clubs/technical" element={<Technical />} />
           <Route path="/clubs/social" element={<Social />} />
           <Route path="/clubs/cultural" element={<Cultural />} />
+          
+          {/* Protect the login route, redirect to home if already logged in */}
+          <Route path="/login" element={<ProtectedRoute element={<Login />} />} />
         </Routes>
       </Router>
     </AuthProvider>

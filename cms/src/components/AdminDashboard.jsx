@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     // Fetch pending signup requests for admin/lead roles
     const fetchPendingRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/signup/pending'); // This route should return pending requests
+        const response = await axios.get('https://finalbackend-8.onrender.com/api/signup/pending'); // This route should return pending requests
         setPendingRequests(response.data);
       } catch (err) {
         setError('Failed to fetch pending requests');
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/signup/approve/${id}`);
+      const response = await axios.get(`https://finalbackend-8.onrender.com/api/signup/approve/${id}`);
       alert(response.data.message);
       // Refresh the list after approval
       setPendingRequests(pendingRequests.filter(request => request._id !== id));
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
 
   const handleReject = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/signup/reject/${id}`);
+      const response = await axios.get(`https://finalbackend-8.onrender.com/api/signup/reject/${id}`);
       alert(response.data.message);
       // Refresh the list after rejection
       setPendingRequests(pendingRequests.filter(request => request._id !== id));

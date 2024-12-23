@@ -36,10 +36,12 @@ function Login() {
 
       const userData = { email, role };
 
-      // Attempt to save user data in localStorage with error handling
+      // Safely save user data to localStorage
       try {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== 'undefined' && localStorage) {
           localStorage.setItem('userData', JSON.stringify(userData));
+        } else {
+          console.error('localStorage is not available');
         }
       } catch (storageError) {
         console.error('Error saving to localStorage:', storageError);

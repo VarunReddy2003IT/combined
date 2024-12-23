@@ -36,7 +36,7 @@ function Signup() {
     setError('');
 
     // Validations
-    if (!name.trim() || !collegeId.trim() || !email.trim() || !password) {
+    if (!name.trim() || !collegeId.trim() || !email.trim() || !password.trim()) {
       setError('Please fill in all fields');
       setLoading(false);
       return;
@@ -45,6 +45,14 @@ function Signup() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gvpce\.ac\.in$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email in the format: username@gvpce.ac.in');
+      setLoading(false);
+      return;
+    }
+
+    // Password validation (minimum 8 characters, one number and one special character)
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError('Password must be at least 8 characters long and contain a number and a special character');
       setLoading(false);
       return;
     }
@@ -73,7 +81,7 @@ function Signup() {
   };
 
   return (
-    <div className='overall'>
+    <div className="overall">
       <h3>Signup</h3>
       <form onSubmit={handleSubmit}>
         <input
@@ -82,6 +90,7 @@ function Signup() {
           value={name}
           onChange={handleInputChange}
           placeholder="Enter your name"
+          disabled={loading}
         />
 
         <input
@@ -90,6 +99,7 @@ function Signup() {
           value={collegeId}
           onChange={handleInputChange}
           placeholder="Enter your College ID"
+          disabled={loading}
         />
 
         <input
@@ -98,6 +108,7 @@ function Signup() {
           value={email}
           onChange={handleInputChange}
           placeholder="Enter your email"
+          disabled={loading}
         />
 
         <input
@@ -106,9 +117,10 @@ function Signup() {
           value={password}
           onChange={handleInputChange}
           placeholder="Enter your password"
+          disabled={loading}
         />
 
-        <select name="role" value={role} onChange={handleInputChange}>
+        <select name="role" value={role} onChange={handleInputChange} disabled={loading}>
           <option value="admin">Admin</option>
           <option value="lead">Lead</option>
           <option value="member">Member</option>
