@@ -35,7 +35,17 @@ function Login() {
       });
 
       const userData = { email, role };
-      login(userData); // Update login state
+
+      // Attempt to save user data in localStorage with error handling
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('userData', JSON.stringify(userData));
+        }
+      } catch (storageError) {
+        console.error('Error saving to localStorage:', storageError);
+      }
+
+      login(userData); // Update login state in context
       setMessage(response.data.message);
       navigate('/app');
     } catch (error) {
