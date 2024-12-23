@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './components/AuthContext'; // Import AuthProvider for state management
+import { AuthProvider } from './components/AuthContext';
 import Header from './Header';
 import Navbar from './Navbar';
 import Login from './components/Login';
@@ -12,18 +12,16 @@ import About from './components/About';
 import Technical from './ClubTypes/Technical';
 import Social from './ClubTypes/Social';
 import Cultural from './ClubTypes/Cultural';
-import ProtectedRoute from './ProtectedRoute'; // Import the ProtectedRoute component
+import ProtectedRoute from './ProtectedRoute'; // Custom ProtectedRoute Component
 
 function App() {
   return (
-    <AuthProvider> {/* Wrap the application in AuthProvider */}
+    <AuthProvider>
       <Router>
         <Header />
-        <Navbar /> {/* Navbar dynamically updates based on login state */}
+        <Navbar />
         <Routes>
-          {/* Default route */}
           <Route path="/" element={<Home />} />
-          {/* Other routes */}
           <Route path="/app" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/signup" element={<Signup />} />
@@ -32,9 +30,18 @@ function App() {
           <Route path="/clubs/technical" element={<Technical />} />
           <Route path="/clubs/social" element={<Social />} />
           <Route path="/clubs/cultural" element={<Cultural />} />
-          
-          {/* Protect the login route, redirect to home if already logged in */}
-          <Route path="/login" element={<ProtectedRoute element={<Login />} />} />
+
+          {/* Protect the login route */}
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute
+                element={<Login />}
+                redirectTo="/"
+                inverse={true} // Only accessible if not logged in
+              />
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>

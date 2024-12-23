@@ -7,7 +7,7 @@ import './Login.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('member'); 
+  const [role, setRole] = useState('member');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -36,20 +36,9 @@ function Login() {
 
       const userData = { email, role };
 
-      // Safely save user data to localStorage
-      try {
-        if (typeof localStorage !== 'undefined' && localStorage) {
-          localStorage.setItem('userData', JSON.stringify(userData));
-        } else {
-          console.error('localStorage is not available');
-        }
-      } catch (storageError) {
-        console.error('Error saving to localStorage:', storageError);
-      }
-
       login(userData); // Update login state in context
       setMessage(response.data.message);
-      navigate('/app');
+      navigate('/app'); // Redirect to home page on successful login
     } catch (error) {
       console.error('Error during login:', error);
       setMessage(error.response?.data?.message || 'Failed to login');
