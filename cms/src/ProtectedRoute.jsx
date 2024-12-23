@@ -5,12 +5,12 @@ import { AuthContext } from './components/AuthContext';
 const ProtectedRoute = ({ element, redirectTo, inverse = false }) => {
   const { isLoggedIn } = useContext(AuthContext);
 
+  // If inverse is true, it means the route is for login/signup (user should be logged out)
   if (inverse) {
-    // Redirect if logged in (for login/signup pages)
-    return isLoggedIn ? <Navigate to={redirectTo} /> : element;
+    return !isLoggedIn ? element : <Navigate to={redirectTo} />;
   }
 
-  // Redirect if not logged in (for protected pages)
+  // If inverse is false, it means the route is for protected pages (user should be logged in)
   return isLoggedIn ? element : <Navigate to={redirectTo} />;
 };
 

@@ -24,24 +24,47 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/app" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/clubs" element={<Clubs />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/clubs/technical" element={<Technical />} />
-          <Route path="/clubs/social" element={<Social />} />
-          <Route path="/clubs/cultural" element={<Cultural />} />
-
-          {/* Protect the login route */}
+          <Route
+            path="/signup"
+            element={
+              <ProtectedRoute
+                element={<Signup />}
+                redirectTo="/app"
+                inverse={true} // Redirect to /app if logged in
+              />
+            }
+          />
           <Route
             path="/login"
             element={
               <ProtectedRoute
                 element={<Login />}
-                redirectTo="/"
-                inverse={true} // Only accessible if not logged in
+                redirectTo="/app"
+                inverse={true} // Redirect to /app if logged in
               />
             }
           />
+          <Route
+            path="/clubs"
+            element={
+              <ProtectedRoute
+                element={<Clubs />}
+                redirectTo="/login" // Redirect to login if not logged in
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute
+                element={<Profile />}
+                redirectTo="/login" // Redirect to login if not logged in
+              />
+            }
+          />
+          <Route path="/clubs/technical" element={<Technical />} />
+          <Route path="/clubs/social" element={<Social />} />
+          <Route path="/clubs/cultural" element={<Cultural />} />
         </Routes>
       </Router>
     </AuthProvider>

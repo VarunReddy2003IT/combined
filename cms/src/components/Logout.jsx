@@ -1,21 +1,20 @@
 import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from './components/AuthContext';
 
 function Logout() {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    logout(); // Update the AuthContext state immediately
+    // Perform the logout logic
+    logout(); // Update AuthContext state
 
-    // Redirect after the state update
-    setTimeout(() => {
-      navigate('/'); // Redirect to the home page after logout
-    }, 100); // Short delay to ensure the state is updated before redirecting
-  }, [navigate, logout]);
+    // Navigate to the home page after logout
+    navigate('/'); // Redirect to home page or login page
+  }, [logout, navigate]);
 
-  return null; // No UI required
+  return null; // No UI needed for logout redirect
 }
 
 export default Logout;
