@@ -16,26 +16,41 @@
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Ensure the items are in a single line */
   justify-content: center;
+  align-items: center; /* Align items vertically in the center */
 }
 
 /* Styling for each navbar item */
 .navbar li {
-  margin: 5px 3px; /* Reduced margin for closer links */
+  margin: 5px 10px; /* Reduced margin for closer links */
 }
 
-/* Link styling */
+/* Remove all default button styles */
+.navbar button {
+  all: unset; /* Unset all default styles */
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: inline-block; /* Ensure the button is on the same line as other links */
+  transition: background-color 0.3s ease;
+}
+
+/* Link and button styling */
 .navbar a {
   color: white;
   text-decoration: none;
   font-size: 18px;
   padding: 5px 10px;
   transition: background-color 0.3s ease;
+  display: inline-block; /* Ensure both button and link are on the same line */
 }
 
-/* Hover effect for links */
-.navbar a:hover {
+/* Hover effect for links and button */
+.navbar a:hover,
+.navbar button:hover {
   background-color: #555;
   border-radius: 5px;
 }
@@ -51,14 +66,16 @@
     margin: 0 1px; /* Further reduce the margin between links */
   }
 
-  .navbar a {
+  .navbar a,
+  .navbar button {
     font-size: 16px; /* Slightly smaller font size for mobile */
   }
 }
 
 /* Media query for very small screens (portrait mobile) */
 @media (max-width: 480px) {
-  .navbar a {
+  .navbar a,
+  .navbar button {
     font-size: 14px; /* Even smaller font size for very small screens */
   }
   .navbar li {

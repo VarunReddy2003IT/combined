@@ -7,25 +7,15 @@ function Logout() {
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    // Safely clear user data from localStorage
-    try {
-      if (typeof localStorage !== 'undefined' && localStorage) {
-        localStorage.removeItem('user');
-      }
-    } catch (error) {
-      console.error('Error clearing localStorage:', error);
-    }
+    logout(); // Update the AuthContext state immediately
 
-    // Update the AuthContext state
-    logout();
-
-    // Ensure navigation happens after state update
+    // Redirect after the state update
     setTimeout(() => {
-      navigate('/'); // Redirect to home page after logout
-    }, 100); // Small delay to ensure state change is processed
+      navigate('/'); // Redirect to the home page after logout
+    }, 100); // Short delay to ensure the state is updated before redirecting
   }, [navigate, logout]);
 
-  return null; // No UI needed, as this is a functional redirect component
-} 
+  return null; // No UI required
+}
 
 export default Logout;
