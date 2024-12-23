@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import './Login.css';
+import Home from './Home';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ function Login() {
       const userData = { email, role };
       login(userData); // Update login state
       setMessage(response.data.message);
-      navigate('/success');
+      navigate('/Home');
     } catch (error) {
       console.error('Error during login:', error);
       setMessage(error.response?.data?.message || 'Failed to login');
