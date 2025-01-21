@@ -1,0 +1,131 @@
+.entirebody {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  box-sizing: border-box;
+}
+
+/* Header styling */
+header {
+  text-align: center;
+  margin-top: 2vw;
+  margin-bottom: 0;
+  color: #333;
+}
+
+header p {
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* Section styling */
+main section {
+  margin-bottom: 10px;
+}
+
+main section h2 {
+  font-size: 2em;
+  color: #444;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+main section div {
+  display: flex;
+  flex-direction: column; /* Stack image and text */
+  align-items: center; /* Center-align content */
+  gap: 15px; /* Add space between elements */
+  margin-bottom: 20px;
+}
+
+main section div img {
+  width: 200px; /* Fixed image width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+main section div h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 0;
+  text-align: left; /* Align heading to the left */
+  width: 100%; /* Ensure heading spans full width */
+}
+
+main section div p {
+  font-size: 1em;
+  color: #555;
+  max-width: 600px;
+  text-align: left; /* Align text to the left */
+  margin: 0;
+  text-indent: 2em; /* Add tab space for the description */
+}
+
+/* Footer styling (unchanged) */
+footer {
+  background-color: #333;
+  padding: 10px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+footer ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+footer li {
+  margin: 5px 10px;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+footer a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
+  footer ul {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  footer li {
+    margin: 0 5px;
+  }
+
+  footer a {
+    font-size: 16px;
+  }
+}
+
+/* Media query for very small screens */
+@media (max-width: 480px) {
+  footer a {
+    font-size: 14px;
+  }
+
+  footer li {
+    margin: 0 2px;
+  }
+}
