@@ -101,7 +101,7 @@ function Technical() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              ITClub1
+              OpenForge
             </a>
           </li>
           <li>
@@ -110,7 +110,7 @@ function Technical() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              ITClub2
+              AlgoRhythm
             </a>
           </li>
         </ul>
