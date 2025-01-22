@@ -9,9 +9,9 @@ import Clubs from './components/Club';
 import Profile from './components/Profile';
 import Home from './components/Home';
 import About from './components/About';
-import Technical from './ClubTypes/Technical';
-import Social from './ClubTypes/Social';
-import Cultural from './ClubTypes/Cultural';
+import Technical from './components/ClubTypes/Technical';
+import Social from './components/ClubTypes/Social';
+import Cultural from './components/ClubTypes/Cultural';
 import ProtectedRoute from './ProtectedRoute'; // Custom ProtectedRoute Component
 
 function App() {

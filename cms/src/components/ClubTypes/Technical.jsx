@@ -1,6 +1,6 @@
 import React from 'react';
 import './Technical.css';
-import eventimage from "/Users/varun/OneDrive/Desktop/combined/cms/src/components/assets/event_poster.png";
+import eventimage from "./event_poster.png";
 
 function Technical() {
   return (
