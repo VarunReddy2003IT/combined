@@ -10,14 +10,23 @@ function Technical() {
       try {
         const response = await fetch('https://finalbackend-8.onrender.com/api/events');
         const data = await response.json();
-        setEvents(data);
+  
+        // Assuming your events have a 'type' field like "past" or "upcoming"
+        const upcomingEvents = data.filter(event => event.type === 'upcoming');
+        const pastEvents = data.filter(event => event.type === 'past');
+  
+        setEvents({
+          upcoming: upcomingEvents,
+          past: pastEvents,
+        });
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
-
+  
     fetchEvents();
   }, []);
+  
 
   return (
     <div className="entirebody">
