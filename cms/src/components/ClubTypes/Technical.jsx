@@ -42,16 +42,19 @@ function Technical() {
         <section>
           <h2>Upcoming Events</h2>
           {events.upcoming.length > 0 ? (
-            events.upcoming.map((event) => (
-              <div key={event._id}>
-                <h3>{event.name}</h3>
-                <p>{event.description}</p>
-                {event.image && <img src={event.image} alt={event.name} />}
-              </div>
-            ))
-          ) : (
-            <p>No upcoming events at the moment.</p>
-          )}
+  events.upcoming.map((event) => {
+    console.log('Upcoming event:', event); // Add this for debugging
+    return (
+      <div key={event._id}>
+        <h3>{event.name}</h3>
+        <p>{event.description}</p>
+        {event.image && <img src={event.image} alt={event.name} />}
+      </div>
+    );
+  })
+) : (
+  <p>No upcoming events at the moment.</p>
+)}
         </section>
 
         {/* Past Events Section */}
