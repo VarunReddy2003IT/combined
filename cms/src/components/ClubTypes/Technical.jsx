@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Technical.css';
-import eventimage from "./event_poster.png";
 
 function Technical() {
+  const [events, setEvents] = useState({ upcoming: [], past: [] });
+
+  // Fetch events from the backend
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   return (
-    <div className='entirebody'>
+    <div className="entirebody">
       {/* Main Heading */}
       <header>
         <h1>Technical Club Page</h1>
@@ -16,43 +32,33 @@ function Technical() {
         {/* Upcoming Events Section */}
         <section>
           <h2>Upcoming Events</h2>
-          <div>
-            <h3>Upcoming Event 1</h3>
-            <p>
-              This is the description for the upcoming event 1. It provides
-              details about the event, location, and schedule.
-            </p>
-            <img src={eventimage} alt="Upcoming Event 1" />
-          </div>
-          <div>
-            <h3>Upcoming Event 2</h3>
-            <p>
-              This is the description for the upcoming event 2. It provides
-              details about the event, location, and schedule.
-            </p>
-            <img src={eventimage} alt="Upcoming Event 2" />
-          </div>
+          {events.upcoming.length > 0 ? (
+            events.upcoming.map((event) => (
+              <div key={event._id}>
+                <h3>{event.name}</h3>
+                <p>{event.description}</p>
+                {event.image && <img src={event.image} alt={event.name} />}
+              </div>
+            ))
+          ) : (
+            <p>No upcoming events at the moment.</p>
+          )}
         </section>
 
         {/* Past Events Section */}
         <section>
           <h2>Past Events</h2>
-          <div>
-            <h3>Past Event 1</h3>
-            <p>
-              This is the description for past event 1. It highlights the key
-              moments and outcomes of the event.
-            </p>
-            <img src={eventimage} alt="Past Event 1" />
-          </div>
-          <div>
-            <h3>Past Event 2</h3>
-            <p>
-              This is the description for past event 2. It highlights the key
-              moments and outcomes of the event.
-            </p>
-            <img src={eventimage} alt="Past Event 2" />
-          </div>
+          {events.past.length > 0 ? (
+            events.past.map((event) => (
+              <div key={event._id}>
+                <h3>{event.name}</h3>
+                <p>{event.description}</p>
+                {event.image && <img src={event.image} alt={event.name} />}
+              </div>
+            ))
+          ) : (
+            <p>No past events to show.</p>
+          )}
         </section>
       </main>
 
@@ -93,24 +99,6 @@ function Technical() {
               rel="noopener noreferrer"
             >
               SEEE
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://itclub1.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              OpenForge
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://itclub2.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              AlgoRhythm
             </a>
           </li>
         </ul>
