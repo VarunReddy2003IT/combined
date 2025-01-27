@@ -2,72 +2,72 @@ import React, { useEffect, useState } from 'react';
 import './Cultural.css';
 
 const Cultural = () => {
-  const [clubs, setClubs] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchClubs = async () => {
+    const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/clubs');
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setClubs(data);
+        setEvents(data);
       } catch (err) {
-        console.error('Error fetching clubs:', err);
+        console.error('Error fetching events:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchClubs();
+    fetchEvents();
   }, []);
 
   return (
     <div className="cultural-container">
       <header className="cultural-header">
-        <h1 className="text-3xl font-bold text-center text-gray-800">Cultural Clubs</h1>
+        <h1 className="text-3xl font-bold text-center text-gray-800">Cultural Events</h1>
       </header>
 
-      <main className="clubs-section">
+      <main className="events-section">
         {loading ? (
           <div className="loading-section">
-            <p className="text-gray-600">Loading clubs...</p>
+            <p className="text-gray-600">Loading events...</p>
           </div>
         ) : error ? (
           <div className="error-section">
             <p className="text-red-500">Error: {error}</p>
           </div>
-        ) : clubs.length > 0 ? (
-          <div className="clubs-grid">
-            {clubs.map((club) => (
-              <div key={club._id} className="club-card">
-                {club.image && (
-                  <div className="club-image-container">
+        ) : events.length > 0 ? (
+          <div className="events-grid">
+            {events.map((event) => (
+              <div key={event._id} className="event-card">
+                {event.image && (
+                  <div className="event-image-container">
                     <img
-                      src={club.image}
-                      alt={club.name}
-                      className="club-image"
+                      src={event.image}
+                      alt={event.name}
+                      className="event-image"
                     />
-                    <div className="club-overlay">
-                      <h2 className="club-title">{club.name}</h2>
+                    <div className="event-overlay">
+                      <h2 className="event-title">{event.name}</h2>
                     </div>
                   </div>
                 )}
-                <div className="club-details">
-                  <h3 className="club-name">{club.name}</h3>
-                  <p className="club-description">{club.description}</p>
+                <div className="event-details">
+                  <h3 className="event-name">{event.eventname}</h3>
+                  <p className="event-description">{event.description}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="no-clubs">
-            <p className="text-gray-600">No clubs available at the moment.</p>
+          <div className="no-events">
+            <p className="text-gray-600">No events available at the moment.</p>
           </div>
         )}
       </main>
@@ -75,18 +75,23 @@ const Cultural = () => {
       <footer className="footer">
         <ul className="footer-links">
           <li>
-            <a href="https://culturalclub1.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              Club 1
+            <a href="https://ieee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
+              IEEE
             </a>
           </li>
           <li>
-            <a href="https://culturalclub2.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              Club 2
+            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer" className="footer-link">
+              CSI
             </a>
           </li>
           <li>
-            <a href="https://culturalclub3.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              Club 3
+            <a href="https://vlsi.org" target="_blank" rel="noopener noreferrer" className="footer-link">
+              VLSID
+            </a>
+          </li>
+          <li>
+            <a href="https://seee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
+              SEEE
             </a>
           </li>
         </ul>
