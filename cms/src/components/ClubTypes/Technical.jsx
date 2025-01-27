@@ -30,9 +30,6 @@ function Technical() {
     fetchEvents();
   }, []);
 
-  // Filter events by type
-  const getEventsByType = (type) => events.filter((event) => event.type === type);
-
   return (
     <div className="entirebody">
       {/* Main Heading */}
@@ -47,40 +44,19 @@ function Technical() {
           <p>Loading events...</p>
         ) : error ? (
           <p>Error: {error}</p>
+        ) : events.length > 0 ? (
+          events.map((event) => (
+            <div key={event._id} className="event-card">
+              <h3>{event.name}</h3>
+              <p>{event.description}</p>
+              <p>
+                <strong>Type:</strong> {event.type}
+              </p>
+              {event.image && <img src={event.image} alt={event.name} />}
+            </div>
+          ))
         ) : (
-          <>
-            {/* Upcoming Events Section */}
-            <section>
-              <h2>Upcoming Events</h2>
-              {getEventsByType('upcoming').length > 0 ? (
-                getEventsByType('upcoming').map((event) => (
-                  <div key={event._id} className="event-card">
-                    <h3>{event.name}</h3>
-                    <p>{event.description}</p>
-                    {event.image && <img src={event.image} alt={event.name} />}
-                  </div>
-                ))
-              ) : (
-                <p>No upcoming events at the moment.</p>
-              )}
-            </section>
-
-            {/* Past Events Section */}
-            <section>
-              <h2>Past Events</h2>
-              {getEventsByType('past').length > 0 ? (
-                getEventsByType('past').map((event) => (
-                  <div key={event._id} className="event-card">
-                    <h3>{event.name}</h3>
-                    <p>{event.description}</p>
-                    {event.image && <img src={event.image} alt={event.name} />}
-                  </div>
-                ))
-              ) : (
-                <p>No past events to show.</p>
-              )}
-            </section>
-          </>
+          <p>No events available at the moment.</p>
         )}
       </main>
 
@@ -93,11 +69,7 @@ function Technical() {
             </a>
           </li>
           <li>
-            <a
-              href="https://csi-india.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer">
               CSI
             </a>
           </li>
