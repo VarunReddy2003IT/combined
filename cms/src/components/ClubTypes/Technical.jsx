@@ -28,72 +28,69 @@ const Technical = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-white shadow-md py-6">
+    <div className="technical-container">
+      <header className="technical-header">
         <h1 className="text-3xl font-bold text-center text-gray-800">Technical Events</h1>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="events-section">
         {loading ? (
-          <div className="text-center py-8">
+          <div className="loading-section">
             <p className="text-gray-600">Loading events...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-8">
+          <div className="error-section">
             <p className="text-red-500">Error: {error}</p>
           </div>
         ) : events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="events-grid">
             {events.map((event) => (
-              <div key={event._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div key={event._id} className="event-card">
                 {event.image && (
-                  <div className="relative h-48 bg-navy-900">
+                  <div className="event-image-container">
                     <img
                       src={event.image}
-                      alt={event.image}
-                      className="w-full h-full object-cover"
+                      alt={event.name}
+                      className="event-image"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60">
-                      <h2 className="absolute bottom-4 left-4 text-3xl font-bold text-white">
-                        {event.name}
-                      </h2>
+                    <div className="event-overlay">
+                      <h2 className="event-title">{event.name}</h2>
                     </div>
                   </div>
                 )}
-                <div className="p-4">
-                  <h3 className="text-xl font-bold text-gray-800">{event.eventname}</h3>
-                  <p className="text-gray-700 mt-2">{event.description}</p>
-                  
+                <div className="event-details">
+                  <h3 className="event-name">{event.eventname}</h3>
+                  <p className="event-description">{event.description}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-8">
+          <div className="no-events">
             <p className="text-gray-600">No events available at the moment.</p>
           </div>
         )}
       </main>
 
-      <footer className="bg-white shadow-md mt-8 py-6">
-        <ul className="flex justify-center space-x-6">
+      <footer className="footer">
+        <ul className="footer-links">
           <li>
-            <a href="https://ieee.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+            <a href="https://ieee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
               IEEE
             </a>
           </li>
           <li>
-            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer" className="footer-link">
               CSI
             </a>
           </li>
           <li>
-            <a href="https://vlsi.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+            <a href="https://vlsi.org" target="_blank" rel="noopener noreferrer" className="footer-link">
               VLSID
             </a>
           </li>
           <li>
-            <a href="https://seee.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+            <a href="https://seee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
               SEEE
             </a>
           </li>
