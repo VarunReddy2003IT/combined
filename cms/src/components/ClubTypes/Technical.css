@@ -11,68 +11,97 @@
 header {
   text-align: center;
   margin-top: 2vw;
-  margin-bottom: 0;
+  margin-bottom: 2vw;
   color: #333;
 }
 
-header p {
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Events Grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Event Card */
+.event-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+}
+
+.event-image-container {
+  position: relative;
+  height: 200px;
+  background: #1a1a2e;
+}
+
+.event-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 1rem;
+}
+
+.event-title {
+  color: white;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.event-content {
+  padding: 1.5rem;
+}
+
+.event-name {
   font-size: 1.2em;
+  color: #333;
+  margin: 0 0 0.5em 0;
+}
+
+.event-description {
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container,
+.no-events {
+  text-align: center;
+  padding: 2rem;
   color: #666;
 }
 
-/* Section styling */
-main section {
-  margin-bottom: 10px;
+.error-container {
+  color: #dc3545;
 }
 
-main section h2 {
-  font-size: 2em;
-  color: #444;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-main section div {
-  display: flex;
-  flex-direction: column; /* Stack image and text */
-  align-items: center; /* Center-align content */
-  gap: 15px; /* Add space between elements */
-  margin-bottom: 20px;
-}
-
-main section div img {
-  width: 200px; /* Fixed image width */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-main section div h3 {
-  font-size: 1.5em;
-  color: #333;
-  margin: 0;
-  text-align: left; /* Align heading to the left */
-  width: 100%; /* Ensure heading spans full width */
-}
-
-main section div p {
-  font-size: 1em;
-  color: #555;
-  max-width: 600px;
-  text-align: left; /* Align text to the left */
-  margin: 0;
-  text-indent: 2em; /* Add tab space for the description */
-}
-
-/* Footer styling (unchanged) */
+/* Footer styling */
 footer {
   background-color: #333;
-  padding: 10px;
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  padding: 1.5rem;
+  margin-top: 3rem;
 }
 
 footer ul {
@@ -80,52 +109,56 @@ footer ul {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-}
-
-footer li {
-  margin: 5px 10px;
+  gap: 2rem;
 }
 
 footer a {
   color: white;
   text-decoration: none;
-  font-size: 18px;
-  padding: 5px 10px;
+  font-size: 1.1em;
+  padding: 0.5rem 1rem;
   transition: background-color 0.3s ease;
-  display: inline-block;
+  border-radius: 4px;
 }
 
 footer a:hover {
   background-color: #555;
-  border-radius: 5px;
 }
 
-/* Media query for mobile screens */
+/* Responsive Design */
 @media (max-width: 768px) {
-  footer ul {
-    flex-direction: row;
-    justify-content: space-between;
+  .events-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 
-  footer li {
-    margin: 0 5px;
+  footer ul {
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   footer a {
-    font-size: 16px;
+    font-size: 1em;
   }
 }
 
-/* Media query for very small screens */
 @media (max-width: 480px) {
-  footer a {
-    font-size: 14px;
+  .entirebody {
+    padding-left: 1vw;
+    padding-right: 1vw;
   }
 
-  footer li {
-    margin: 0 2px;
+  header h1 {
+    font-size: 2em;
+  }
+
+  .event-title {
+    font-size: 1.2em;
+  }
+
+  footer a {
+    font-size: 0.9em;
+    padding: 0.3rem 0.8rem;
   }
 }

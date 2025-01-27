@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './Technical.css';
 
-function Technical() {
-  const [events, setEvents] = useState([]); // Store all events
+const Technical = () => {
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch events from the backend
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        setLoading(true); // Start loading
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events'); // Replace with your backend URL
+        setLoading(true);
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-
-        console.log('Fetched events:', data); // Debug fetched data
-        setEvents(data); // Set the fetched events
+        setEvents(data);
       } catch (err) {
         console.error('Error fetching events:', err);
-        setError(err.message); // Set error state
+        setError(err.message);
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
 
@@ -32,35 +29,51 @@ function Technical() {
 
   return (
     <div className="entirebody">
-      {/* Main Heading */}
       <header>
-        <h1>Technical Club Page</h1>
-        <p>Explore technical clubs and their activities.</p>
+        <h1>Technical Events</h1>
       </header>
 
-      {/* Main Content */}
       <main>
         {loading ? (
-          <p>Loading events...</p>
+          <div className="loading-container">
+            <p>Loading events...</p>
+          </div>
         ) : error ? (
-          <p>Error: {error}</p>
+          <div className="error-container">
+            <p>Error: {error}</p>
+          </div>
         ) : events.length > 0 ? (
-          events.map((event) => (
-            <div key={event._id} className="event-card">
-              <h3>{event.name}</h3>
-              <p>{event.description}</p>
-              <p>
-                <strong>Type:</strong> {event.type}
-              </p>
-              {event.image && <img src={event.image} alt={event.name} />}
-            </div>
-          ))
+          <div className="events-grid">
+            {events.map((event) => (
+              <div key={event._id} className="event-card">
+                {event.image && (
+                  <div className="event-image-container">
+                    <img
+                      src={event.image}
+                      alt={event.image}
+                      className="event-image"
+                    />
+                    <div className="event-overlay">
+                      <h2 className="event-title">
+                        {event.name}
+                      </h2>
+                    </div>
+                  </div>
+                )}
+                <div className="event-content">
+                  <h5 className="event-name">{event.eventname}</h5>
+                  <p className="event-description">{event.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
-          <p>No events available at the moment.</p>
+          <div className="no-events">
+            <p>No events available at the moment.</p>
+          </div>
         )}
       </main>
 
-      {/* Footer */}
       <footer>
         <ul>
           <li>
@@ -87,6 +100,6 @@ function Technical() {
       </footer>
     </div>
   );
-}
+};
 
 export default Technical;

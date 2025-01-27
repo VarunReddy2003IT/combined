@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
-import eventPoster from "./assets/event_poster.png"; // Add event poster image in src/assets folder
 
 function Home() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setEvents(data);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   return (
     <div className="home-container">
-      
-
       {/* Welcome Section */}
       <section className="welcome-section">
         <h2>Welcome to Gayatri Vidya Parishad College of Engineering</h2>
@@ -18,47 +40,34 @@ function Home() {
         </p>
       </section>
 
-      {/* Past Events Section */}
-      <section className="event-section">
-        <h2>Past Famous Events</h2>
-        <div className="event-card">
-          <img src={eventPoster} alt="TechFest 2023" />
-          <div className="event-details">
-            <h3>TechFest 2023</h3>
-            <p>Date: 25th November 2023</p>
-            <p>
-              An exciting and grand tech fest where students showcased their
-              innovative projects and participated in coding challenges.
-            </p>
-          </div>
+      {loading ? (
+        <div className="loading-section">
+          <p>Loading events...</p>
         </div>
-      </section>
-
-      {/* Upcoming Events Section */}
-      <section className="event-section">
-        <h2>Upcoming Events</h2>
-        <div className="event-card">
-          <img src={eventPoster} alt="Tech Talk" />
-          <div className="event-details">
-            <h3>Tech Talk: AI and the Future</h3>
-            <p>Date: 15th December 2024</p>
-            <p>
-              Join us for an insightful discussion about AI's impact on our
-              future.
-            </p>
-          </div>
+      ) : error ? (
+        <div className="error-section">
+          <p>Error loading events: {error}</p>
         </div>
-
-        <div className="event-card">
-          <img src={eventPoster} alt="Annual Cultural Fest" />
-          <div className="event-details">
-            <h3>Annual Cultural Fest</h3>
-            <p>Date: 20th December 2024</p>
-            <p>Be a part of the grand celebration of arts and culture.</p>
-            <button>RSVP</button>
+      ) : (
+        <section className="event-section">
+          <h2>College Events</h2>
+          <div className="events-grid">
+            {events.map((event) => (
+              <div key={event._id} className="event-card">
+                {event.image && (
+                  <div className="event-image-container">
+                    <img src={event.image} alt={event.name} className="event-image" />
+                  </div>
+                )}
+                <div className="event-details">
+                  <h3>{event.name}</h3>
+                  <p className="event-description">{event.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }
