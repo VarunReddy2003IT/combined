@@ -1,82 +1,121 @@
-// Profile.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import './Profile.css';
 
 function Profile() {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
-  const [image, setImage] = useState(null);
-  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState({
+    name: '',
+    location: '',
+    role: '',
+    club: '',
+    avatar: '',
+    stats: {
+      friends: 0,
+      photos: 0,
+      comments: 0
+    }
+  });
+  const [file, setFile] = useState(null);
 
-  // Fetch user profile data
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await axios.get('https://finalbackend-8.onrender.com/api/profile', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },  // Assuming token-based auth
-        });
-        setUser(response.data);
-      } catch (err) {
-        setError('Failed to fetch profile data');
+        const email = localStorage.getItem('userEmail');
+        const response = await axios.get(`https://finalbackend-8.onrender.com/api/profile/${email}`);
+        setProfileData(response.data);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
       }
     };
 
-    fetchUserProfile();
+    fetchProfile();
   }, []);
 
-  // Handle Logout
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');  // Remove token from localStorage
-    navigate('/login');  // Redirect to login page
-  };
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      formData.append('email', localStorage.getItem('userEmail'));
 
-  // Handle Image Upload
-  const handleImageUpload = async (e) => {
-    const formData = new FormData();
-    formData.append('file', image);
-    formData.append('upload_preset', 'profile_image'); // Assuming you're using Cloudinary's preset
-
-    try {
-      const response = await axios.post('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', formData);
-      const imageUrl = response.data.secure_url;
-
-      // Update the user's image URL in the backend
-      await axios.put(`https://finalbackend-8.onrender.com/api/profile/${user.email}`, { imageUrl }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
-      });
-
-      setUser((prevState) => ({ ...prevState, imageUrl })); // Update profile with new image
-    } catch (err) {
-      setError('Failed to upload image');
+      try {
+        const response = await axios.post('https://finalbackend-8.onrender.com/api/upload-avatar', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        setProfileData(prev => ({
+          ...prev,
+          avatar: response.data.avatarUrl
+        }));
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+      }
     }
   };
 
-  // Render profile details
   return (
-    <div className="profile-container">
-      <h2>Profile</h2>
-      {error && <p className="error-message">{error}</p>}
-      {user ? (
-        <div className="profile-info">
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>College ID:</strong> {user.collegeId}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
-          {user.role === 'lead' && <p><strong>Club:</strong> {user.club}</p>}
-          {user.imageUrl && <img src={user.imageUrl} alt="Profile" />}
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={(e) => setImage(e.target.files[0])} 
-          />
-          <button onClick={handleImageUpload}>Upload Image</button>
-          <button onClick={handleLogout}>Logout</button>
+    <div className="profile-page">
+      <div className="profile-card">
+        <div className="profile-header">
+          <button className="icon-button">
+            <i className="icon-connect"></i>
+            Connect
+          </button>
+          <button className="icon-button">
+            <i className="icon-message"></i>
+            Message
+          </button>
         </div>
-      ) : (
-        <p>Loading profile...</p>
-      )}
+
+        <div className="profile-content">
+          <div className="avatar-container">
+            <img
+              src={profileData.avatar || "/default-avatar.png"}
+              alt="Profile"
+              className="avatar"
+            />
+            <label className="avatar-upload">
+              <i className="icon-camera"></i>
+              <input
+                type="file"
+                onChange={handleFileUpload}
+                accept="image/*"
+                hidden
+              />
+            </label>
+          </div>
+
+          <h1 className="profile-name">{profileData.name}</h1>
+          <p className="profile-location">{profileData.location}</p>
+          
+          <div className="profile-details">
+            <p className="profile-role">{profileData.role}</p>
+            {profileData.club && (
+              <p className="profile-club">{profileData.club}</p>
+            )}
+          </div>
+
+          <div className="profile-stats">
+            <div className="stat-item">
+              <span className="stat-value">{profileData.stats.friends}</span>
+              <span className="stat-label">Friends</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{profileData.stats.photos}</span>
+              <span className="stat-label">Photos</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{profileData.stats.comments}</span>
+              <span className="stat-label">Comments</span>
+            </div>
+          </div>
+
+          <button className="show-more">
+            Show more
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
