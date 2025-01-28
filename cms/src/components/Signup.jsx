@@ -8,23 +8,27 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('member'); // Default role as 'member'
+  const [club, setClub] = useState(''); // New state for club selection
   const [loading, setLoading] = useState(false); // To track loading state
   const [error, setError] = useState(''); // To track error messages
+
+  const clubs = [
+    'Art Club', 'Coding Club', 'Dance Club', 'Debate Club', 'Drama Club',
+    'Entrepreneurship Club', 'Environmental Club', 'Film Club', 'Fitness Club',
+    'Gaming Club', 'Literary Club', 'Music Club', 'Photography Club',
+    'Robotics Club', 'Science Club', 'Social Service Club', 'Sports Club',
+    'Startup Club', 'Technology Club', 'Travel Club', 'Yoga Club'
+  ];
 
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'name') {
-      setName(value);
-    } else if (name === 'collegeId') {
-      setCollegeId(value);
-    } else if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    } else if (name === 'role') {
-      setRole(value);
-    }
+    if (name === 'name') setName(value);
+    else if (name === 'collegeId') setCollegeId(value);
+    else if (name === 'email') setEmail(value);
+    else if (name === 'password') setPassword(value);
+    else if (name === 'role') setRole(value);
+    else if (name === 'club') setClub(value);
   };
 
   // Handle form submission
@@ -49,10 +53,15 @@ function Signup() {
       return;
     }
 
-    // Password validation (minimum 8 characters, one number and one special character)
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setError('Password must be at least 8 characters long and contain a number and a special character');
+      setLoading(false);
+      return;
+    }
+
+    if (role === 'lead' && !club) {
+      setError('Please select a club if you are signing up as a Lead');
       setLoading(false);
       return;
     }
@@ -64,7 +73,8 @@ function Signup() {
         collegeId, 
         email, 
         password, 
-        role 
+        role, 
+        club: role === 'lead' ? club : undefined // Include club only for leads
       });
 
       alert(response.data.message); // Show success message
@@ -73,6 +83,8 @@ function Signup() {
       setCollegeId('');
       setEmail('');
       setPassword('');
+      setRole('member');
+      setClub('');
       setLoading(false);
     } catch (error) {
       setError(error.response?.data.message || 'Failed to create account. Please try again later.');
@@ -125,6 +137,18 @@ function Signup() {
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
+
+        {/* Conditionally render the Club dropdown for leads */}
+        {role === 'lead' && (
+          <select name="club" value={club} onChange={handleInputChange} disabled={loading}>
+            <option value="">Select a Club</option>
+            {clubs.map((clubName) => (
+              <option key={clubName} value={clubName}>
+                {clubName}
+              </option>
+            ))}
+          </select>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 
