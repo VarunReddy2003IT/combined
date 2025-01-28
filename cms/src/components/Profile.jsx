@@ -43,7 +43,7 @@ function Profile() {
       const imageUrl = response.data.secure_url;
 
       // Update the user's image URL in the backend
-      await axios.put(`https://finalbackend-8.onrender.com/api/profile/update-image/${user.email}`, { imageUrl }, {
+      await axios.put(`https://finalbackend-8.onrender.com/api/profile/${user.email}`, { imageUrl }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
       });
 
