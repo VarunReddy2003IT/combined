@@ -10,7 +10,7 @@ const Technical = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events/technical');
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
