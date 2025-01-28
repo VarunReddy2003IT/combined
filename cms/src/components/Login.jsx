@@ -13,6 +13,14 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
+  const clubs = [
+    'Art Club', 'Coding Club', 'Dance Club', 'Debate Club', 'Drama Club',
+    'Entrepreneurship Club', 'Environmental Club', 'Film Club', 'Fitness Club',
+    'Gaming Club', 'Literary Club', 'Music Club', 'Photography Club',
+    'Robotics Club', 'Science Club', 'Social Service Club', 'Sports Club',
+    'Startup Club', 'Technology Club', 'Travel Club', 'Yoga Club'
+  ];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'email') setEmail(value);
@@ -30,7 +38,7 @@ function Login() {
     }
 
     if (role === 'lead' && !club.trim()) {
-      setMessage('Please enter your club name');
+      setMessage('Please select your club');
       return;
     }
 
@@ -84,16 +92,21 @@ function Login() {
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
+        {/* Conditionally render the Club dropdown for leads */}
         {role === 'lead' && (
-          <input
-            type="text"
+          <select
             name="club"
             value={club}
             onChange={handleInputChange}
-            placeholder="Club Name"
             required
-            className="club-input"
-          />
+          >
+            <option value="">Select a Club</option>
+            {clubs.map((clubName) => (
+              <option key={clubName} value={clubName}>
+                {clubName}
+              </option>
+            ))}
+          </select>
         )}
         <button type="submit" className="login-button">
           Login
