@@ -8,6 +8,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('member');
+  const [club, setClub] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -17,6 +18,7 @@ function Login() {
     if (name === 'email') setEmail(value);
     else if (name === 'password') setPassword(value);
     else if (name === 'role') setRole(value);
+    else if (name === 'club') setClub(value);
   };
 
   const handleSubmit = async (e) => {
@@ -27,18 +29,24 @@ function Login() {
       return;
     }
 
+    if (role === 'lead' && !club.trim()) {
+      setMessage('Please enter your club name');
+      return;
+    }
+
     try {
       const response = await axios.post('https://finalbackend-8.onrender.com/api/login', {
         email,
         password,
         role,
+        ...(role === 'lead' && { club }),
       });
 
-      const userData = { email, role };
+      const userData = { email, role, ...(role === 'lead' && { club }) };
 
-      login(userData); // Update login state in context
+      login(userData);
       setMessage(response.data.message);
-      navigate('/app'); // Redirect to home page on successful login
+      navigate('/app');
     } catch (error) {
       console.error('Error during login:', error);
       setMessage(error.response?.data?.message || 'Failed to login');
@@ -47,15 +55,15 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h3>Login</h3>
-        {message && <p className="message">{message}</p>}
+      <h3>Login</h3>
+      {message && <div className="message">{message}</div>}
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
           value={email}
           onChange={handleInputChange}
-          placeholder="Enter your email"
+          placeholder="Email"
           required
         />
         <input
@@ -63,15 +71,33 @@ function Login() {
           name="password"
           value={password}
           onChange={handleInputChange}
-          placeholder="Enter your password"
+          placeholder="Password"
           required
         />
-        <select name="role" value={role} onChange={handleInputChange}>
+        <select
+          name="role"
+          value={role}
+          onChange={handleInputChange}
+          required
+        >
           <option value="admin">Admin</option>
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
-        <button type="submit" className="login-button">Login</button>
+        {role === 'lead' && (
+          <input
+            type="text"
+            name="club"
+            value={club}
+            onChange={handleInputChange}
+            placeholder="Club Name"
+            required
+            className="club-input"
+          />
+        )}
+        <button type="submit" className="login-button">
+          Login
+        </button>
       </form>
     </div>
   );

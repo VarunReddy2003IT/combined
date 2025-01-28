@@ -1,10 +1,8 @@
 /* Reset and box-sizing setup for consistent layout */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Ensures padding and border don't cause overflow */
+  box-sizing: border-box;
 }
 
 /* General container styling for the login form */
@@ -17,7 +15,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Prevents any overflow */
+  overflow: hidden;
 }
 
 /* Title for the form */
@@ -29,8 +27,7 @@ h3 {
 }
 
 /* General styles for input fields and select dropdown */
-input,
-select {
+input, select {
   width: 100%;
   padding: 2vw;
   margin-top: 2vw;
@@ -38,6 +35,17 @@ select {
   border-radius: 4px;
   font-size: 2vw;
   box-sizing: border-box;
+}
+
+/* Club input specific styling */
+.club-input {
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.club-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }
 
 /* Styling for password fields */
@@ -56,6 +64,7 @@ button.login-button {
   cursor: pointer;
   font-size: 3vw;
   margin-top: 4vw;
+  transition: background-color 0.3s ease;
 }
 
 button.login-button:hover {
@@ -63,8 +72,7 @@ button.login-button:hover {
 }
 
 /* Focus styles for input fields */
-input:focus,
-select:focus {
+input:focus, select:focus {
   outline: none;
   border-color: #4CAF50;
 }
@@ -75,8 +83,9 @@ input::placeholder {
 }
 
 /* Margin for input fields */
-input[type="email"],
-input[type="password"] {
+input[type="email"], 
+input[type="password"],
+select {
   margin-bottom: 2vw;
 }
 
