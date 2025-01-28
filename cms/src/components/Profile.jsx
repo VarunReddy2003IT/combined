@@ -21,7 +21,7 @@ function Profile() {
     try {
       // Send the image to your backend for Cloudinary upload
       const response = await axios.post(
-        'http://localhost:5000/api/upload-image', // Replace with your backend URL
+        'http://finalbackend-8.onrender.com/api/upload-image', // Replace with your backend URL
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
