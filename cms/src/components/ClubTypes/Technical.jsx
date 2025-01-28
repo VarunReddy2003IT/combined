@@ -10,7 +10,7 @@ const Technical = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events/technical');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -71,31 +71,6 @@ const Technical = () => {
           </div>
         )}
       </main>
-
-      <footer className="footer">
-        <ul className="footer-links">
-          <li>
-            <a href="https://ieee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              IEEE
-            </a>
-          </li>
-          <li>
-            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              CSI
-            </a>
-          </li>
-          <li>
-            <a href="https://vlsi.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              VLSID
-            </a>
-          </li>
-          <li>
-            <a href="https://seee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              SEEE
-            </a>
-          </li>
-        </ul>
-      </footer>
     </div>
   );
 };

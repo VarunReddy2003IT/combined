@@ -12,7 +12,7 @@ import About from './components/About';
 import Technical from './components/ClubTypes/Technical';
 import Social from './components/ClubTypes/Social';
 import Cultural from './components/ClubTypes/Cultural';
-import ProtectedRoute from './ProtectedRoute'; // Custom ProtectedRoute Component
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
@@ -26,45 +26,33 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route
             path="/signup"
-            element={
-              <ProtectedRoute
-                element={<Signup />}
-                redirectTo="/app"
-                inverse={true} // Redirect to /app if logged in
-              />
-            }
+            element={<ProtectedRoute element={<Signup />} redirectTo="/app" inverse />}
           />
           <Route
             path="/login"
-            element={
-              <ProtectedRoute
-                element={<Login />}
-                redirectTo="/app"
-                inverse={true} // Redirect to /app if logged in
-              />
-            }
+            element={<ProtectedRoute element={<Login />} redirectTo="/app" inverse />}
           />
           <Route
             path="/clubs"
-            element={
-              <ProtectedRoute
-                element={<Clubs />}
-                redirectTo="/login" // Redirect to login if not logged in
-              />
-            }
+            element={<ProtectedRoute element={<Clubs />} redirectTo="/login" />}
           />
           <Route
             path="/profile"
-            element={
-              <ProtectedRoute
-                element={<Profile />}
-                redirectTo="/login" // Redirect to login if not logged in
-              />
-            }
+            element={<ProtectedRoute element={<Profile />} redirectTo="/login" />}
           />
-          <Route path="/clubs/technical" element={<Technical />} />
-          <Route path="/clubs/social" element={<Social />} />
-          <Route path="/clubs/cultural" element={<Cultural />} />
+          {/* Protected Routes for Technical, Social, and Cultural */}
+          <Route
+            path="/clubs/technical"
+            element={<ProtectedRoute element={<Technical />} redirectTo="/login" />}
+          />
+          <Route
+            path="/clubs/social"
+            element={<ProtectedRoute element={<Social />} redirectTo="/login" />}
+          />
+          <Route
+            path="/clubs/cultural"
+            element={<ProtectedRoute element={<Cultural />} redirectTo="/login" />}
+          />
         </Routes>
       </Router>
     </AuthProvider>
