@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
-import './Login.css';
+import { AuthContext } from './AuthContext';  // Assuming you have this context set up for authentication
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,8 +10,9 @@ function Login() {
   const [club, setClub] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);  // Login function from AuthContext
 
+  // List of clubs for the lead role
   const clubs = [
     'Art Club', 'Coding Club', 'Dance Club', 'Debate Club', 'Drama Club',
     'Entrepreneurship Club', 'Environmental Club', 'Film Club', 'Fitness Club',
@@ -21,6 +21,7 @@ function Login() {
     'Startup Club', 'Technology Club', 'Travel Club', 'Yoga Club'
   ];
 
+  // Handle input change for email, password, role, and club
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'email') setEmail(value);
@@ -29,32 +30,43 @@ function Login() {
     else if (name === 'club') setClub(value);
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation for empty fields
     if (!email.trim() || !password.trim()) {
       setMessage('Please fill in all fields');
       return;
     }
 
+    // Validation for lead role to select a club
     if (role === 'lead' && !club.trim()) {
       setMessage('Please select your club');
       return;
     }
 
     try {
+      // Send the login request to the server
       const response = await axios.post('https://finalbackend-8.onrender.com/api/login', {
         email,
         password,
         role,
-        ...(role === 'lead' && { club }),
+        ...(role === 'lead' && { club }),  // Only send club if the role is 'lead'
       });
 
+      // Prepare the user data to store in context
       const userData = { email, role, ...(role === 'lead' && { club }) };
 
+      // Store the email in localStorage after successful login
+      localStorage.setItem('userEmail', email);
+
+      // Use context login function to store user data
       login(userData);
+
+      // Set the message and navigate to the next page
       setMessage(response.data.message);
-      navigate('/app');
+      navigate('/app');  // Redirect to the app page after successful login
     } catch (error) {
       console.error('Error during login:', error);
       setMessage(error.response?.data?.message || 'Failed to login');
@@ -92,6 +104,7 @@ function Login() {
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
+
         {/* Conditionally render the Club dropdown for leads */}
         {role === 'lead' && (
           <select
@@ -108,6 +121,7 @@ function Login() {
             ))}
           </select>
         )}
+
         <button type="submit" className="login-button">
           Login
         </button>
