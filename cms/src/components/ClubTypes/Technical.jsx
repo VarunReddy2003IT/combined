@@ -3,7 +3,8 @@ import './Technical.css';
 import Footerbar from '../TechnicalFootBar';
 
 const Technical = () => {
-  const [events, setEvents] = useState({ upcoming: [], past: [] });
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -11,16 +12,22 @@ const Technical = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events?clubtype=technical');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        // Fetch upcoming events for technical clubtype
+        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming');
+        if (!upcomingResponse.ok) {
+          throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
-        const data = await response.json();
-        // Separate upcoming and past events
-        const currentDate = new Date();
-        const upcomingEvents = data.filter(event => new Date(event.date) > currentDate);
-        const pastEvents = data.filter(event => new Date(event.date) <= currentDate);
-        setEvents({ upcoming: upcomingEvents, past: pastEvents });
+        const upcomingData = await upcomingResponse.json();
+        setUpcomingEvents(upcomingData);
+
+        // Fetch past events for technical clubtype
+        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past');
+        if (!pastResponse.ok) {
+          throw new Error(`HTTP error! Status: ${pastResponse.status}`);
+        }
+        const pastData = await pastResponse.json();
+        setPastEvents(pastData);
       } catch (err) {
         console.error('Error fetching events:', err);
         setError(err.message);
@@ -49,11 +56,12 @@ const Technical = () => {
           </div>
         ) : (
           <>
-            {events.upcoming.length > 0 && (
-              <section className="upcoming-events">
-                <h2 className="text-2xl font-bold text-gray-800">Upcoming Events</h2>
+            {/* Upcoming Events */}
+            {upcomingEvents.length > 0 && (
+              <div className="event-section">
+                <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
                 <div className="events-grid">
-                  {events.upcoming.map((event) => (
+                  {upcomingEvents.map((event) => (
                     <div key={event._id} className="event-card">
                       {event.image && (
                         <div className="event-image-container">
@@ -74,14 +82,15 @@ const Technical = () => {
                     </div>
                   ))}
                 </div>
-              </section>
+              </div>
             )}
 
-            {events.past.length > 0 && (
-              <section className="past-events">
-                <h2 className="text-2xl font-bold text-gray-800">Past Events</h2>
+            {/* Past Events */}
+            {pastEvents.length > 0 && (
+              <div className="event-section">
+                <h2 className="text-xl font-semibold mb-4">Past Events</h2>
                 <div className="events-grid">
-                  {events.past.map((event) => (
+                  {pastEvents.map((event) => (
                     <div key={event._id} className="event-card">
                       {event.image && (
                         <div className="event-image-container">
@@ -102,10 +111,11 @@ const Technical = () => {
                     </div>
                   ))}
                 </div>
-              </section>
+              </div>
             )}
 
-            {events.upcoming.length === 0 && events.past.length === 0 && (
+            {/* No events available */}
+            {upcomingEvents.length === 0 && pastEvents.length === 0 && (
               <div className="no-events">
                 <p className="text-gray-600">No events available at the moment.</p>
               </div>
