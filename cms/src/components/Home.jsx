@@ -15,16 +15,10 @@ function Home() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-
-        // Check if data is an array before setting it
-        if (Array.isArray(data)) {
-          setEvents(data);
-        } else {
-          throw new Error("Data is not an array");
-        }
+        setEvents(data);
       } catch (err) {
         console.error('Error fetching events:', err);
-        setError(err.message || 'Something went wrong while loading the events.');
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -46,7 +40,6 @@ function Home() {
         </p>
       </section>
 
-      {/* Loading, Error, or Event Display Section */}
       {loading ? (
         <div className="loading-section">
           <p>Loading events...</p>
@@ -59,27 +52,19 @@ function Home() {
         <section className="event-section">
           <h2>College Events</h2>
           <div className="events-grid">
-            {events.length > 0 ? (
-              events.map((event) => (
-                <div key={event._id} className="event-card">
-                  {event.image && (
-                    <div className="event-image-container">
-                      <img
-                        src={event.image}
-                        alt={event.name}
-                        className="event-image"
-                      />
-                    </div>
-                  )}
-                  <div className="event-details">
-                    <h3>{event.name}</h3>
-                    <p className="event-description">{event.description}</p>
+            {events.map((event) => (
+              <div key={event._id} className="event-card">
+                {event.image && (
+                  <div className="event-image-container">
+                    <img src={event.image} alt={event.name} className="event-image" />
                   </div>
+                )}
+                <div className="event-details">
+                  <h3>{event.name}</h3>
+                  <p className="event-description">{event.description}</p>
                 </div>
-              ))
-            ) : (
-              <p>No events available at the moment.</p>
-            )}
+              </div>
+            ))}
           </div>
         </section>
       )}
