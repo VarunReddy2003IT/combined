@@ -12,7 +12,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         // Pass role in the query to determine which database to query
-        const response = await fetch(`https://finalbackend-8.onrender.com/api/users?email=${email}&role=${role}`);
+        const response = await fetch(`https://finalbackend-8.onrender.com/api/profile?email=${email}&role=${role}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
