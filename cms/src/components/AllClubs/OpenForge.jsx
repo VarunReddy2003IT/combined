@@ -149,6 +149,7 @@ function OpenForge() {
                         src={imageUrl}
                         alt="Event poster preview"
                         className="max-w-xs rounded"
+                        style={{ width: '120px', height: '120px', borderRadius: '50%' }}
                       />
                     </div>
                   )}
