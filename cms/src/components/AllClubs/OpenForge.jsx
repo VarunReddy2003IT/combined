@@ -28,7 +28,7 @@ function OpenForge() {
 
     try {
       // Send event data to the backend
-      const response = await axios.post("https://finalbackend-8.onrender.com/api/events", {
+      const response = await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
         date: eventDate,
         description: eventDescription,
