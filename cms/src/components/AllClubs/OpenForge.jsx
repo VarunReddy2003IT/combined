@@ -14,6 +14,8 @@ function OpenForge() {
   const [error, setError] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const userRole = localStorage.getItem("userRole");
@@ -22,7 +24,22 @@ function OpenForge() {
     if ((userRole === 'lead' && userClub === 'OpenForge') || userRole === 'admin') {
       setIsLeadForOpenForge(true);
     }
+
+    fetchEvents();
   }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
+      // Filter events for OpenForge club
+      const openForgeEvents = response.data.filter(event => event.club === 'OpenForge');
+      setEvents(openForgeEvents);
+    } catch (error) {
+      setError("Failed to fetch events");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -73,7 +90,7 @@ function OpenForge() {
         date: eventDate,
         description: eventDescription,
         type: eventType,
-        posterUrl: imageUrl,
+        image: imageUrl, // Changed from posterUrl to image to match schema
         registrationLink: eventType === 'upcoming' ? registrationLink : undefined
       });
 
@@ -86,16 +103,87 @@ function OpenForge() {
       setImageUrl('');
       setShowAddEventForm(false);
       setError('');
+      fetchEvents(); // Refresh events after adding
     } catch (error) {
       setError(error.response?.data?.error || "Failed to add event. Please try again.");
     }
   };
+
+  const EventCard = ({ event }) => (
+    <div className="event-card">
+      <div className="event-image-container">
+        <img
+          src={event.image || '/placeholder-event.jpg'}
+          alt={event.eventname}
+          className="event-image"
+        />
+      </div>
+      <div className="event-details">
+        <h3>{event.eventname}</h3>
+        <p className="event-description">{event.description}</p>
+        <p>Date: {new Date(event.date).toLocaleDateString()}</p>
+        {event.type === 'upcoming' && event.registrationLink && (
+          <a
+            href={event.registrationLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="submit-button"
+            style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
+          >
+            Register Now
+          </a>
+        )}
+      </div>
+    </div>
+  );
+
+  // Filter events by type
+  const upcomingEvents = events.filter(event => event.type === 'upcoming');
+  const pastEvents = events.filter(event => event.type === 'past');
 
   return (
     <div className="container">
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">OpenForge Club</h1>
+
+          {/* Upcoming Events Section */}
+          <div className="event-section">
+            <h2>Upcoming Events</h2>
+            {loading ? (
+              <div className="loading-section">Loading events...</div>
+            ) : error ? (
+              <div className="error-section">{error}</div>
+            ) : upcomingEvents.length > 0 ? (
+              <div className="events-grid">
+                {upcomingEvents.map((event) => (
+                  <EventCard key={event._id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <p>No upcoming events</p>
+            )}
+          </div>
+
+          {/* Past Events Section */}
+          <div className="event-section">
+            <h2>Past Events</h2>
+            {loading ? (
+              <div className="loading-section">Loading events...</div>
+            ) : error ? (
+              <div className="error-section">{error}</div>
+            ) : pastEvents.length > 0 ? (
+              <div className="events-grid">
+                {pastEvents.map((event) => (
+                  <EventCard key={event._id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <p>No past events</p>
+            )}
+          </div>
+
+          {/* Add Event Button and Form */}
           {isLeadForOpenForge && (
             <div className="form-container">
               <button 

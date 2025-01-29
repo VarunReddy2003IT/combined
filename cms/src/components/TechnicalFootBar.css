@@ -1,55 +1,93 @@
-/* General footer styling */
+/* Main footer container */
 .footer-bar {
-    background-color: #222;
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    position: relative;
+    background-color: #333;
+    color: azure;
     width: 100%;
+    padding: 15px 0;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
   }
   
   /* Navigation container */
   .footer-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   
   /* Footer list styling */
   .footer-list {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  /* List items */
+  .footer-list li {
+    margin: 0;
+    padding: 0;
+    color: azure;
+    text-decoration: none;
   }
   
   /* Footer links */
   .footer-link {
-    color: white;
+    color: #f7f8fa;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 1.1rem;
     padding: 8px 12px;
-    transition: color 0.3s ease-in-out;
+    transition: color 0.3s ease;
+    display: inline-block;
   }
   
   .footer-link:hover {
-    color: #00c4ff;
+    color: #98da14;
   }
   
-  /* Responsive design for mobile screens */
-  @media (max-width: 600px) {
+  /* Active link state */
+  .footer-link.active {
+    color: #f1f3f4;
+    font-weight: 500;
+  }
+  
+  /* Responsive design for tablets */
+  @media (max-width: 768px) {
     .footer-list {
-      flex-direction: column;
-      gap: 10px;
+      gap: 20px;
+      flex-wrap: wrap;
     }
   
     .footer-link {
-      font-size: 14px;
-      padding: 10px;
+      font-size: 1rem;
+      padding: 6px 10px;
     }
   }
   
+  /* Responsive design for mobile */
+  @media (max-width: 480px) {
+    .footer-bar {
+      padding: 10px 0;
+    }
+  
+    .footer-nav {
+      padding: 0 10px;
+    }
+  
+    .footer-list {
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .footer-link {
+      font-size: 0.9rem;
+      padding: 5px 8px;
+    }
+  }
