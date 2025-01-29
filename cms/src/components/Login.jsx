@@ -59,7 +59,9 @@ function Login() {
       // Store the email in localStorage after successful login
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userRole', role);
-
+      if(role=='lead'){
+        localStorage.setItem('userClub', club);
+      }
       // Use context login function to store user data
       login(userData);
 
