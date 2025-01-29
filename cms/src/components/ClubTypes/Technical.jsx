@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './Technical.css';
 import Footerbar from '../TechnicalFootBar';
+
 const Technical = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -10,12 +11,16 @@ const Technical = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
+        const response = await fetch('https://finalbackend-8.onrender.com/api/events?clubtype=technical');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setEvents(data);
+        // Separate upcoming and past events
+        const currentDate = new Date();
+        const upcomingEvents = data.filter(event => new Date(event.date) > currentDate);
+        const pastEvents = data.filter(event => new Date(event.date) <= currentDate);
+        setEvents({ upcoming: upcomingEvents, past: pastEvents });
       } catch (err) {
         console.error('Error fetching events:', err);
         setError(err.message);
@@ -42,33 +47,70 @@ const Technical = () => {
           <div className="error-section">
             <p className="text-red-500">Error: {error}</p>
           </div>
-        ) : events.length > 0 ? (
-          <div className="events-grid">
-            {events.map((event) => (
-              <div key={event._id} className="event-card">
-                {event.image && (
-                  <div className="event-image-container">
-                    <img
-                      src={event.image}
-                      alt={event.name}
-                      className="event-image"
-                    />
-                    <div className="event-overlay">
-                      <h2 className="event-title">{event.name}</h2>
-                    </div>
-                  </div>
-                )}
-                <div className="event-details">
-                  <h3 className="event-name">{event.eventname}</h3>
-                  <p className="event-description">{event.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         ) : (
-          <div className="no-events">
-            <p className="text-gray-600">No events available at the moment.</p>
-          </div>
+          <>
+            {events.upcoming.length > 0 && (
+              <section className="upcoming-events">
+                <h2 className="text-2xl font-bold text-gray-800">Upcoming Events</h2>
+                <div className="events-grid">
+                  {events.upcoming.map((event) => (
+                    <div key={event._id} className="event-card">
+                      {event.image && (
+                        <div className="event-image-container">
+                          <img
+                            src={event.image}
+                            alt={event.name}
+                            className="event-image"
+                          />
+                          <div className="event-overlay">
+                            <h2 className="event-title">{event.name}</h2>
+                          </div>
+                        </div>
+                      )}
+                      <div className="event-details">
+                        <h3 className="event-name">{event.eventname}</h3>
+                        <p className="event-description">{event.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {events.past.length > 0 && (
+              <section className="past-events">
+                <h2 className="text-2xl font-bold text-gray-800">Past Events</h2>
+                <div className="events-grid">
+                  {events.past.map((event) => (
+                    <div key={event._id} className="event-card">
+                      {event.image && (
+                        <div className="event-image-container">
+                          <img
+                            src={event.image}
+                            alt={event.name}
+                            className="event-image"
+                          />
+                          <div className="event-overlay">
+                            <h2 className="event-title">{event.name}</h2>
+                          </div>
+                        </div>
+                      )}
+                      <div className="event-details">
+                        <h3 className="event-name">{event.eventname}</h3>
+                        <p className="event-description">{event.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {events.upcoming.length === 0 && events.past.length === 0 && (
+              <div className="no-events">
+                <p className="text-gray-600">No events available at the moment.</p>
+              </div>
+            )}
+          </>
         )}
       </main>
 
