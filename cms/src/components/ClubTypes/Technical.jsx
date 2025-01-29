@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Technical.css';
-
+import Footerbar from '../TechnicalFootBar';
 const Technical = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +71,8 @@ const Technical = () => {
           </div>
         )}
       </main>
+
+      <Footerbar />
     </div>
   );
 };

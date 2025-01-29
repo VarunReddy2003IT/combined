@@ -1,18 +1,22 @@
+/* Container for the entire Technical section */
 .technical-container {
   background-color: #f7fafc;
   min-height: 100vh;
 }
 
+/* Header styles */
 .technical-header {
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 24px;
 }
 
+/* Events section */
 .events-section {
   padding: 40px;
 }
 
+/* Loading, error, and no-events sections */
 .loading-section,
 .error-section,
 .no-events {
@@ -27,12 +31,14 @@
   color: #dc3545;
 }
 
+/* Grid layout for events */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
 }
 
+/* Event card styling */
 .event-card {
   display: flex;
   flex-direction: column;
@@ -46,6 +52,7 @@
   transform: translateY(-5px);
 }
 
+/* Event image container */
 .event-image-container {
   position: relative;
   height: 200px;
@@ -58,6 +65,7 @@
   object-fit: cover;
 }
 
+/* Event overlay styling */
 .event-overlay {
   position: absolute;
   inset: 0;
@@ -73,6 +81,7 @@
   color: white;
 }
 
+/* Event details styling */
 .event-details {
   padding: 16px;
 }
@@ -89,35 +98,77 @@
   margin-top: 8px;
 }
 
-.footer {
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin-top: 40px;
-}
-
-.footer-links {
+/* Footer bar styling (similar to navbar) */
+.footer-bar {
+  background-color: #333;
+  padding: 5px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 24px;
+  align-items: center;
+  margin-left: 3vw;
+  margin-right: 3vw;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
-.footer-link {
+/* List styling for footer items */
+.footer-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for each footer item */
+.footer-bar li {
+  margin: 5px 10px; /* Reduced margin for closer links */
+}
+
+/* Link styling for footer */
+.footer-bar a {
+  color: white;
   text-decoration: none;
-  color: #3182ce;
-  transition: color 0.3s ease;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+  display: inline-block; /* Ensure both button and link are on the same line */
 }
 
-.footer-link:hover {
-  color: #2b6cb0;
+/* Hover effect for footer links */
+.footer-bar a:hover {
+  color: white;
+  text-decoration: none;
+  background-color: #555;
+  border-radius: 5px;
 }
 
+/* Mobile responsive styles for footer */
 @media (max-width: 768px) {
-  .events-grid {
-    grid-template-columns: 1fr;
+  .footer-bar ul {
+    flex-direction: row; /* Ensure links are in a single line */
+    justify-content: space-between; /* Spread links across the footer */
   }
 
-  .event-card {
-    margin-bottom: 24px;
+  .footer-bar li {
+    margin: 0 1px; /* Further reduce the margin between links */
+  }
+
+  .footer-bar a {
+    font-size: 16px; /* Slightly smaller font size for mobile */
+  }
+}
+
+/* Media query for very small screens (portrait mobile) */
+@media (max-width: 480px) {
+  .footer-bar a {
+    font-size: 14px; /* Even smaller font size for very small screens */
+  }
+  .footer-bar li {
+    margin: 0 1px; /* Further reduce the margin between links */
   }
 }
