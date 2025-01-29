@@ -59,7 +59,7 @@ function Login() {
       // Store the email in localStorage after successful login
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userRole', role);
-      if(role=='lead'){
+      if(role==='lead'){
         localStorage.setItem('userClub', club);
       }
       console.log(club);

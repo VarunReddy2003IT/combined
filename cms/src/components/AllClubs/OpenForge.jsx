@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
-import Footerbar from "../TechnicalFootBar";
+import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
+import './OpenForge.css';
 
 function OpenForge() {
   const [isLeadForOpenForge, setIsLeadForOpenForge] = useState(false);
   const [showAddEventForm, setShowAddEventForm] = useState(false);
-  const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
-  const [eventType, setEventType] = useState("upcoming");
-  const [error, setError] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [eventName, setEventName] = useState('');
+  const [eventDate, setEventDate] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
+  const [eventType, setEventType] = useState('upcoming');
+  const [registrationLink, setRegistrationLink] = useState('');
+  const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const userRole = localStorage.getItem("userRole");
     const userClub = localStorage.getItem("userClub");
 
-    if ((userRole === "lead" && userClub === "OpenForge") || userRole === "admin") {
+    if ((userRole === 'lead' && userClub === 'OpenForge') || userRole === 'admin') {
       setIsLeadForOpenForge(true);
     }
   }, []);
@@ -27,29 +29,26 @@ function OpenForge() {
     if (!file) return;
 
     setUploading(true);
-    setError("");
+    setError('');
 
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "ml_default");
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default');
 
     try {
-      const cloudinaryResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
       const cloudinaryData = await cloudinaryResponse.json();
       if (!cloudinaryData.secure_url) {
-        throw new Error("Failed to upload image to Cloudinary");
+        throw new Error('Failed to upload image to Cloudinary');
       }
 
       setImageUrl(cloudinaryData.secure_url);
     } catch (err) {
-      setError("Error uploading image: " + err.message);
+      setError('Error uploading image: ' + err.message);
     } finally {
       setUploading(false);
     }
@@ -61,116 +60,152 @@ function OpenForge() {
       return;
     }
 
+    if (eventType === 'upcoming' && !registrationLink) {
+      setError("Registration link is required for upcoming events.");
+      return;
+    }
+
     try {
-      const response = await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
+      await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
         clubtype: "Technical",
         club: "OpenForge",
         date: eventDate,
         description: eventDescription,
         type: eventType,
-        image: imageUrl, // Add the image URL to the event document
+        posterUrl: imageUrl,
+        registrationLink: eventType === 'upcoming' ? registrationLink : undefined
       });
 
       alert("Event added successfully!");
-      // Clear form fields
-      setEventName("");
-      setEventDate("");
-      setEventDescription("");
-      setEventType("upcoming");
-      setImageUrl("");
+      setEventName('');
+      setEventDate('');
+      setEventDescription('');
+      setEventType('upcoming');
+      setRegistrationLink('');
+      setImageUrl('');
       setShowAddEventForm(false);
-      setError("");
+      setError('');
     } catch (error) {
       setError(error.response?.data?.error || "Failed to add event. Please try again.");
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="p-4 flex-grow">
-        <h1 className="text-2xl font-bold mb-4">OpenForge Club</h1>
-        {isLeadForOpenForge && (
-          <div className="mb-16"> {/* Increased margin to prevent overlapping */}
-            <button
-              onClick={() => setShowAddEventForm(!showAddEventForm)}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              {showAddEventForm ? "Cancel" : "Add Event"}
-            </button>
-
-            {showAddEventForm && (
-              <div className="mt-4 max-w-lg">
-                <h3 className="text-xl font-semibold mb-3">Add New Event</h3>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Event Name"
-                    value={eventName}
-                    onChange={(e) => setEventName(e.target.value)}
-                    className="w-full p-2 border rounded"
-                  />
-
-                  <input
-                    type="date"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    className="w-full p-2 border rounded"
-                  />
-
-                  <textarea
-                    placeholder="Event Description"
-                    value={eventDescription}
-                    onChange={(e) => setEventDescription(e.target.value)}
-                    className="w-full p-2 border rounded h-32"
-                  ></textarea>
-
-                  <select
-                    value={eventType}
-                    onChange={(e) => setEventType(e.target.value)}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="upcoming">Upcoming Event</option>
-                    <option value="past">Past Event</option>
-                  </select>
-
-                  {/* Image Upload Section */}
-                  <div className="border rounded p-4">
-                    <p className="mb-2 font-medium">Event Poster</p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploading}
-                      className="w-full"
-                    />
-                    {uploading && <p className="text-blue-500 mt-2">Uploading...</p>}
-                    {imageUrl && (
-                      <div className="mt-2">
-                        <img
-                          src={imageUrl}
-                          alt="Event poster preview"
-                          className="max-w-xs rounded"
-                          style={{ width: "120px", height: "120px", borderRadius: "50%" }}
+    <div className="container">
+      <div className="content">
+        <div className="page-content">
+          <h1 className="page-title">OpenForge Club</h1>
+          {isLeadForOpenForge && (
+            <div className="form-container">
+              <button 
+                onClick={() => setShowAddEventForm(!showAddEventForm)}
+                className="toggle-button"
+              >
+                {showAddEventForm ? "Cancel" : "Add Event"}
+              </button>
+              
+              {showAddEventForm && (
+                <div className="event-form">
+                  <div className="form-content">
+                    <h3 className="form-title">Add New Event</h3>
+                    
+                    <div className="form-fields">
+                      <div className="form-group">
+                        <label>Event Name</label>
+                        <input
+                          type="text"
+                          placeholder="Enter event name"
+                          value={eventName}
+                          onChange={(e) => setEventName(e.target.value)}
                         />
                       </div>
-                    )}
+                      
+                      <div className="form-group">
+                        <label>Event Date</label>
+                        <input
+                          type="date"
+                          value={eventDate}
+                          onChange={(e) => setEventDate(e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="form-group">
+                        <label>Event Description</label>
+                        <textarea
+                          placeholder="Enter event description"
+                          value={eventDescription}
+                          onChange={(e) => setEventDescription(e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="form-group">
+                        <label>Event Type</label>
+                        <select
+                          value={eventType}
+                          onChange={(e) => setEventType(e.target.value)}
+                        >
+                          <option value="upcoming">Upcoming Event</option>
+                          <option value="past">Past Event</option>
+                        </select>
+                      </div>
+
+                      {eventType === 'upcoming' && (
+                        <div className="form-group">
+                          <label>Registration Link (Google Form)</label>
+                          <input
+                            type="url"
+                            placeholder="Enter Google Form URL"
+                            value={registrationLink}
+                            onChange={(e) => setRegistrationLink(e.target.value)}
+                          />
+                        </div>
+                      )}
+
+                      <div className="image-upload">
+                        <label>Event Poster</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          disabled={uploading}
+                        />
+                        {uploading && (
+                          <p className="upload-status">Uploading...</p>
+                        )}
+                        {imageUrl && (
+                          <div className="image-preview">
+                            <img
+                              src={imageUrl}
+                              alt="Event poster preview"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {error && (
+                        <div className="error-message">
+                          {error}
+                        </div>
+                      )}
+
+                      <button 
+                        onClick={handleAddEvent}
+                        className="submit-button"
+                      >
+                        Submit Event
+                      </button>
+                    </div>
                   </div>
-
-                  {error && <div className="text-red-500">{error}</div>}
-
-                  <button onClick={handleAddEvent} className="bg-green-500 text-white px-4 py-2 rounded">
-                    Submit Event
-                  </button>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Footerbar is now properly spaced below the content */}
-      <Footerbar />
+      <div className="footer">
+        <Footerbar />
+      </div>
     </div>
   );
 }
