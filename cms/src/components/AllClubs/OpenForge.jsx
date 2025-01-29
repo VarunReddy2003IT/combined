@@ -8,8 +8,10 @@ function OpenForge() {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [eventDescription, setEventDescription] = useState('');
-  const [eventType, setEventType] = useState('upcoming'); // Added event type
+  const [eventType, setEventType] = useState('upcoming');
   const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const userRole = localStorage.getItem("userRole");
@@ -20,6 +22,36 @@ function OpenForge() {
     }
   }, []);
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError('');
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default');
+
+    try {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const cloudinaryData = await cloudinaryResponse.json();
+      if (!cloudinaryData.secure_url) {
+        throw new Error('Failed to upload image to Cloudinary');
+      }
+
+      setImageUrl(cloudinaryData.secure_url);
+    } catch (err) {
+      setError('Error uploading image: ' + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleAddEvent = async () => {
     if (!eventName || !eventDate || !eventDescription) {
       setError("Please fill in all fields.");
@@ -29,11 +61,12 @@ function OpenForge() {
     try {
       const response = await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
-        clubtype: "Technical", // Added clubtype
+        clubtype: "Technical",
         club: "OpenForge",
         date: eventDate,
         description: eventDescription,
-        type: eventType // Added type field
+        type: eventType,
+        image: imageUrl // Add the image URL to the event document
       });
 
       alert("Event added successfully!");
@@ -42,6 +75,7 @@ function OpenForge() {
       setEventDate('');
       setEventDescription('');
       setEventType('upcoming');
+      setImageUrl('');
       setShowAddEventForm(false);
       setError('');
     } catch (error) {
@@ -95,6 +129,30 @@ function OpenForge() {
                   <option value="upcoming">Upcoming Event</option>
                   <option value="past">Past Event</option>
                 </select>
+
+                {/* Image Upload Section */}
+                <div className="border rounded p-4">
+                  <p className="mb-2 font-medium">Event Poster</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    className="w-full"
+                  />
+                  {uploading && (
+                    <p className="text-blue-500 mt-2">Uploading...</p>
+                  )}
+                  {imageUrl && (
+                    <div className="mt-2">
+                      <img
+                        src={imageUrl}
+                        alt="Event poster preview"
+                        className="max-w-xs rounded"
+                      />
+                    </div>
+                  )}
+                </div>
 
                 {error && (
                   <div className="text-red-500">{error}</div>
