@@ -13,11 +13,8 @@ function Signup() {
   const [error, setError] = useState(''); // To track error messages
 
   const clubs = [
-    'Art Club', 'Coding Club', 'Dance Club', 'Debate Club', 'Drama Club',
-    'Entrepreneurship Club', 'Environmental Club', 'Film Club', 'Fitness Club',
-    'Gaming Club', 'Literary Club', 'Music Club', 'Photography Club',
-    'Robotics Club', 'Science Club', 'Social Service Club', 'Sports Club',
-    'Startup Club', 'Technology Club', 'Travel Club', 'Yoga Club'
+    'CFSR','YES','NSS UNIT 1','NSS UNIT 2','YFS(Youth For Seva)','YFS','We Are For Help','Hearts Of Humanity','Vidhyan','Rotract'
+    ,'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
   ];
 
   // Handle form input changes
