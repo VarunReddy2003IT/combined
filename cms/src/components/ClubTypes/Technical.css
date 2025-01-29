@@ -2,6 +2,7 @@
 .technical-container {
   background-color: #f7fafc;
   min-height: 100vh;
+  padding: 20px;
 }
 
 /* Header styles */
@@ -13,6 +14,8 @@
 
 /* Events section */
 .events-section {
+  margin-left: 5vw;
+  margin-right: 5vw;
   padding: 40px;
 }
 
@@ -96,4 +99,41 @@
   color: #555;
   line-height: 1.6;
   margin-top: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .events-section {
+    padding: 20px;
+  }
+
+  .events-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .event-title {
+    font-size: 1.5rem;
+  }
+
+  .event-name {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-image-container {
+    height: 150px;
+  }
+
+  .event-title {
+    font-size: 1.2rem;
+  }
+
+  .event-name {
+    font-size: 1rem;
+  }
+
+  .event-description {
+    font-size: 0.9rem;
+  }
 }
