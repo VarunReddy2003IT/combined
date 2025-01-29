@@ -3,51 +3,52 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-  
-  /* Content area */
-  .content {
+}
+
+/* Content area */
+.content {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 60px; /* Adjust based on footer height */
-  }
-  
-  .page-content {
+}
+
+.page-content {
     padding: 1rem;
-  }
-  
-  .page-title {
+}
+
+.page-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
-  }
-  
-  /* Form container */
-  .form-container {
+}
+
+/* Form container */
+.form-container {
     margin-bottom: 1rem;
     position: relative; /* Added for absolute positioning of the button */
-  }
-  
-  /* Button styles */
-  .toggle-button {
+}
+
+/* Button styles */
+.toggle-button {
     position: absolute; /* Position the button at the top-right corner */
-    top: 10px;
+    top: 60px; /* Adjust as needed to be below navbar - VERY IMPORTANT */
     right: 10px;
     background-color: #3b82f6;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.7rem; /* Reduced padding for smaller size */
+    font-size: 0.8rem; /* Reduced font size */
     border-radius: 0.25rem;
     border: none;
     cursor: pointer;
     transition: background-color 0.2s;
-  }
-  
-  .toggle-button:hover {
+}
+
+.toggle-button:hover {
     background-color: #2563eb;
-  }
-  
-  /* Event form */
-  .event-form {
+}
+
+/* Event form (if applicable - if you have a form that appears after clicking the button) */
+.event-form {
     margin-top: 1rem;
     max-width: 32rem;
     margin-left: auto;
@@ -56,96 +57,97 @@
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #e5e7eb;
-  }
-  
-  .form-content {
+    display: none; /* Initially hidden */
+}
+
+.form-content {
     padding: 1.5rem;
-  }
-  
-  .form-title {
+}
+
+.form-title {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-  }
-  
-  .form-fields {
+}
+
+.form-fields {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  }
-  
-  /* Form groups */
-  .form-group {
+}
+
+/* Form groups */
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     font-size: 0.875rem;
     font-weight: 500;
     color: #374151;
-  }
-  
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 0.25rem;
     transition: all 0.2s;
-  }
-  
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-  }
-  
-  .form-group textarea {
+}
+
+.form-group textarea {
     height: 8rem;
     resize: vertical;
-  }
-  
-  /* Image upload */
-  .image-upload {
+}
+
+/* Image upload (if used in your form) */
+.image-upload {
     padding: 1rem;
     background-color: #f9fafb;
     border-radius: 0.25rem;
     border: 1px solid #e5e7eb;
-  }
-  
-  .upload-status {
+}
+
+.upload-status {
     color: #3b82f6;
     margin-top: 0.5rem;
-  }
-  
-  .image-preview {
+}
+
+.image-preview {
     margin-top: 0.5rem;
-  }
-  
-  .image-preview img {
+}
+
+.image-preview img {
     width: 8rem;
     height: 8rem;
     border-radius: 50%;
     object-fit: cover;
-  }
-  
-  /* Error message */
-  .error-message {
+}
+
+/* Error message (if used in your form) */
+.error-message {
     color: #dc2626;
     font-weight: 600;
     padding: 0.75rem;
     border: 1px solid #f87171;
     background-color: #fee2e2;
     border-radius: 0.25rem;
-  }
-  
-  /* Submit button */
-  .submit-button {
+}
+
+/* Submit button (if used in your form) */
+.submit-button {
     width: 100%;
     background-color: #22c55e;
     color: white;
@@ -154,14 +156,14 @@
     border: none;
     cursor: pointer;
     transition: background-color 0.2s;
-  }
-  
-  .submit-button:hover {
+}
+
+.submit-button:hover {
     background-color: #16a34a;
-  }
-  
-  /* Footer */
-  .footer {
+}
+
+/* Footer */
+.footer {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -169,5 +171,4 @@
     background-color: white;
     border-top: 1px solid #e5e7eb;
     z-index: 10;
-  }
-  
+}
