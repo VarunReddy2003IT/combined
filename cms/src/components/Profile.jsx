@@ -67,7 +67,7 @@ const Profile = () => {
       }
 
       // Update user profile with the image URL
-      const updateResponse = await fetch('https://finalbackend-8.onrender.com/api/update-profile', {
+      const updateResponse = await fetch('https://finalbackend-8.onrender.com/api/profile/update-profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
