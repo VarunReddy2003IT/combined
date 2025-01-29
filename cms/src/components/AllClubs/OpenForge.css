@@ -25,10 +25,14 @@
   /* Form container */
   .form-container {
     margin-bottom: 1rem;
+    position: relative; /* Added for absolute positioning of the button */
   }
   
   /* Button styles */
   .toggle-button {
+    position: absolute; /* Position the button at the top-right corner */
+    top: 10px;
+    right: 10px;
     background-color: #3b82f6;
     color: white;
     padding: 0.5rem 1rem;
@@ -166,3 +170,4 @@
     border-top: 1px solid #e5e7eb;
     z-index: 10;
   }
+  
