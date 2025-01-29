@@ -73,7 +73,7 @@ function OpenForge() {
         date: eventDate,
         description: eventDescription,
         type: eventType,
-        image: imageUrl,
+        posterUrl: imageUrl,
         registrationLink: eventType === 'upcoming' ? registrationLink : undefined
       });
 
