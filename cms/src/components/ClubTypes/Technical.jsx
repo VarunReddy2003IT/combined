@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import './Technical.css';
 
 const Technical = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null); // For new event image URL
+
+  const role = localStorage.getItem('userRole');
+  const email = localStorage.getItem('userEmail');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -26,6 +30,69 @@ const Technical = () => {
 
     fetchEvents();
   }, []);
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default'); // Cloudinary preset
+
+    try {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const cloudinaryData = await cloudinaryResponse.json();
+      if (!cloudinaryData.secure_url) {
+        throw new Error('Failed to upload image to Cloudinary');
+      }
+
+      // Store the image URL
+      setImageUrl(cloudinaryData.secure_url);
+      alert('Image uploaded successfully');
+    } catch (err) {
+      setError(err.message || 'Error uploading image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleAddEvent = async () => {
+    if (!imageUrl) {
+      setError('Please upload an image before adding the event.');
+      return;
+    }
+
+    const newEvent = {
+      eventname: 'New Event',
+      description: 'Event description goes here',
+      image: imageUrl,
+      type: 'upcoming', // Set the type dynamically based on the event
+    };
+
+    try {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newEvent),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert('Event added successfully!');
+        setEvents((prevEvents) => [...prevEvents, result.data]); // Update state with new event
+      } else {
+        throw new Error(result.message || 'Failed to add event');
+      }
+    } catch (err) {
+      setError(err.message || 'Error adding event');
+    }
+  };
 
   return (
     <div className="technical-container">
@@ -71,6 +138,18 @@ const Technical = () => {
           </div>
         )}
       </main>
+
+      {role === 'admin' && (
+        <div className="add-event">
+          <button onClick={handleAddEvent} className="btn-add-event">
+            + Add New Event
+          </button>
+
+          <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+          {uploading && <p>Uploading...</p>}
+          {imageUrl && <p>Image uploaded! You can now add the event.</p>}
+        </div>
+      )}
     </div>
   );
 };
