@@ -62,6 +62,7 @@ function Login() {
       if(role=='lead'){
         localStorage.setItem('userClub', club);
       }
+      console.log(club);
       // Use context login function to store user data
       login(userData);
 
