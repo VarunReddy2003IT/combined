@@ -1,146 +1,205 @@
+/* Cultural.css */
+
+/* Base styles */
 .cultural-container {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9fafb;
-    min-height: 100vh;
-  }
-  
-  .cultural-header {
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cultural-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.cultural-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Events section */
+.events-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.event-section {
+  margin-bottom: 30px;
+}
+
+.event-section h2 {
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.event-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.event-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.event-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+.event-title {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.event-details {
+  padding: 15px;
+}
+
+.event-name {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.event-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.registration-link {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.registration-link:hover {
+  background-color: #0056b3;
+}
+
+/* Loading and error states */
+.loading-section,
+.error-section,
+.no-events {
+  text-align: center;
+  padding: 20px;
+}
+
+.loading-section p,
+.no-events p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.error-section p {
+  font-size: 1rem;
+  color: #ff0000;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
   .cultural-header h1 {
-    color: #333;
-    font-size: 2.5rem;
-    text-align: center;
+    font-size: 1.8rem;
   }
-  
-  .events-section {
-    padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
+
+  .event-section h2 {
+    font-size: 1.3rem;
   }
-  
-  .loading-section,
-  .error-section,
-  .no-events {
-    text-align: center;
-    padding: 40px;
-  }
-  
-  .loading-section p,
-  .error-section p,
-  .no-events p {
-    font-size: 1.2rem;
-    color: #777;
-  }
-  
+
   .events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-  
-  .event-card {
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .event-card:hover {
-    transform: translateY(-5px);
-  }
-  
+
   .event-image-container {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
+    height: 150px;
   }
-  
-  .event-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .event-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+
   .event-title {
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
   }
-  
-  .event-details {
-    padding: 20px;
-  }
-  
+
   .event-name {
-    color: #333;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1rem;
   }
-  
+
   .event-description {
-    color: #555;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
   }
-  
-  .footer {
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+
+  .registration-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
-  
-  .footer-links {
-    list-style: none;
-    padding: 0;
+}
+
+@media (max-width: 480px) {
+  .cultural-header h1 {
+    font-size: 1.5rem;
   }
-  
-  .footer-links li {
-    display: inline;
-    margin: 0 15px;
+
+  .event-section h2 {
+    font-size: 1.2rem;
   }
-  
-  .footer-link {
-    text-decoration: none;
-    color: #1d4ed8;
-    font-size: 1rem;
-    transition: color 0.3s;
+
+  .events-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .footer-link:hover {
-    color: #2563eb;
+
+  .event-image-container {
+    height: 120px;
   }
-  
-  @media (max-width: 768px) {
-    .events-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .event-title {
-      font-size: 1.5rem;
-    }
-  
-    .event-name {
-      font-size: 1.2rem;
-    }
-  
-    .footer-link {
-      font-size: 0.9rem;
-    }
+
+  .event-title {
+    font-size: 0.9rem;
   }
-  
+
+  .event-name {
+    font-size: 0.9rem;
+  }
+
+  .event-description {
+    font-size: 0.75rem;
+  }
+
+  .registration-link {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+}

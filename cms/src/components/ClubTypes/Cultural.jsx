@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './Cultural.css';
+import Footerbar from '../CulturalFootBar';
 
 const Cultural = () => {
-  const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -10,12 +12,22 @@ const Cultural = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        // Fetch upcoming events for cultural clubtype
+        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming/Cultural');
+        if (!upcomingResponse.ok) {
+          throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
-        const data = await response.json();
-        setEvents(data);
+        const upcomingData = await upcomingResponse.json();
+        setUpcomingEvents(upcomingData);
+
+        // Fetch past events for cultural clubtype
+        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past/Cultural');
+        if (!pastResponse.ok) {
+          throw new Error(`HTTP error! Status: ${pastResponse.status}`);
+        }
+        const pastData = await pastResponse.json();
+        setPastEvents(pastData);
       } catch (err) {
         console.error('Error fetching events:', err);
         setError(err.message);
@@ -42,60 +54,87 @@ const Cultural = () => {
           <div className="error-section">
             <p className="text-red-500">Error: {error}</p>
           </div>
-        ) : events.length > 0 ? (
-          <div className="events-grid">
-            {events.map((event) => (
-              <div key={event._id} className="event-card">
-                {event.image && (
-                  <div className="event-image-container">
-                    <img
-                      src={event.image}
-                      alt={event.name}
-                      className="event-image"
-                    />
-                    <div className="event-overlay">
-                      <h2 className="event-title">{event.name}</h2>
+        ) : (
+          <>
+            {/* Upcoming Events */}
+            {upcomingEvents.length > 0 && (
+              <div className="event-section">
+                <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
+                <div className="events-grid">
+                  {upcomingEvents.map((event) => (
+                    <div key={event._id} className="event-card">
+                      {event.image && (
+                        <div className="event-image-container">
+                          <img
+                            src={event.image}
+                            alt={event.eventname}
+                            className="event-image"
+                          />
+                          <div className="event-overlay">
+                            <h2 className="event-title">{event.eventname}</h2>
+                          </div>
+                        </div>
+                      )}
+                      <div className="event-details">
+                        <h3 className="event-name">{event.eventname}</h3>
+                        <p className="event-description">{event.description}</p>
+                        {event.registrationLink && (
+                          <a 
+                            href={event.registrationLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="registration-link"
+                          >
+                            Register Now
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-                <div className="event-details">
-                  <h3 className="event-name">{event.eventname}</h3>
-                  <p className="event-description">{event.description}</p>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="no-events">
-            <p className="text-gray-600">No events available at the moment.</p>
-          </div>
+            )}
+
+            {/* Past Events */}
+            {pastEvents.length > 0 && (
+              <div className="event-section">
+                <h2 className="text-xl font-semibold mb-4">Past Events</h2>
+                <div className="events-grid">
+                  {pastEvents.map((event) => (
+                    <div key={event._id} className="event-card">
+                      {event.image && (
+                        <div className="event-image-container">
+                          <img
+                            src={event.image}
+                            alt={event.eventname}
+                            className="event-image"
+                          />
+                          <div className="event-overlay">
+                            <h2 className="event-title">{event.eventname}</h2>
+                          </div>
+                        </div>
+                      )}
+                      <div className="event-details">
+                        <h3 className="event-name">{event.eventname}</h3>
+                        <p className="event-description">{event.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No events available */}
+            {upcomingEvents.length === 0 && pastEvents.length === 0 && (
+              <div className="no-events">
+                <p className="text-gray-600">No events available at the moment.</p>
+              </div>
+            )}
+          </>
         )}
       </main>
 
-      <footer className="footer">
-        <ul className="footer-links">
-          <li>
-            <a href="https://ieee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              IEEE
-            </a>
-          </li>
-          <li>
-            <a href="https://csi-india.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              CSI
-            </a>
-          </li>
-          <li>
-            <a href="https://vlsi.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              VLSID
-            </a>
-          </li>
-          <li>
-            <a href="https://seee.org" target="_blank" rel="noopener noreferrer" className="footer-link">
-              SEEE
-            </a>
-          </li>
-        </ul>
-      </footer>
+      <Footerbar />
     </div>
   );
 };
