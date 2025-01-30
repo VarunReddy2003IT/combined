@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import './SocialFootBar.css';
+import './SocialFooter.css';
 
 function SocialFooter() {
   return (
