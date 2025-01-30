@@ -70,9 +70,7 @@ const Technical = () => {
                             alt={event.eventname}
                             className="event-image"
                           />
-                          <div className="event-overlay">
-                            <h2 className="event-title">{event.eventname}</h2>
-                          </div>
+                          
                         </div>
                       )}
                       <div className="event-details">
@@ -109,9 +107,7 @@ const Technical = () => {
                             alt={event.eventname}
                             className="event-image"
                           />
-                          <div className="event-overlay">
-                            <h2 className="event-title">{event.eventname}</h2>
-                          </div>
+                          
                         </div>
                       )}
                       <div className="event-details">
