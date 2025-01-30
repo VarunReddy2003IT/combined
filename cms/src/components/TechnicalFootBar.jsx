@@ -10,7 +10,7 @@ function footer(){
             <li><Link to="/openforge" className="footer-link">OpenForge</Link></li>
             <li><Link to="/vlsid" className="footer-link">VLSID</Link></li>
             <li><Link to="/seee" className="footer-link">SEEE</Link></li>
-            <li><Link to="/algorhythm" className="footer-link">AlgoRythm</Link></li>
+            <li><Link to="/algorhythm" className="footer-link">AlgoRhythm</Link></li>
           </ul>
         </nav>
       </footer>);
