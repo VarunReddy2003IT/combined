@@ -17,7 +17,6 @@
   }
   
   .events-section {
-    padding: 40px;
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -26,7 +25,6 @@
   .error-section,
   .no-events {
     text-align: center;
-    padding: 40px;
   }
   
   .loading-section p,
