@@ -14,7 +14,7 @@ const Social = () => {
         setLoading(true);
         
         // Fetch upcoming events for social clubtype
-        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming');
+        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming/Social');
         if (!upcomingResponse.ok) {
           throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
@@ -22,7 +22,7 @@ const Social = () => {
         setUpcomingEvents(upcomingData);
 
         // Fetch past events for social clubtype
-        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past');
+        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past/Social');
         if (!pastResponse.ok) {
           throw new Error(`HTTP error! Status: ${pastResponse.status}`);
         }
@@ -67,17 +67,27 @@ const Social = () => {
                         <div className="event-image-container">
                           <img
                             src={event.image}
-                            alt={event.name}
+                            alt={event.eventname}
                             className="event-image"
                           />
                           <div className="event-overlay">
-                            <h2 className="event-title">{event.name}</h2>
+                            <h2 className="event-title">{event.eventname}</h2>
                           </div>
                         </div>
                       )}
                       <div className="event-details">
                         <h3 className="event-name">{event.eventname}</h3>
                         <p className="event-description">{event.description}</p>
+                        {event.registrationLink && (
+                          <a 
+                            href={event.registrationLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="registration-link"
+                          >
+                            Register Now
+                          </a>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -96,11 +106,11 @@ const Social = () => {
                         <div className="event-image-container">
                           <img
                             src={event.image}
-                            alt={event.name}
+                            alt={event.eventname}
                             className="event-image"
                           />
                           <div className="event-overlay">
-                            <h2 className="event-title">{event.name}</h2>
+                            <h2 className="event-title">{event.eventname}</h2>
                           </div>
                         </div>
                       )}
