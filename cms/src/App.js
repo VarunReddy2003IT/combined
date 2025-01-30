@@ -20,6 +20,7 @@ import AlgoRhythm from './components/AllClubs/AlgoRhythm'
 import VLSID from './components/AllClubs/VLSID'
 import OpenForge from './components/AllClubs/OpenForge'
 import SEEE from './components/AllClubs/SEEE'
+import GCCC from './components/AllClubs/GCCC'
 
 // Social Club imports
 import CFSR from './components/AllClubs/CFSR'
@@ -137,6 +138,10 @@ function App() {
           <Route
             path="/rotract"
             element={<ProtectedRoute element={<Rotract />} redirectTo="/app" />}
+          />
+          <Route
+            path="/gccc"
+            element={<ProtectedRoute element={<GCCC/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>
