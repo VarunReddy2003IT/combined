@@ -12,9 +12,9 @@ const Technical = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        
+        const clubType='Technical';
         // Fetch upcoming events for technical clubtype
-        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming');
+        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming?${clubType}');
         if (!upcomingResponse.ok) {
           throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
