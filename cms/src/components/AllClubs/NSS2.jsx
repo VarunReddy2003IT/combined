@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Footerbar from '../TechnicalFootBar';
+import Footerbar from '../SocialFooter';
 import axios from "axios";
-import './NSS2.css';
 
 function NSS2() {
   const [isLeadForNSS2, setIsLeadForNSS2] = useState(false);

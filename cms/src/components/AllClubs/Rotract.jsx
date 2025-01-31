@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Footerbar from '../TechnicalFootBar';
+import Footerbar from '../SocialFooter';
 import axios from "axios";
-import './Rotract.css';
 
 function Rotract() {
   const [isLeadForRotract, setIsLeadForRotract] = useState(false);

@@ -31,8 +31,6 @@ import YouthForSeva from './components/AllClubs/YouthForSeva'
 import WeAreForHelp from './components/AllClubs/WeAreForHelp'
 import HOH from './components/AllClubs/HOH'
 import Rotract from './components/AllClubs/Rotract'
-import Rotract from './components/AllClubs/Vidyadaan'
-
 import ProtectedRoute from './ProtectedRoute';
 import Vidyadaan from './components/AllClubs/Vidyadaan';
 
