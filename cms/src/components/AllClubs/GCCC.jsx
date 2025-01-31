@@ -83,7 +83,7 @@ function GCCC() {
     try {
       await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
-        clubtype: "Technical",
+        clubtype: "Cultural",
         club: "GCCC",
         date: eventDate,
         description: eventDescription,

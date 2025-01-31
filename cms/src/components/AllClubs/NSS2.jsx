@@ -83,7 +83,7 @@ function NSS2() {
     try {
       await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
-        clubtype: "Technical",
+        clubtype: "Social",
         club: "NSS2",
         date: eventDate,
         description: eventDescription,

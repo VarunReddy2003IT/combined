@@ -83,7 +83,7 @@ function WeAreForHelp() {
     try {
       await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
-        clubtype: "Technical",
+        clubtype: "Social",
         club: "WeAreForHelp",
         date: eventDate,
         description: eventDescription,
