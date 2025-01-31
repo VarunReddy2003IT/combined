@@ -31,8 +31,10 @@ import YouthForSeva from './components/AllClubs/YouthForSeva'
 import WeAreForHelp from './components/AllClubs/WeAreForHelp'
 import HOH from './components/AllClubs/HOH'
 import Rotract from './components/AllClubs/Rotract'
+import Rotract from './components/AllClubs/Vidyadaan'
 
 import ProtectedRoute from './ProtectedRoute';
+import Vidyadaan from './components/AllClubs/Vidyadaan';
 
 function App() {
   return (
@@ -138,6 +140,10 @@ function App() {
           <Route
             path="/gccc"
             element={<ProtectedRoute element={<GCCC/>} redirectTo="/app" />}
+          />
+          <Route
+            path="/vidyadaan"
+            element={<ProtectedRoute element={<Vidyadaan/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>

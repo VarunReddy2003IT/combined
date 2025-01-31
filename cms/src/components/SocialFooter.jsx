@@ -16,6 +16,7 @@ function SocialFooter() {
             <li><Link to="/we-are-for-help" className={styles.footerLink}>WeAreForHelp</Link></li>
             <li><Link to="/hoh" className={styles.footerLink}>HOH</Link></li>
             <li><Link to="/rotract" className={styles.footerLink}>Rotract</Link></li>
+            <li><Link to="/vidyadaan" className={styles.footerLink}>Vidyadaan</Link></li>
           </ul>
         </nav>
       </div>

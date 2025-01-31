@@ -13,7 +13,7 @@ function Signup() {
   const [error, setError] = useState(''); // To track error messages
 
   const clubs = [
-    'CFSR','YES','NSS UNIT 1','NSS UNIT 2','YFS(Youth For Seva)','YFS','We Are For Help','Hearts Of Humanity','Vidhyan','Rotract'
+    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract'
     ,'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
   ];
 

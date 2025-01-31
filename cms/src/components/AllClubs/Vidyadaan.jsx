@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './HOH.css';
+import './Vidyadaan.css';
 
-function HOH() {
-  const [isLeadForHOH, setIsLeadForHOH] = useState(false);
+function Vidyadaan() {
+  const [isLeadForVidyadaan, setIsLeadForVidyadaan] = useState(false);
   const [showAddEventForm, setShowAddEventForm] = useState(false);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -21,8 +21,8 @@ function HOH() {
     const userRole = localStorage.getItem("userRole");
     const userClub = localStorage.getItem("userClub");
 
-    if ((userRole === 'lead' && userClub === 'HOH') || userRole === 'admin') {
-      setIsLeadForHOH(true);
+    if ((userRole === 'lead' && userClub === 'Vidyadaan') || userRole === 'admin') {
+      setIsLeadForVidyadaan(true);
     }
 
     fetchEvents();
@@ -31,8 +31,8 @@ function HOH() {
   const fetchEvents = async () => {
     try {
       const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
-      const HOHEvents = response.data.filter(event => event.club === 'HOH');
-      setEvents(HOHEvents);
+      const VidyadaanEvents = response.data.filter(event => event.club === 'Vidyadaan');
+      setEvents(VidyadaanEvents);
     } catch (error) {
       setError("Failed to fetch events");
     } finally {
@@ -85,7 +85,7 @@ function HOH() {
       await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
         clubtype: "Technical",
-        club: "HOH",
+        club: "Vidyadaan",
         date: eventDate,
         description: eventDescription,
         type: eventType,
@@ -142,7 +142,7 @@ function HOH() {
     <div className="container">
       <div className="content">
         <div className="page-content">
-          <h1 className="page-title">HOH Club</h1>
+          <h1 className="page-title">Vidyadaan Club</h1>
           
           <div className="event-section">
             <h2>Upcoming Events</h2>
@@ -178,7 +178,7 @@ function HOH() {
             )}
           </div>
 
-          {isLeadForHOH && (
+          {isLeadForVidyadaan && (
             <div className="form-container">
               <button 
                 onClick={() => setShowAddEventForm(!showAddEventForm)}
@@ -292,4 +292,4 @@ function HOH() {
   );
 }
 
-export default HOH;
+export default Vidyadaan;
