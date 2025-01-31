@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './SEEE.css';
+// import './SEEE.css';
 
 function SEEE() {
   const [isLeadForSEEE, setIsLeadForSEEE] = useState(false);

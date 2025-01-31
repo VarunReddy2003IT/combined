@@ -4,6 +4,7 @@ import './TechnicalFootBar.css'
 function footer(){
     return(<footer className="footer-bar">
         <nav className="footer-nav">
+        <div className="footer-scroll-container">
           <ul className="footer-list">
             <li><Link to="/ieee" className="footer-link">IEEE</Link></li>
             <li><Link to="/csi" className="footer-link">CSI</Link></li>
@@ -12,6 +13,7 @@ function footer(){
             <li><Link to="/seee" className="footer-link">SEEE</Link></li>
             <li><Link to="/algorhythm" className="footer-link">AlgoRhythm</Link></li>
           </ul>
+          </div>
         </nav>
       </footer>);
 }

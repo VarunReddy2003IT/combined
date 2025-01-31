@@ -93,7 +93,7 @@
 .registration-link {
   display: inline-block;
   padding: 8px 15px;
-  background-color: #007bff;
+  background-color: #22c55e;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
@@ -156,6 +156,7 @@
 
   .registration-link {
     font-size: 0.8rem;
+    width: 100%;
     padding: 6px 12px;
   }
 }

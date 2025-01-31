@@ -23,7 +23,6 @@ import SEEE from './components/AllClubs/SEEE'
 import GCCC from './components/AllClubs/GCCC'
 
 // Social Club imports
-import CFSR from './components/AllClubs/CFSR'
 import YES from './components/AllClubs/YES'
 import YFS from './components/AllClubs/YFS'
 import NSS1 from './components/AllClubs/NSS1'
@@ -103,10 +102,7 @@ function App() {
           />
 
           {/* Social Club Routes */}
-          <Route
-            path="/cfsr"
-            element={<ProtectedRoute element={<CFSR />} redirectTo="/app" />}
-          />
+         
           <Route
             path="/yes"
             element={<ProtectedRoute element={<YES />} redirectTo="/app" />}
