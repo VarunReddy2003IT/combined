@@ -1,27 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select } from '@/components/ui/select';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [selectedClub, setSelectedClub] = useState('');
+  const [selectedClubs, setSelectedClubs] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
   const club = localStorage.getItem('userClub');
 
+  const clubs = [
+    'YES', 'NSS1', 'NSS2', 'YouthForSeva', 'YFS', 'WeAreForHelp', 'HOH', 
+    'Vidyadaan', 'Rotract', 'GCCC', 'IEEE', 'CSI', 'AlgoRhythm', 'OpenForge', 
+    'VLSID', 'SEEE', 'Sports'
+  ];
+
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!role || !email || !club) {
+      if (!role || !email) {
         setError('Role and email are required. Please login again.');
         setLoading(false);
         return;
       }
 
       try {
-        console.log('Fetching data for:', { role, email, club });
-
+        // Fetch user profile data
         const response = await fetch(`https://finalbackend-8.onrender.com/api/profile?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}`);
         const result = await response.json();
 
@@ -30,6 +42,13 @@ const Profile = () => {
         }
 
         setUserData(result.data);
+
+        // If user is a member, fetch their selected clubs
+        if (role === 'member') {
+          const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}`);
+          const clubsData = await clubsResponse.json();
+          setSelectedClubs(clubsData.selectedClubs || []);
+        }
       } catch (err) {
         setError(err.message || 'An error occurred while fetching user data');
       } finally {
@@ -38,7 +57,7 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, [email, role, club]);
+  }, [email, role]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -80,104 +99,209 @@ const Profile = () => {
         throw new Error(updateResult.message || 'Failed to update profile');
       }
 
-      // Update UI and hide input field
       setUserData((prev) => ({ ...prev, imageUrl: cloudinaryData.secure_url }));
+      showNotification('Profile image updated successfully', 'success');
 
     } catch (err) {
-      setError(err.message || 'Error uploading image');
+      showNotification(err.message || 'Error uploading image', 'error');
     } finally {
       setUploading(false);
     }
   };
 
+  const handleClubSelection = async () => {
+    if (!selectedClub) return;
+
+    try {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/club-selection/select-clubs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          selectedClub
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to select club');
+      }
+
+      setSelectedClubs([...selectedClubs, selectedClub]);
+      setSelectedClub('');
+      showNotification(data.message, 'success');
+    } catch (err) {
+      showNotification(err.message || 'Error selecting club', 'error');
+    }
+  };
+
+  const showNotification = (message, type = 'info') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 5000);
+  };
+
   if (!role || !email) {
-    return <div style={{ color: 'red', textAlign: 'center', marginTop: '20px' }}>Please login to view your profile</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Alert variant="destructive">
+          Please login to view your profile
+        </Alert>
+      </div>
+    );
   }
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '20px' }}>Loading profile...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div style={{ color: 'red', textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Alert variant="destructive">
+          Error: {error}
+        </Alert>
+      </div>
+    );
   }
 
   return (
-    <div style={{
-      maxWidth: '400px',
-      margin: '20px auto',
-      padding: '20px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-      borderRadius: '8px',
-      backgroundColor: 'white',
-      textAlign: 'center'
-    }}>
-      {/* Profile Image at the Top */}
-      <div style={{ marginBottom: '20px' }}>
-        {userData?.imageUrl ? (
-          <img src={userData.imageUrl} alt="Profile" style={{ width: '120px', height: '120px', borderRadius: '50%' }} />
-        ) : (
-          <p>No image uploaded</p>
-        )}
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      {notification && (
+        <Alert
+          variant={notification.type === 'error' ? 'destructive' : 'default'}
+          className="mb-4"
+        >
+          {notification.message}
+        </Alert>
+      )}
 
-      <h1 style={{ marginBottom: '20px', color: '#333' }}>
-        {role.charAt(0).toUpperCase() + role.slice(1)} Profile
-      </h1>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', textAlign: 'left' }}>
-        <div>
-          <label style={{ fontWeight: 'bold', color: '#666' }}>Name:</label>
-          <div>{userData?.name || 'Not available'}</div>
-        </div>
-
-        <div>
-          <label style={{ fontWeight: 'bold', color: '#666' }}>Email:</label>
-          <div>{userData?.email || 'Not available'}</div>
-        </div>
-
-        <div>
-          <label style={{ fontWeight: 'bold', color: '#666' }}>Role:</label>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            {role}
-            {role === 'lead' && (
-              <span style={{ marginLeft: '5px' }}>- {club || 'Not available'}</span>
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-center">
+            {role.charAt(0).toUpperCase() + role.slice(1)} Profile
+          </CardTitle>
+        </CardHeader>
+        
+        <CardContent>
+          {/* Profile Image Section */}
+          <div className="flex justify-center mb-6">
+            {userData?.imageUrl ? (
+              <img
+                src={userData.imageUrl}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500">No Image</span>
+              </div>
             )}
           </div>
-        </div>
 
-        {/* Image Upload Field (Hidden After Upload) */}
-        {!userData?.imageUrl && (
-          <div>
-            <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-            {uploading && <p style={{ color: 'blue' }}>Uploading...</p>}
+          {/* Image Upload Section */}
+          {!userData?.imageUrl && (
+            <div className="mb-6 text-center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                className="hidden"
+                id="image-upload"
+              />
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+              >
+                {uploading ? 'Uploading...' : 'Upload Profile Picture'}
+              </label>
+            </div>
+          )}
+
+          {/* Profile Information */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Name</label>
+              <div className="mt-1">{userData?.name || 'Not available'}</div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Email</label>
+              <div className="mt-1">{userData?.email || 'Not available'}</div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600">Role</label>
+              <div className="mt-1 flex gap-2">
+                {role}
+                {role === 'lead' && (
+                  <span>- {club || 'Not available'}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Club Selection Section for Members */}
+            {role === 'member' && (
+              <div className="mt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Club Selection</h3>
+                
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">Selected Clubs:</h4>
+                  {selectedClubs.length > 0 ? (
+                    <ul className="list-disc list-inside space-y-1">
+                      {selectedClubs.map((club, index) => (
+                        <li key={index} className="text-gray-700">{club}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-500">No clubs selected yet</p>
+                  )}
+                </div>
+
+                <div className="flex gap-4">
+                  <select
+                    value={selectedClub}
+                    onChange={(e) => setSelectedClub(e.target.value)}
+                    className="flex-1 rounded-md border-gray-300 shadow-sm"
+                  >
+                    <option value="">Select a club</option>
+                    {clubs
+                      .filter(club => !selectedClubs.includes(club))
+                      .map((club, index) => (
+                        <option key={index} value={club}>{club}</option>
+                      ))}
+                  </select>
+                  <Button
+                    onClick={handleClubSelection}
+                    disabled={!selectedClub}
+                  >
+                    Add Club
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Admin Link */}
+            {role === 'admin' && (
+              <Link
+                to="/admin-profile"
+                className="mt-6 inline-block w-full"
+              >
+                <Button className="w-full">
+                  View All Profiles
+                </Button>
+              </Link>
+            )}
           </div>
-        )}
-
-        {/* Admin Link */}
-        {role === 'admin' && (
-          <Link
-            to="/admin-profile"
-            style={{
-              backgroundColor: '#007bff',
-              color: 'white',
-              padding: '10px 20px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginTop: '20px',
-              width: '100%',
-              fontSize: '16px',
-              textDecoration: 'none',
-              display: 'inline-block',
-              textAlign: 'center',
-              boxSizing: 'border-box'
-            }}
-          >
-            View All Profiles
-          </Link>
-        )}
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
