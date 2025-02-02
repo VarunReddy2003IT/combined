@@ -8,17 +8,18 @@ const Profile = () => {
 
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
+  const club = localStorage.getItem('userClub');
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!role || !email) {
+      if (!role || !email || !club) {
         setError('Role and email are required. Please login again.');
         setLoading(false);
         return;
       }
 
       try {
-        console.log('Fetching data for:', { role, email });
+        console.log('Fetching data for:', { role, email, club });
 
         const response = await fetch(`https://finalbackend-8.onrender.com/api/profile?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}`);
         const result = await response.json();
@@ -36,7 +37,7 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, [email, role]);
+  }, [email, role, club]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -136,7 +137,12 @@ const Profile = () => {
 
         <div>
           <label style={{ fontWeight: 'bold', color: '#666' }}>Role:</label>
-          <div>{role}</div>
+          <div style={{ display: 'flex', gap: '5px' }}>
+            {role}
+            {role === 'lead' && (
+              <span style={{ marginLeft: '5px' }}>- {club || 'Not available'}</span>
+            )}
+          </div>
         </div>
 
         {/* Image Upload Field (Hidden After Upload) */}
