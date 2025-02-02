@@ -8,6 +8,7 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const [selectedClub, setSelectedClub] = useState('');
   const [selectedClubs, setSelectedClubs] = useState([]);
+  const [pendingClubs, setPendingClubs] = useState([]);
   const [notification, setNotification] = useState(null);
 
   const role = localStorage.getItem('userRole');
@@ -19,6 +20,11 @@ const Profile = () => {
     'Vidyadaan', 'Rotract', 'GCCC', 'IEEE', 'CSI', 'AlgoRhythm', 'OpenForge', 
     'VLSID', 'SEEE', 'Sports'
   ];
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 5000);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,10 +47,17 @@ const Profile = () => {
         if (role === 'member') {
           const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}`);
           const clubsData = await clubsResponse.json();
-          setSelectedClubs(clubsData.selectedClubs || []);
+          
+          if (clubsData.success) {
+            setSelectedClubs(clubsData.selectedClubs || []);
+            setPendingClubs(clubsData.pendingClubs || []);
+          } else {
+            throw new Error(clubsData.message || 'Failed to fetch clubs data');
+          }
         }
       } catch (err) {
         setError(err.message || 'An error occurred while fetching user data');
+        showNotification(err.message || 'An error occurred while fetching user data', 'error');
       } finally {
         setLoading(false);
       }
@@ -122,17 +135,12 @@ const Profile = () => {
         throw new Error(data.message || 'Failed to select club');
       }
 
-      setSelectedClubs([...selectedClubs, selectedClub]);
+      setPendingClubs([...pendingClubs, selectedClub]);
       setSelectedClub('');
-      showNotification(data.message);
+      showNotification(data.message || 'Club request sent successfully. Awaiting lead approval.');
     } catch (err) {
       showNotification(err.message || 'Error selecting club', 'error');
     }
-  };
-
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 5000);
   };
 
   if (!role || !email) {
@@ -160,14 +168,7 @@ const Profile = () => {
   }
 
   return (
-    <div style={{
-      maxWidth: '600px',
-      margin: '20px auto',
-      padding: '20px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-      borderRadius: '8px',
-      backgroundColor: 'white',
-    }}>
+    <div className="profile-container">
       {notification && (
         <div style={{
           padding: '10px',
@@ -257,36 +258,52 @@ const Profile = () => {
 
       {/* Club Selection for Members */}
       {role === 'member' && (
-        <div style={{ marginTop: '20px' }}>
-          <h3 style={{ marginBottom: '15px' }}>Club Selection</h3>
+        <div className="club-selection-container">
+          <h3 className="section-title">Club Selection</h3>
           
-          <div style={{ marginBottom: '15px' }}>
-            <h4 style={{ marginBottom: '10px' }}>Selected Clubs:</h4>
+          {/* Approved Clubs */}
+          <div className="clubs-section">
+            <h4 className="subsection-title">Selected Clubs:</h4>
             {selectedClubs.length > 0 ? (
-              <ul style={{ paddingLeft: '20px' }}>
+              <ul className="clubs-list">
                 {selectedClubs.map((club, index) => (
-                  <li key={index}>{club}</li>
+                  <li key={index} className="club-item approved">
+                    {club}
+                    <span className="status-badge approved">Approved</span>
+                  </li>
                 ))}
               </ul>
             ) : (
-              <p>No clubs selected yet</p>
+              <p className="no-clubs">No approved clubs yet</p>
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          {/* Pending Clubs */}
+          <div className="clubs-section">
+            <h4 className="subsection-title">Pending Approvals:</h4>
+            {pendingClubs.length > 0 ? (
+              <ul className="clubs-list">
+                {pendingClubs.map((club, index) => (
+                  <li key={index} className="club-item pending">
+                    {club}
+                    <span className="status-badge pending">Pending</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="no-clubs">No pending requests</p>
+            )}
+          </div>
+
+          <div className="club-selection-form">
             <select
               value={selectedClub}
               onChange={(e) => setSelectedClub(e.target.value)}
-              style={{
-                flex: 1,
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
-              }}
+              className="club-select"
             >
               <option value="">Select a club</option>
               {clubs
-                .filter(club => !selectedClubs.includes(club))
+                .filter(club => !selectedClubs.includes(club) && !pendingClubs.includes(club))
                 .map((club, index) => (
                   <option key={index} value={club}>{club}</option>
                 ))}
@@ -294,16 +311,9 @@ const Profile = () => {
             <button
               onClick={handleClubSelection}
               disabled={!selectedClub}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: selectedClub ? '#007bff' : '#cccccc',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: selectedClub ? 'pointer' : 'not-allowed',
-              }}
+              className={`club-select-button ${!selectedClub ? 'disabled' : ''}`}
             >
-              Add Club
+              Request to Join
             </button>
           </div>
         </div>
@@ -327,6 +337,114 @@ const Profile = () => {
           View All Profiles
         </Link>
       )}
+
+      <style jsx>{`
+        .profile-container {
+          max-width: 600px;
+          margin: 20px auto;
+          padding: 20px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          background-color: white;
+        }
+
+        .club-selection-container {
+          margin-top: 30px;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+        }
+
+        .section-title {
+          color: #2c3e50;
+          font-size: 1.5rem;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #e9ecef;
+          padding-bottom: 10px;
+        }
+
+        .subsection-title {
+          color: #495057;
+          font-size: 1.1rem;
+          margin: 15px 0;
+        }
+
+        .clubs-section {
+          margin-bottom: 25px;
+        }
+
+        .clubs-list {
+          list-style: none;
+          padding: 0;
+        }
+
+        .club-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 12px 15px;
+          margin-bottom: 8px;
+          border-radius: 6px;
+          background-color: white;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-badge {
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+
+        .status-badge.approved {
+          background-color: #d4edda;
+          color: #155724;
+        }
+
+        .status-badge.pending {
+          background-color: #fff3cd;
+          color: #856404;
+        }
+
+        .club-selection-form {
+          display: flex;
+          gap: 10px;
+          margin-top: 20px;
+        }
+
+        .club-select {
+          flex: 1;
+          padding: 10px;
+          border: 1px solid #ced4da;
+          border-radius: 6px;
+          font-size: 1rem;
+          color: #495057;
+        }
+
+        .club-select-button {
+          padding: 10px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .club-select-button:hover {
+          background-color: #0056b3;
+        }
+
+        .club-select-button.disabled {
+          background-color: #cccccc;
+          cursor: not-allowed;
+        }
+
+        .no-clubs {
+          color: #6c757d;
+          font-style: italic;
+        }
+      `}</style>
     </div>
   );
 };
