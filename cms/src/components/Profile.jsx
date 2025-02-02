@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -151,6 +152,30 @@ const Profile = () => {
             <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
             {uploading && <p style={{ color: 'blue' }}>Uploading...</p>}
           </div>
+        )}
+
+        {/* Admin Link */}
+        {role === 'admin' && (
+          <Link
+            to="/admin-profile"
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginTop: '20px',
+              width: '100%',
+              fontSize: '16px',
+              textDecoration: 'none',
+              display: 'inline-block',
+              textAlign: 'center',
+              boxSizing: 'border-box'
+            }}
+          >
+            View All Profiles
+          </Link>
         )}
       </div>
     </div>

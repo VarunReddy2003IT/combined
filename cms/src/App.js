@@ -34,6 +34,8 @@ import Rotract from './components/AllClubs/Rotract'
 import ProtectedRoute from './ProtectedRoute';
 import Vidyadaan from './components/AllClubs/Vidyadaan';
 
+import AdminProfiles from './components/ProfileRoles/AdminProfile'
+
 function App() {
   return (
     <AuthProvider>
@@ -142,6 +144,10 @@ function App() {
           <Route
             path="/vidyadaan"
             element={<ProtectedRoute element={<Vidyadaan/>} redirectTo="/app" />}
+          />
+          <Route
+            path="/admin-profile"
+            element={<ProtectedRoute element={<AdminProfiles/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>
