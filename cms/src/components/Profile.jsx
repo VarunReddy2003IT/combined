@@ -120,6 +120,7 @@ const Profile = () => {
     try {
       const response = await fetch('https://finalbackend-8.onrender.com/api/club-selection/select-clubs', {
         method: 'POST',
+        
         headers: {
           'Content-Type': 'application/json',
         },
