@@ -29,6 +29,35 @@ function LeadsProfile() {
     }
   };
 
+  const handleDeleteClub = async (email, clubName) => {
+    try {
+      const response = await fetch("https://finalbackend-8.onrender.com/api/remove-club", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, clubName })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Remove the club from the member's selectedClubs in the frontend
+        setMembers((prevMembers) =>
+          prevMembers.map((member) =>
+            member.email === email
+              ? { ...member, selectedClubs: member.selectedClubs.filter(club => club !== clubName) }
+              : member
+          )
+        );
+      } else {
+        throw new Error(data.message || "Error removing club");
+      }
+    } catch (err) {
+      setError(err.message || "Error removing club");
+    }
+  };
+
   const filteredUsers = () => {
     if (!searchTerm) return members;
     return members.filter((user) =>
@@ -130,6 +159,24 @@ function LeadsProfile() {
               <label style={{ fontWeight: "bold", color: "#666" }}>Email:</label>
               <div>{user.email}</div>
             </div>
+
+            {/* Render the Delete button for each club in the selectedClubs array */}
+            {user.selectedClubs.includes(leadClub) && (
+              <button
+                onClick={() => handleDeleteClub(user.email, leadClub)}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "red",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  marginTop: "10px",
+                }}
+              >
+                Remove from Club
+              </button>
+            )}
           </div>
         ))}
       </div>
