@@ -35,6 +35,8 @@ import ProtectedRoute from './ProtectedRoute';
 import Vidyadaan from './components/AllClubs/Vidyadaan';
 
 import AdminProfiles from './components/ProfileRoles/AdminProfile'
+import LeadProfiles from './components/ProfileRoles/LeadProfile'
+
 
 function App() {
   return (
@@ -148,6 +150,10 @@ function App() {
           <Route
             path="/admin-profile"
             element={<ProtectedRoute element={<AdminProfiles/>} redirectTo="/app" />}
+          />
+          <Route
+            path="/lead-profile"
+            element={<ProtectedRoute element={<LeadProfiles/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>

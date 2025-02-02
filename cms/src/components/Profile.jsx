@@ -337,6 +337,23 @@ const Profile = () => {
           View All Profiles
         </Link>
       )}
+      {role === 'lead' && (
+        <Link
+          to="/lead-profile"
+          style={{
+            display: 'block',
+            backgroundColor: '#007bff',
+            color: 'white',
+            padding: '10px 20px',
+            textAlign: 'center',
+            borderRadius: '4px',
+            textDecoration: 'none',
+            marginTop: '20px',
+          }}
+        >
+          View All Profiles
+        </Link>
+      )}
 
       <style jsx>{`
         .profile-container {
