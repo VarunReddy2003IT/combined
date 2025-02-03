@@ -44,8 +44,9 @@ const Profile = () => {
 
         setUserData(result.data);
 
-        if (role === 'member') {
-          const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}`);
+        // Fetch clubs for both members and leads
+        if (role === 'member' || role === 'lead') {
+          const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}/${role}`);
           const clubsData = await clubsResponse.json();
           
           if (clubsData.success) {
@@ -120,13 +121,12 @@ const Profile = () => {
     try {
       const response = await fetch('https://finalbackend-8.onrender.com/api/club-selection/select-clubs', {
         method: 'POST',
-
-        
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email,
+          role,
           selectedClub
         }),
       });
@@ -139,7 +139,7 @@ const Profile = () => {
 
       setPendingClubs([...pendingClubs, selectedClub]);
       setSelectedClub('');
-      showNotification(data.message || 'Club request sent successfully. Awaiting lead approval.');
+      showNotification(data.message || 'Club request sent successfully. Awaiting approval.');
     } catch (err) {
       showNotification(err.message || 'Error selecting club', 'error');
     }
@@ -184,7 +184,7 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Profile Image */}
+      {/* Profile Image Section */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         {userData?.imageUrl ? (
           <img
@@ -253,13 +253,12 @@ const Profile = () => {
           </label>
           <div>
             {role}
-            {role === 'lead' && club && ` - ${club}`}
           </div>
         </div>
       </div>
 
-      {/* Club Selection for Members */}
-      {role === 'member' && (
+      {/* Club Selection for Members and Leads */}
+      {(role === 'member' || role === 'lead') && (
         <div className="club-selection-container">
           <h3 className="section-title">Club Selection</h3>
           
@@ -321,7 +320,7 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Admin Link */}
+      {/* Admin/Lead Links */}
       {role === 'admin' && (
         <Link
           to="/admin-profile"
