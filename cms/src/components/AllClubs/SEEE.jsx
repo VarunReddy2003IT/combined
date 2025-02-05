@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-// import './SEEE.css';
+import './SEEE.css';
 
 function SEEE() {
   const [isLeadForSEEE, setIsLeadForSEEE] = useState(false);
@@ -12,7 +12,8 @@ function SEEE() {
   const [eventType, setEventType] = useState('upcoming');
   const [registrationLink, setRegistrationLink] = useState('');
   const [error, setError] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [uploading, setUploading] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,8 +33,8 @@ function SEEE() {
     try {
       const response = await axios.get("http://localhost:5000/api/events");
       // Filter events for SEEE club
-      const seeeEvents = response.data.filter(event => event.club === 'SEEE');
-      setEvents(seeeEvents);
+      const SEEEEvents = response.data.filter(event => event.club === 'SEEE');
+      setEvents(SEEEEvents);
     } catch (error) {
       setError("Failed to fetch events");
     } finally {
@@ -41,34 +42,19 @@ function SEEE() {
     }
   };
 
-  const handleImageUpload = async (event) => {
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    setUploading(true);
-    setError('');
+    // Create image preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'ml_default');
-
-    try {
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const cloudinaryData = await cloudinaryResponse.json();
-      if (!cloudinaryData.secure_url) {
-        throw new Error('Failed to upload image to Cloudinary');
-      }
-
-      setImageUrl(cloudinaryData.secure_url);
-    } catch (err) {
-      setError('Error uploading image: ' + err.message);
-    } finally {
-      setUploading(false);
-    }
+    // Set file for upload
+    setImageFile(file);
   };
 
   const handleAddEvent = async () => {
@@ -82,60 +68,86 @@ function SEEE() {
       return;
     }
 
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('eventname', eventName);
+    formData.append('clubtype', "Technical");
+    formData.append('club', "SEEE");
+    formData.append('date', eventDate);
+    formData.append('description', eventDescription);
+    formData.append('type', eventType);
+    
+    // Add file if present
+    if (imageFile) {
+      formData.append('file', imageFile);
+    }
+
+    // Add registration link for upcoming events
+    if (eventType === 'upcoming') {
+      formData.append('registrationLink', registrationLink);
+    }
+
     try {
-      await axios.post("http://localhost:5000/api/events/add", {
-        eventname: eventName,
-        clubtype: "Technical",
-        club: "SEEE",
-        date: eventDate,
-        description: eventDescription,
-        type: eventType,
-        image: imageUrl, // Changed from posterUrl to image to match schema
-        registrationLink: eventType === 'upcoming' ? registrationLink : undefined
+      await axios.post("http://localhost:5000/api/events/add", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
       alert("Event added successfully!");
+      // Reset form
       setEventName('');
       setEventDate('');
       setEventDescription('');
       setEventType('upcoming');
       setRegistrationLink('');
-      setImageUrl('');
+      setImageFile(null);
+      setImagePreview('');
       setShowAddEventForm(false);
       setError('');
       fetchEvents(); // Refresh events after adding
     } catch (error) {
       setError(error.response?.data?.error || "Failed to add event. Please try again.");
+    } finally {
+      setUploading(false);
     }
   };
 
-  const EventCard = ({ event }) => (
-    <div className="event-card">
-      <div className="event-image-container">
-        <img
-          src={event.image || '/placeholder-event.jpg'}
-          alt={event.eventname}
-          className="event-image"
-        />
+  const EventCard = ({ event }) => {
+    // Construct full image URL for local uploads
+    const imageSrc = event.image 
+      ? `http://localhost:5000/${event.image}` 
+      : '/placeholder-event.jpg';
+
+    return (
+      <div className="event-card">
+        <div className="event-image-container">
+          <img
+            src={imageSrc}
+            alt={event.eventname}
+            className="event-image"
+            onError={(e) => { e.target.src = '/placeholder-event.jpg' }}
+          />
+        </div>
+        <div className="event-details">
+          <h3>{event.eventname}</h3>
+          <p className="event-description">{event.description}</p>
+          <p>Date: {new Date(event.date).toLocaleDateString()}</p>
+          {event.type === 'upcoming' && event.registrationLink && (
+            <a
+              href={event.registrationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="submit-button"
+              style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
+            >
+              Register Now
+            </a>
+          )}
+        </div>
       </div>
-      <div className="event-details">
-        <h3>{event.eventname}</h3>
-        <p className="event-description">{event.description}</p>
-        <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-        {event.type === 'upcoming' && event.registrationLink && (
-          <a
-            href={event.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="submit-button"
-            style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
-          >
-            Register Now
-          </a>
-        )}
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Filter events by type
   const upcomingEvents = events.filter(event => event.type === 'upcoming');
@@ -143,6 +155,9 @@ function SEEE() {
 
   return (
     <div className="container">
+      <div className="footer">
+        <Footerbar />
+      </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">SEEE Club</h1>
@@ -261,10 +276,10 @@ function SEEE() {
                         {uploading && (
                           <p className="upload-status">Uploading...</p>
                         )}
-                        {imageUrl && (
+                        {imagePreview && (
                           <div className="image-preview">
                             <img
-                              src={imageUrl}
+                              src={imagePreview}
                               alt="Event poster preview"
                             />
                           </div>
@@ -280,8 +295,9 @@ function SEEE() {
                       <button 
                         onClick={handleAddEvent}
                         className="submit-button"
+                        disabled={uploading}
                       >
-                        Submit Event
+                        {uploading ? "Submitting..." : "Submit Event"}
                       </button>
                     </div>
                   </div>
@@ -290,9 +306,6 @@ function SEEE() {
             </div>
           )}
         </div>
-      </div>
-      <div className="footer">
-        <Footerbar />
       </div>
     </div>
   );
