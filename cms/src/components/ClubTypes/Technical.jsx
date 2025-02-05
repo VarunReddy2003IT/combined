@@ -41,6 +41,7 @@ const Technical = () => {
 
   return (
     <div className="technical-container">
+      <Footerbar />
       <header className="technical-header">
         <h1 className="text-3xl font-bold text-center text-gray-800">Technical Events</h1>
       </header>
@@ -130,7 +131,7 @@ const Technical = () => {
         )}
       </main>
 
-      <Footerbar />
+      
     </div>
   );
 };

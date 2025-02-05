@@ -91,10 +91,11 @@
   }
   
   .footer {
-    background-color: #fff;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    background-color: yellow;
+
   }
   
   .footer-links {
@@ -105,17 +106,18 @@
   .footer-links li {
     display: inline;
     margin: 0 15px;
+    
   }
   
   .footer-link {
     text-decoration: none;
-    color: #fff;
     font-size: 1rem;
     transition: color 0.3s;
   }
   
   .footer-link:hover {
-    color: #2563eb;
+    border-radius: 10px;
+    color: #fff;
   }
   
   @media (max-width: 768px) {

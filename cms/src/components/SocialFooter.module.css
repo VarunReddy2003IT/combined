@@ -1,13 +1,11 @@
 .footerBar {
-  background-color: #333;
-  color: azure;
+  background-color:transparent;
   width: 100%;
-  position: fixed;
-  bottom: 0;
   left: 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   text-align: center; /* Add center alignment */
+  margin-top: 10px;
 }
 
 .footerScrollContainer {
@@ -59,7 +57,10 @@
 }
 
 .footerLink {
-  color: #f7f8fa;
+  color: white;
+  background-color: #333;
+  border: grey 1px solid;
+  border-radius: 20px;
   text-decoration: none;
   font-size: 1.1rem;
   padding: 8px 12px;
@@ -68,7 +69,8 @@
 }
 
 .footerLink:hover {
-  color: #98da14;
+  transform: translateY(-5px);
+  color: #f1f3f4;
 }
 
 .footerLink:global(.active) {

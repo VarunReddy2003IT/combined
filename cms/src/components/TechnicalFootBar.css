@@ -1,13 +1,12 @@
 .footer-bar {
-  background-color: #333;
-  color: azure;
   width: 100%;
-  padding: 15px 0;
-  position: fixed;
-  bottom: 0;
+  padding: 10px 0;
+  /* bottom: 0; */
   left: 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  margin: 10px 0 10px 0;
+  background-color: transparent;
 }
 
 .footer-nav {
@@ -46,20 +45,26 @@
 }
 
 .footer-link {
-  color: #f7f8fa;
   text-decoration: none;
   font-size: 1.1rem;
   padding: 8px 12px;
   transition: color 0.3s ease;
   display: inline-block;
+  border: grey 1px solid;
+  border-radius: 20px;
+  margin-top: 5px;
+  background-color: #333;
+    color: #fff;
 }
 
 .footer-link:hover {
   color: #98da14;
+  transform: translateY(-5px);
+
 }
 
 .footer-link.active {
-  color: #f1f3f4;
+  color: black;
   font-weight: 500;
 }
 

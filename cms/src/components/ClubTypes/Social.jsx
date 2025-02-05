@@ -41,6 +41,7 @@ const Social = () => {
 
   return (
     <div className="social-container">
+      <SocialFooter />
       <header className="social-header">
         <h1 className="text-3xl font-bold text-center text-gray-800">Social Events</h1>
       </header>
@@ -130,7 +131,7 @@ const Social = () => {
         )}
       </main>
 
-      <SocialFooter />
+      
     </div>
   );
 };
