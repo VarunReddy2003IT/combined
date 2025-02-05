@@ -13,7 +13,6 @@ const Profile = () => {
 
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
-  const club = localStorage.getItem('userClub');
 
   const clubs = [
     'YES', 'NSS1', 'NSS2', 'YouthForSeva', 'YFS', 'WeAreForHelp', 'HOH', 
@@ -44,7 +43,6 @@ const Profile = () => {
 
         setUserData(result.data);
 
-        // Fetch clubs for both members and leads
         if (role === 'member' || role === 'lead') {
           const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}/${role}`);
           const clubsData = await clubsResponse.json();
@@ -75,38 +73,22 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'ml_default');
+    formData.append('email', email);
+    formData.append('role', role);
 
     try {
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/profile/update-profile', {
         method: 'POST',
         body: formData,
       });
 
-      const cloudinaryData = await cloudinaryResponse.json();
-      if (!cloudinaryData.secure_url) {
-        throw new Error('Failed to upload image to Cloudinary');
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to update profile');
       }
 
-      const updateResponse = await fetch('https://finalbackend-8.onrender.com/api/profile/update-profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          role,
-          imageUrl: cloudinaryData.secure_url,
-        }),
-      });
-
-      const updateResult = await updateResponse.json();
-
-      if (!updateResult.success) {
-        throw new Error(updateResult.message || 'Failed to update profile');
-      }
-
-      setUserData((prev) => ({ ...prev, imageUrl: cloudinaryData.secure_url }));
+      setUserData((prev) => ({ ...prev, imageUrl: result.data.imageUrl }));
       showNotification('Profile image updated successfully');
     } catch (err) {
       showNotification(err.message || 'Error uploading image', 'error');
@@ -147,322 +129,193 @@ const Profile = () => {
 
   if (!role || !email) {
     return (
-      <div style={{ color: 'red', textAlign: 'center', marginTop: '20px' }}>
-        Please login to view your profile
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-red-600 text-lg font-medium">
+          Please login to view your profile
+        </div>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        Loading profile...
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-gray-600 text-lg">
+          Loading profile...
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ color: 'red', textAlign: 'center', marginTop: '20px' }}>
-        Error: {error}
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-red-600 text-lg">
+          Error: {error}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="profile-container">
+    <div className="max-w-3xl mx-auto px-4 py-8">
       {notification && (
-        <div style={{
-          padding: '10px',
-          marginBottom: '20px',
-          borderRadius: '4px',
-          backgroundColor: notification.type === 'error' ? '#ffebee' : '#e8f5e9',
-          color: notification.type === 'error' ? '#c62828' : '#2e7d32',
-          textAlign: 'center',
-        }}>
+        <div className={`mb-4 p-4 rounded-lg text-center ${
+          notification.type === 'error' 
+            ? 'bg-red-100 text-red-800' 
+            : 'bg-green-100 text-green-800'
+        }`}>
           {notification.message}
         </div>
       )}
 
-      {/* Profile Image Section */}
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        {userData?.imageUrl ? (
-          <img
-            src={userData.imageUrl}
-            alt="Profile"
-            style={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <div style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '50%',
-            backgroundColor: '#f0f0f0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto',
-          }}>
-            No Image
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        {/* Profile Image Section */}
+        <div className="flex flex-col items-center mb-8">
+          {userData?.imageUrl ? (
+            <img
+              src={userData.imageUrl}
+              alt="Profile"
+              className="w-32 h-32 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500">No Image</span>
+            </div>
+          )}
+
+          <div className="mt-4">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+              <div className={`inline-flex items-center px-4 py-2 rounded-lg text-white transition-colors ${
+                uploading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+              }`}>
+                {uploading ? 'Uploading...' : 'Upload Photo'}
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Profile Information */}
+        <div className="space-y-6 mb-8">
+          <h1 className="text-2xl font-bold text-center text-gray-800">
+            {role.charAt(0).toUpperCase() + role.slice(1)} Profile
+          </h1>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block font-semibold text-gray-700 mb-1">Name:</label>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                {userData?.name || 'Not available'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-semibold text-gray-700 mb-1">Email:</label>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                {userData?.email || 'Not available'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-semibold text-gray-700 mb-1">Role:</label>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                {role}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Club Selection Section */}
+        {(role === 'member' || role === 'lead') && (
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6">Club Selection</h3>
+            
+            {/* Approved Clubs */}
+            <div className="mb-6">
+              <h4 className="text-lg font-medium text-gray-700 mb-3">Selected Clubs:</h4>
+              {selectedClubs.length > 0 ? (
+                <div className="space-y-2">
+                  {selectedClubs.map((club, index) => (
+                    <div key={index} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                      <span>{club}</span>
+                      <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                        Approved
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 italic">No approved clubs yet</p>
+              )}
+            </div>
+
+            {/* Pending Clubs */}
+            <div className="mb-6">
+              <h4 className="text-lg font-medium text-gray-700 mb-3">Pending Approvals:</h4>
+              {pendingClubs.length > 0 ? (
+                <div className="space-y-2">
+                  {pendingClubs.map((club, index) => (
+                    <div key={index} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                      <span>{club}</span>
+                      <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-full">
+                        Pending
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 italic">No pending requests</p>
+              )}
+            </div>
+
+            {/* Club Selection Form */}
+            <div className="flex gap-4">
+              <select
+                value={selectedClub}
+                onChange={(e) => setSelectedClub(e.target.value)}
+                className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              >
+                <option value="">Select a club</option>
+                {clubs
+                  .filter(club => !selectedClubs.includes(club) && !pendingClubs.includes(club))
+                  .map((club, index) => (
+                    <option key={index} value={club}>{club}</option>
+                  ))}
+              </select>
+              <button
+                onClick={handleClubSelection}
+                disabled={!selectedClub}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  !selectedClub 
+                    ? 'bg-gray-300 cursor-not-allowed' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                Request to Join
+              </button>
+            </div>
           </div>
         )}
+
+        {/* Admin/Lead Links */}
+        {(role === 'admin' || role === 'lead') && (
+          <Link
+            to={`/${role.toLowerCase()}-profile`}
+            className="block w-full text-center bg-blue-600 text-white py-3 rounded-lg mt-6 hover:bg-blue-700 transition-colors"
+          >
+            View All Profiles
+          </Link>
+        )}
       </div>
-
-      {/* Image Upload */}
-      {!userData?.imageUrl && (
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            disabled={uploading}
-            style={{ marginBottom: '10px' }}
-          />
-          {uploading && <div>Uploading...</div>}
-        </div>
-      )}
-
-      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>
-        {role.charAt(0).toUpperCase() + role.slice(1)} Profile
-      </h1>
-
-      {/* Profile Information */}
-      <div style={{ marginBottom: '20px' }}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Name:
-          </label>
-          <div>{userData?.name || 'Not available'}</div>
-        </div>
-
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Email:
-          </label>
-          <div>{userData?.email || 'Not available'}</div>
-        </div>
-
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Role:
-          </label>
-          <div>
-            {role}
-          </div>
-        </div>
-      </div>
-
-      {/* Club Selection for Members and Leads */}
-      {(role === 'member' || role === 'lead') && (
-        <div className="club-selection-container">
-          <h3 className="section-title">Club Selection</h3>
-          
-          {/* Approved Clubs */}
-          <div className="clubs-section">
-            <h4 className="subsection-title">Selected Clubs:</h4>
-            {selectedClubs.length > 0 ? (
-              <ul className="clubs-list">
-                {selectedClubs.map((club, index) => (
-                  <li key={index} className="club-item approved">
-                    {club}
-                    <span className="status-badge approved">Approved</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-clubs">No approved clubs yet</p>
-            )}
-          </div>
-
-          {/* Pending Clubs */}
-          <div className="clubs-section">
-            <h4 className="subsection-title">Pending Approvals:</h4>
-            {pendingClubs.length > 0 ? (
-              <ul className="clubs-list">
-                {pendingClubs.map((club, index) => (
-                  <li key={index} className="club-item pending">
-                    {club}
-                    <span className="status-badge pending">Pending</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-clubs">No pending requests</p>
-            )}
-          </div>
-
-          <div className="club-selection-form">
-            <select
-              value={selectedClub}
-              onChange={(e) => setSelectedClub(e.target.value)}
-              className="club-select"
-            >
-              <option value="">Select a club</option>
-              {clubs
-                .filter(club => !selectedClubs.includes(club) && !pendingClubs.includes(club))
-                .map((club, index) => (
-                  <option key={index} value={club}>{club}</option>
-                ))}
-            </select>
-            <button
-              onClick={handleClubSelection}
-              disabled={!selectedClub}
-              className={`club-select-button ${!selectedClub ? 'disabled' : ''}`}
-            >
-              Request to Join
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Admin/Lead Links */}
-      {role === 'admin' && (
-        <Link
-          to="/admin-profile"
-          style={{
-            display: 'block',
-            backgroundColor: '#007bff',
-            color: 'white',
-            padding: '10px 20px',
-            textAlign: 'center',
-            borderRadius: '4px',
-            textDecoration: 'none',
-            marginTop: '20px',
-          }}
-        >
-          View All Profiles
-        </Link>
-      )}
-      {role === 'lead' && (
-        <Link
-          to="/lead-profile"
-          style={{
-            display: 'block',
-            backgroundColor: '#007bff',
-            color: 'white',
-            padding: '10px 20px',
-            textAlign: 'center',
-            borderRadius: '4px',
-            textDecoration: 'none',
-            marginTop: '20px',
-          }}
-        >
-          View All Profiles
-        </Link>
-      )}
-
-      <style jsx>{`
-        .profile-container {
-          max-width: 600px;
-          margin: 20px auto;
-          padding: 20px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          background-color: white;
-        }
-
-        .club-selection-container {
-          margin-top: 30px;
-          padding: 20px;
-          background-color: #f8f9fa;
-          border-radius: 8px;
-        }
-
-        .section-title {
-          color: #2c3e50;
-          font-size: 1.5rem;
-          margin-bottom: 20px;
-          border-bottom: 2px solid #e9ecef;
-          padding-bottom: 10px;
-        }
-
-        .subsection-title {
-          color: #495057;
-          font-size: 1.1rem;
-          margin: 15px 0;
-        }
-
-        .clubs-section {
-          margin-bottom: 25px;
-        }
-
-        .clubs-list {
-          list-style: none;
-          padding: 0;
-        }
-
-        .club-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 15px;
-          margin-bottom: 8px;
-          border-radius: 6px;
-          background-color: white;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .status-badge {
-          padding: 4px 8px;
-          border-radius: 12px;
-          font-size: 0.8rem;
-          font-weight: 500;
-        }
-
-        .status-badge.approved {
-          background-color: #d4edda;
-          color: #155724;
-        }
-
-        .status-badge.pending {
-          background-color: #fff3cd;
-          color: #856404;
-        }
-
-        .club-selection-form {
-          display: flex;
-          gap: 10px;
-          margin-top: 20px;
-        }
-
-        .club-select {
-          flex: 1;
-          padding: 10px;
-          border: 1px solid #ced4da;
-          border-radius: 6px;
-          font-size: 1rem;
-          color: #495057;
-        }
-
-        .club-select-button {
-          padding: 10px 20px;
-          background-color: #007bff;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-
-        .club-select-button:hover {
-          background-color: #0056b3;
-        }
-
-        .club-select-button.disabled {
-          background-color: #cccccc;
-          cursor: not-allowed;
-        }
-
-        .no-clubs {
-          color: #6c757d;
-          font-style: italic;
-        }
-      `}</style>
     </div>
   );
 };
