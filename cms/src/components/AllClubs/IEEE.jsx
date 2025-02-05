@@ -30,7 +30,7 @@ function IEEE() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
+      const response = await axios.get("http://localhost:5000/api/events");
       // Filter events for IEEE club
       const ieeeEvents = response.data.filter(event => event.club === 'IEEE');
       setEvents(ieeeEvents);
@@ -83,7 +83,7 @@ function IEEE() {
     }
 
     try {
-      await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
+      await axios.post("http://localhost:5000/api/events/add", {
         eventname: eventName,
         clubtype: "Technical",
         club: "IEEE",

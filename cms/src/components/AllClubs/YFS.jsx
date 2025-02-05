@@ -29,7 +29,7 @@ function YFS() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
+      const response = await axios.get("http://localhost:5000/api/events");
       const YFSEvents = response.data.filter(event => event.club === 'YFS');
       setEvents(YFSEvents);
     } catch (error) {
@@ -81,7 +81,7 @@ function YFS() {
     }
 
     try {
-      await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
+      await axios.post("http://localhost:5000/api/events/add", {
         eventname: eventName,
         clubtype: "Social",
         club: "YFS",

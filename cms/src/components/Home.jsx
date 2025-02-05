@@ -10,7 +10,7 @@ function Home() {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://finalbackend-8.onrender.com/api/events');
+        const response = await fetch('http://localhost:5000/api/events');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

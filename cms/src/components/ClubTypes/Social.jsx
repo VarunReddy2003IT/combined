@@ -14,7 +14,7 @@ const Social = () => {
         setLoading(true);
         
         // Fetch upcoming events for social clubtype
-        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming/Social');
+        const upcomingResponse = await fetch('http://localhost:5000/api/events/upcoming/Social');
         if (!upcomingResponse.ok) {
           throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
@@ -22,7 +22,7 @@ const Social = () => {
         setUpcomingEvents(upcomingData);
 
         // Fetch past events for social clubtype
-        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past/Social');
+        const pastResponse = await fetch('http://localhost:5000/api/events/past/Social');
         if (!pastResponse.ok) {
           throw new Error(`HTTP error! Status: ${pastResponse.status}`);
         }

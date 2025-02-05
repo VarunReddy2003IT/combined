@@ -8,30 +8,32 @@ function LeadsProfile() {
   const leadClub = localStorage.getItem("userClub");
 
   useEffect(() => {
-    fetchMembers();
-  }, []);
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/members-by-club?clubName=${leadClub}`
+        );
+        const data = await response.json();
 
-  const fetchMembers = async () => {
-    try {
-      const response = await fetch(
-        `https://finalbackend-8.onrender.com/api/members-by-club?clubName=${leadClub}`
-      );
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error("Failed to fetch members");
+        if (!data.success) {
+          throw new Error("Failed to fetch members");
+        }
+        setMembers(data.data);
+      } catch (err) {
+        setError(err.message || "Error fetching members");
+      } finally {
+        setLoading(false);
       }
-      setMembers(data.data);
-    } catch (err) {
-      setError(err.message || "Error fetching members");
-    } finally {
-      setLoading(false);
+    };
+
+    if (leadClub) {
+      fetchMembers();
     }
-  };
+  }, [leadClub]);
 
   const handleDeleteClub = async (email, clubName) => {
     try {
-      const response = await fetch("https://finalbackend-8.onrender.com/api/remove-club", {
+      const response = await fetch("http://localhost:5000/api/remove-club", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -42,7 +44,6 @@ function LeadsProfile() {
       const data = await response.json();
 
       if (data.success) {
-        // Remove the club from the member's selectedClubs in the frontend
         setMembers((prevMembers) =>
           prevMembers.map((member) =>
             member.email === email
@@ -160,7 +161,6 @@ function LeadsProfile() {
               <div>{user.email}</div>
             </div>
 
-            {/* Render the Delete button for each club in the selectedClubs array */}
             {user.selectedClubs.includes(leadClub) && (
               <button
                 onClick={() => handleDeleteClub(user.email, leadClub)}

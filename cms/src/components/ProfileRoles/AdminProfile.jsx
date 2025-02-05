@@ -15,8 +15,8 @@ function AdminProfiles() {
   const fetchUsers = async () => {
     try {
       const [membersResponse, leadsResponse] = await Promise.all([
-        fetch('https://finalbackend-8.onrender.com/api/all-members'),
-        fetch('https://finalbackend-8.onrender.com/api/all-leads')
+        fetch('http://localhost:5000/api/all-members'),
+        fetch('http://localhost:5000/api/all-leads')
       ]);
 
       const membersData = await membersResponse.json();
@@ -41,7 +41,7 @@ function AdminProfiles() {
     }
 
     try {
-      const response = await fetch('https://finalbackend-8.onrender.com/api/delete-user', {
+      const response = await fetch('http://localhost:5000/api/delete-user', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

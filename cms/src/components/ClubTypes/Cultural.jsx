@@ -14,7 +14,7 @@ const Cultural = () => {
         setLoading(true);
         
         // Fetch upcoming events for cultural clubtype
-        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming/Cultural');
+        const upcomingResponse = await fetch('http://localhost:5000/api/events/upcoming/Cultural');
         if (!upcomingResponse.ok) {
           throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
@@ -22,7 +22,7 @@ const Cultural = () => {
         setUpcomingEvents(upcomingData);
 
         // Fetch past events for cultural clubtype
-        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past/Cultural');
+        const pastResponse = await fetch('http://localhost:5000/api/events/past/Cultural');
         if (!pastResponse.ok) {
           throw new Error(`HTTP error! Status: ${pastResponse.status}`);
         }

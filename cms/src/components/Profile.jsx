@@ -33,7 +33,7 @@ const Profile = () => {
         return;
       }
       try {
-        const response = await fetch(`https://finalbackend-8.onrender.com/api/profile?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}`);
+        const response = await fetch(`http://localhost:5000/api/profile?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role)}`);
         const result = await response.json();
 
         if (!result.success) {
@@ -43,7 +43,7 @@ const Profile = () => {
         setUserData(result.data);
 
         if (role === 'member' || role === 'lead') {
-          const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}/${role}`);
+          const clubsResponse = await fetch(`http://localhost:5000/api/club-selection/selected-clubs/${email}/${role}`);
           const clubsData = await clubsResponse.json();
           
           if (clubsData.success) {
@@ -76,7 +76,7 @@ const Profile = () => {
     formData.append('role', role);
 
     try {
-      const response = await fetch('https://finalbackend-8.onrender.com/api/profile/update-profile', {
+      const response = await fetch('http://localhost:5000/api/profile/update-profile', {
         method: 'POST',
         body: formData,
       });
@@ -100,7 +100,7 @@ const Profile = () => {
     if (!selectedClub) return;
 
     try {
-      const response = await fetch('https://finalbackend-8.onrender.com/api/club-selection/select-clubs', {
+      const response = await fetch('http://localhost:5000/api/club-selection/select-clubs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ const Profile = () => {
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           {userData?.imageUrl ? (
             <img
-            src={`https://finalbackend-8.onrender.com/${userData.imageUrl}`}
+            src={`http://localhost:5000/${userData.imageUrl}`}
               alt="Profile"
               style={{
                 width: '120px',

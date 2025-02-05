@@ -65,7 +65,7 @@ function Signup() {
 
     try {
       // Send signup data to backend
-      const response = await axios.post('https://finalbackend-8.onrender.com/api/signup', { 
+      const response = await axios.post('http://localhost:5000/api/signup', { 
         name, 
         collegeId, 
         email, 

@@ -14,7 +14,7 @@ const Technical = () => {
         setLoading(true);
         
         // Fetch upcoming events for technical clubtype
-        const upcomingResponse = await fetch('https://finalbackend-8.onrender.com/api/events/upcoming/Technical');
+        const upcomingResponse = await fetch('http://localhost:5000/api/events/upcoming/Technical');
         if (!upcomingResponse.ok) {
           throw new Error(`HTTP error! Status: ${upcomingResponse.status}`);
         }
@@ -22,7 +22,7 @@ const Technical = () => {
         setUpcomingEvents(upcomingData);
 
         // Fetch past events for technical clubtype
-        const pastResponse = await fetch('https://finalbackend-8.onrender.com/api/events/past/Technical');
+        const pastResponse = await fetch('http://localhost:5000/api/events/past/Technical');
         if (!pastResponse.ok) {
           throw new Error(`HTTP error! Status: ${pastResponse.status}`);
         }
