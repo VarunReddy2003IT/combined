@@ -12,6 +12,7 @@ import About from './components/About';
 import Technical from './components/ClubTypes/Technical';
 import Social from './components/ClubTypes/Social';
 import Cultural from './components/ClubTypes/Cultural';
+import Notification from './components/Notifications';
 
 // Technical Club imports
 import IEEE from './components/AllClubs/IEEE'
@@ -154,6 +155,10 @@ function App() {
           <Route
             path="/lead-profile"
             element={<ProtectedRoute element={<LeadProfiles/>} redirectTo="/app" />}
+          />
+          <Route
+            path="/notifications"
+            element={<ProtectedRoute element={<Notification/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>
