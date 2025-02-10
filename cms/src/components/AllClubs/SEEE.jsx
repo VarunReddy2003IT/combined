@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-// import './SEEE.css';
+import './SEEE.css';
 
 function SEEE() {
   const [isLeadForSEEE, setIsLeadForSEEE] = useState(false);
@@ -14,7 +14,7 @@ function SEEE() {
   const [error, setError] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,9 +31,16 @@ function SEEE() {
   const fetchEvents = async () => {
     try {
       const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
-      // Filter events for SEEE club
-      const seeeEvents = response.data.filter(event => event.club === 'SEEE');
-      setEvents(seeeEvents);
+      const SEEEEvents = response.data.filter(event => event.club === 'SEEE');
+
+      // Get current date in YYYY-MM-DD format
+      const today = new Date().toISOString().split("T")[0];
+
+      // Categorize events based on the current date
+      const upcomingEvents = SEEEEvents.filter(event => event.date >= today);
+      const pastEvents = SEEEEvents.filter(event => event.date < today);
+
+      setEvents({ upcoming: upcomingEvents, past: pastEvents });
     } catch (error) {
       setError("Failed to fetch events");
     } finally {
@@ -41,6 +48,7 @@ function SEEE() {
     }
   };
 
+  
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -109,6 +117,7 @@ function SEEE() {
     }
   };
 
+  // Define EventCard component above usage
   const EventCard = ({ event }) => (
     <div className="event-card">
       <div className="event-image-container">
@@ -122,24 +131,21 @@ function SEEE() {
         <h3>{event.eventname}</h3>
         <p className="event-description">{event.description}</p>
         <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-        {event.type === 'upcoming' && event.registrationLink && (
-          <a
-            href={event.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="submit-button"
-            style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
-          >
-            Register Now
-          </a>
-        )}
+        {new Date(event.date) >= new Date() && event.registrationLink && (
+  <a
+    href={event.registrationLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="submit-button"
+    style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
+  >
+    Register Now
+  </a>
+)}
+
       </div>
     </div>
   );
-
-  // Filter events by type
-  const upcomingEvents = events.filter(event => event.type === 'upcoming');
-  const pastEvents = events.filter(event => event.type === 'past');
 
   return (
     <div className="container">
@@ -154,9 +160,9 @@ function SEEE() {
               <div className="loading-section">Loading events...</div>
             ) : error ? (
               <div className="error-section">{error}</div>
-            ) : upcomingEvents.length > 0 ? (
+            ) : events.upcoming.length > 0 ? (
               <div className="events-grid">
-                {upcomingEvents.map((event) => (
+                {events.upcoming.map((event) => (
                   <EventCard key={event._id} event={event} />
                 ))}
               </div>
@@ -172,9 +178,9 @@ function SEEE() {
               <div className="loading-section">Loading events...</div>
             ) : error ? (
               <div className="error-section">{error}</div>
-            ) : pastEvents.length > 0 ? (
+            ) : events.past.length > 0 ? (
               <div className="events-grid">
-                {pastEvents.map((event) => (
+                {events.past.map((event) => (
                   <EventCard key={event._id} event={event} />
                 ))}
               </div>
@@ -182,8 +188,6 @@ function SEEE() {
               <p>No past events</p>
             )}
           </div>
-
-          {/* Add Event Button and Form */}
           {isLeadForSEEE && (
             <div className="form-container">
               <button 

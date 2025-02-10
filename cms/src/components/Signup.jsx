@@ -3,88 +3,109 @@ import axios from 'axios';
 import './Signup.css';
 
 function Signup() {
-  const [name, setName] = useState('');
-  const [collegeId, setCollegeId] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('member'); // Default role as 'member'
-  const [club, setClub] = useState(''); // New state for club selection
-  const [loading, setLoading] = useState(false); // To track loading state
-  const [error, setError] = useState(''); // To track error messages
+  const [formData, setFormData] = useState({
+    name: '',
+    collegeId: '',
+    email: '',
+    password: '',
+    role: 'member',
+    club: '',
+  });
+  const [otp, setOtp] = useState('');
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const clubs = [
-    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract'
-    ,'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
+    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract',
+    'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
   ];
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'name') setName(value);
-    else if (name === 'collegeId') setCollegeId(value);
-    else if (name === 'email') setEmail(value);
-    else if (name === 'password') setPassword(value);
-    else if (name === 'role') setRole(value);
-    else if (name === 'club') setClub(value);
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true); // Set loading to true while making the request
-
-    // Clear previous error
-    setError('');
-
-    // Validations
-    if (!name.trim() || !collegeId.trim() || !email.trim() || !password.trim()) {
+  const validateForm = () => {
+    if (!formData.name.trim() || !formData.collegeId.trim() || 
+        !formData.email.trim() || !formData.password.trim()) {
       setError('Please fill in all fields');
-      setLoading(false);
-      return;
+      return false;
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gvpce\.ac\.in$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email in the format: username@gvpce.ac.in');
-      setLoading(false);
-      return;
+      return false;
     }
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
-    if (!passwordRegex.test(password)) {
+    if (!passwordRegex.test(formData.password)) {
       setError('Password must be at least 8 characters long and contain a number and a special character');
-      setLoading(false);
-      return;
+      return false;
     }
 
-    if (role === 'lead' && !club) {
+    if (formData.role === 'lead' && !formData.club) {
       setError('Please select a club if you are signing up as a Lead');
-      setLoading(false);
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
+    setError('');
 
     try {
-      // Send signup data to backend
-      const response = await axios.post('https://finalbackend-8.onrender.com/api/signup', { 
-        name, 
-        collegeId, 
-        email, 
-        password, 
-        role, 
-        club: role === 'lead' ? club : undefined // Include club only for leads
+      const response = await axios.post('https://finalbackend-8.onrender.com/api/signup/send-otp', {
+        email: formData.email
+      });
+      
+      setShowOtpInput(true);
+      alert(response.data.message);
+    } catch (error) {
+      setError(error.response?.data.message || 'Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyAndSignup = async (e) => {
+    e.preventDefault();
+    if (!otp) {
+      setError('Please enter the OTP');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.post('https://finalbackend-8.onrender.com/api/signup/verify', {
+        ...formData,
+        otp,
+        club: formData.role === 'lead' ? formData.club : undefined
       });
 
-      alert(response.data.message); // Show success message
-      // Clear form fields
-      setName('');
-      setCollegeId('');
-      setEmail('');
-      setPassword('');
-      setRole('member');
-      setClub('');
-      setLoading(false);
+      alert(response.data.message);
+      // Reset form
+      setFormData({
+        name: '',
+        collegeId: '',
+        email: '',
+        password: '',
+        role: 'member',
+        club: ''
+      });
+      setOtp('');
+      setShowOtpInput(false);
     } catch (error) {
-      setError(error.response?.data.message || 'Failed to create account. Please try again later.');
+      setError(error.response?.data.message || 'Failed to verify OTP. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -92,52 +113,61 @@ function Signup() {
   return (
     <div className="overall">
       <h3>Signup</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={showOtpInput ? handleVerifyAndSignup : handleSendOtp}>
         <input
           type="text"
           name="name"
-          value={name}
+          value={formData.name}
           onChange={handleInputChange}
           placeholder="Enter your name"
-          disabled={loading}
+          disabled={loading || showOtpInput}
         />
 
         <input
           type="text"
           name="collegeId"
-          value={collegeId}
+          value={formData.collegeId}
           onChange={handleInputChange}
           placeholder="Enter your College ID"
-          disabled={loading}
+          disabled={loading || showOtpInput}
         />
 
         <input
           type="email"
           name="email"
-          value={email}
+          value={formData.email}
           onChange={handleInputChange}
           placeholder="Enter your email"
-          disabled={loading}
+          disabled={loading || showOtpInput}
         />
 
         <input
           type="password"
           name="password"
-          value={password}
+          value={formData.password}
           onChange={handleInputChange}
           placeholder="Enter your password"
-          disabled={loading}
+          disabled={loading || showOtpInput}
         />
 
-        <select name="role" value={role} onChange={handleInputChange} disabled={loading}>
+        <select 
+          name="role" 
+          value={formData.role} 
+          onChange={handleInputChange} 
+          disabled={loading || showOtpInput}
+        >
           <option value="admin">Admin</option>
           <option value="lead">Lead</option>
           <option value="member">Member</option>
         </select>
 
-        {/* Conditionally render the Club dropdown for leads */}
-        {role === 'lead' && (
-          <select name="club" value={club} onChange={handleInputChange} disabled={loading}>
+        {formData.role === 'lead' && (
+          <select 
+            name="club" 
+            value={formData.club} 
+            onChange={handleInputChange} 
+            disabled={loading || showOtpInput}
+          >
             <option value="">Select a Club</option>
             {clubs.map((clubName) => (
               <option key={clubName} value={clubName}>
@@ -147,11 +177,21 @@ function Signup() {
           </select>
         )}
 
+        {showOtpInput && (
+          <input
+            type="text"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Enter OTP"
+            disabled={loading}
+          />
+        )}
+
         {error && <div className="error-message">{error}</div>}
 
         <div className="button-container">
           <button type="submit" disabled={loading}>
-            {loading ? 'Processing...' : 'Submit'}
+            {loading ? 'Processing...' : showOtpInput ? 'Verify & Signup' : 'Send OTP'}
           </button>
         </div>
       </form>

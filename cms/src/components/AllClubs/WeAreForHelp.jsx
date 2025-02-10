@@ -13,7 +13,7 @@ function WeAreForHelp() {
   const [error, setError] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +31,15 @@ function WeAreForHelp() {
     try {
       const response = await axios.get("https://finalbackend-8.onrender.com/api/events");
       const WeAreForHelpEvents = response.data.filter(event => event.club === 'WeAreForHelp');
-      setEvents(WeAreForHelpEvents);
+
+      // Get current date in YYYY-MM-DD format
+      const today = new Date().toISOString().split("T")[0];
+
+      // Categorize events based on the current date
+      const upcomingEvents = WeAreForHelpEvents.filter(event => event.date >= today);
+      const pastEvents = WeAreForHelpEvents.filter(event => event.date < today);
+
+      setEvents({ upcoming: upcomingEvents, past: pastEvents });
     } catch (error) {
       setError("Failed to fetch events");
     } finally {
@@ -39,6 +47,7 @@ function WeAreForHelp() {
     }
   };
 
+  
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -88,7 +97,7 @@ function WeAreForHelp() {
         date: eventDate,
         description: eventDescription,
         type: eventType,
-        image: imageUrl,
+        image: imageUrl, // Changed from posterUrl to image to match schema
         registrationLink: eventType === 'upcoming' ? registrationLink : undefined
       });
 
@@ -101,12 +110,13 @@ function WeAreForHelp() {
       setImageUrl('');
       setShowAddEventForm(false);
       setError('');
-      fetchEvents(); 
+      fetchEvents(); // Refresh events after adding
     } catch (error) {
       setError(error.response?.data?.error || "Failed to add event. Please try again.");
     }
   };
 
+  // Define EventCard component above usage
   const EventCard = ({ event }) => (
     <div className="event-card">
       <div className="event-image-container">
@@ -120,38 +130,38 @@ function WeAreForHelp() {
         <h3>{event.eventname}</h3>
         <p className="event-description">{event.description}</p>
         <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-        {event.type === 'upcoming' && event.registrationLink && (
-          <a
-            href={event.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="submit-button"
-          >
-            Register Now
-          </a>
-        )}
+        {new Date(event.date) >= new Date() && event.registrationLink && (
+  <a
+    href={event.registrationLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="submit-button"
+    style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
+  >
+    Register Now
+  </a>
+)}
+
       </div>
     </div>
   );
-
-  const upcomingEvents = events.filter(event => event.type === 'upcoming');
-  const pastEvents = events.filter(event => event.type === 'past');
 
   return (
     <div className="container">
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">WeAreForHelp Club</h1>
-          
+
+          {/* Upcoming Events Section */}
           <div className="event-section">
             <h2>Upcoming Events</h2>
             {loading ? (
               <div className="loading-section">Loading events...</div>
             ) : error ? (
               <div className="error-section">{error}</div>
-            ) : upcomingEvents.length > 0 ? (
+            ) : events.upcoming.length > 0 ? (
               <div className="events-grid">
-                {upcomingEvents.map((event) => (
+                {events.upcoming.map((event) => (
                   <EventCard key={event._id} event={event} />
                 ))}
               </div>
@@ -160,15 +170,16 @@ function WeAreForHelp() {
             )}
           </div>
 
+          {/* Past Events Section */}
           <div className="event-section">
             <h2>Past Events</h2>
             {loading ? (
               <div className="loading-section">Loading events...</div>
             ) : error ? (
               <div className="error-section">{error}</div>
-            ) : pastEvents.length > 0 ? (
+            ) : events.past.length > 0 ? (
               <div className="events-grid">
-                {pastEvents.map((event) => (
+                {events.past.map((event) => (
                   <EventCard key={event._id} event={event} />
                 ))}
               </div>
@@ -176,7 +187,6 @@ function WeAreForHelp() {
               <p>No past events</p>
             )}
           </div>
-
           {isLeadForWeAreForHelp && (
             <div className="form-container">
               <button 
