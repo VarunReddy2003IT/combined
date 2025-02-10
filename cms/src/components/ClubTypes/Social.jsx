@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './Social.css';
 import SocialFooter from '../SocialFooter';
 
 const Social = () => {

@@ -148,6 +148,9 @@ function HOH() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">HOH Club</h1>
@@ -294,9 +297,7 @@ function HOH() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

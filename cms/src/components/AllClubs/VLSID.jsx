@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './VLSID.css';
 
 function VLSID() {
   const [isLeadForVLSID, setIsLeadForVLSID] = useState(false);

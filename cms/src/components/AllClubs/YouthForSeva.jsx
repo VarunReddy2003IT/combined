@@ -148,6 +148,9 @@ function YouthForSeva() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">YouthForSeva Club</h1>
@@ -294,9 +297,7 @@ function YouthForSeva() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

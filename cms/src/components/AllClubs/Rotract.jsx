@@ -148,6 +148,9 @@ function Rotract() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">Rotract Club</h1>
@@ -294,9 +297,7 @@ function Rotract() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

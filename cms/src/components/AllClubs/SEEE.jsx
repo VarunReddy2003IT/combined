@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './SEEE.css';
 
 function SEEE() {
   const [isLeadForSEEE, setIsLeadForSEEE] = useState(false);
@@ -149,6 +148,9 @@ function SEEE() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">SEEE Club</h1>
@@ -295,9 +297,7 @@ function SEEE() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

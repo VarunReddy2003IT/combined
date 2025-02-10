@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './CSI.css';
 
 function CSI() {
   const [isLeadForCSI, setIsLeadForCSI] = useState(false);
@@ -149,6 +148,9 @@ function CSI() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">CSI Club</h1>
@@ -295,9 +297,7 @@ function CSI() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

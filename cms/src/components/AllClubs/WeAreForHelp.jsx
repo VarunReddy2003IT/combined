@@ -148,6 +148,9 @@ function WeAreForHelp() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">WeAreForHelp Club</h1>
@@ -294,9 +297,7 @@ function WeAreForHelp() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

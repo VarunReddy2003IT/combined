@@ -7,6 +7,7 @@ function Signup() {
     name: '',
     collegeId: '',
     email: '',
+    mobilenumber: '',
     password: '',
     role: 'member',
     club: '',
@@ -28,7 +29,7 @@ function Signup() {
 
   const validateForm = () => {
     if (!formData.name.trim() || !formData.collegeId.trim() || 
-        !formData.email.trim() || !formData.password.trim()) {
+        !formData.email.trim() || !formData.password.trim() || !formData.mobilenumber.trim()) {
       setError('Please fill in all fields');
       return false;
     }
@@ -36,6 +37,12 @@ function Signup() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gvpce\.ac\.in$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email in the format: username@gvpce.ac.in');
+      return false;
+    }
+
+    const mobileRegex = /^[6-9]\d{9}$/;
+    if (!mobileRegex.test(formData.mobilenumber)) {
+      setError('Please enter a valid 10-digit Indian mobile number');
       return false;
     }
 
@@ -88,6 +95,7 @@ function Signup() {
       const response = await axios.post('https://finalbackend-8.onrender.com/api/signup/verify', {
         ...formData,
         otp,
+        mobilenumber: formData.mobilenumber,
         club: formData.role === 'lead' ? formData.club : undefined
       });
 
@@ -97,6 +105,7 @@ function Signup() {
         name: '',
         collegeId: '',
         email: '',
+        mobilenumber: '',
         password: '',
         role: 'member',
         club: ''
@@ -139,6 +148,16 @@ function Signup() {
           onChange={handleInputChange}
           placeholder="Enter your email"
           disabled={loading || showOtpInput}
+        />
+
+        <input
+          type="tel"
+          name="mobilenumber"
+          value={formData.mobilenumber}
+          onChange={handleInputChange}
+          placeholder="Enter your mobile number"
+          disabled={loading || showOtpInput}
+          maxLength="10"
         />
 
         <input

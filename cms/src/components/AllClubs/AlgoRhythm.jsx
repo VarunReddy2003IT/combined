@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
-import './AlgoRhythm.css';
 
 function AlgoRhythm() {
   const [isLeadForAlgoRhythm, setIsLeadForAlgoRhythm] = useState(false);
@@ -149,6 +148,9 @@ function AlgoRhythm() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">AlgoRhythm Club</h1>
@@ -295,9 +297,7 @@ function AlgoRhythm() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

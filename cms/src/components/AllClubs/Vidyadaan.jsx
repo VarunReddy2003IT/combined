@@ -148,6 +148,9 @@ function Vidyadaan() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">Vidyadaan Club</h1>
@@ -294,9 +297,7 @@ function Vidyadaan() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }

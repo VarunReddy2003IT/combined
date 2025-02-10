@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './Cultural.css';
 import Footerbar from '../CulturalFootBar';
 
 const Cultural = () => {

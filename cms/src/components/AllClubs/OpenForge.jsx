@@ -149,6 +149,9 @@ function OpenForge() {
 
   return (
     <div className="container">
+      <div className="footer">
+              <Footerbar />
+            </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">OpenForge Club</h1>
@@ -295,9 +298,7 @@ function OpenForge() {
           )}
         </div>
       </div>
-      <div className="footer">
-        <Footerbar />
-      </div>
+      
     </div>
   );
 }
