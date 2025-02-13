@@ -13,7 +13,6 @@ const Profile = () => {
 
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
-  const club = localStorage.getItem('userClub');
 
   const clubs = [
     'YES', 'NSS1', 'NSS2', 'YouthForSeva', 'YFS', 'WeAreForHelp', 'HOH', 

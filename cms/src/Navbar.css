@@ -3,9 +3,11 @@
   background-color: #333;
   padding: 5px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 
 /* List styling for navbar items */
@@ -14,25 +16,44 @@
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: nowrap; /* Ensure the items are in a single line */
+  flex-wrap: nowrap; /* Keep items in a single row */
   justify-content: center;
-  align-items: center; /* Align items vertically in the center */
+  align-items: center;
+  overflow-x: auto; /* Add horizontal scrolling */
+  white-space: nowrap;
+  scrollbar-width: thin; /* Firefox scrollbar */
+  scrollbar-color: #888 transparent; /* Firefox scrollbar colors */
+}
+
+/* For WebKit (Chrome, Safari) */
+.navbar ul::-webkit-scrollbar {
+  height: 5px; /* Adjust scrollbar height */
+}
+
+.navbar ul::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar color */
+  border-radius: 10px;
+}
+
+.navbar ul::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Styling for each navbar item */
 .navbar li {
-  margin: 5px 10px; /* Reduced margin for closer links */
+  margin: 5px 10px;
+  flex-shrink: 0; /* Prevent items from shrinking */
 }
 
 /* Remove all default button styles */
 .navbar button {
-  all: unset; /* Unset all default styles */
+  all: unset;
   color: white;
   text-decoration: none;
   font-size: 18px;
   padding: 5px 10px;
   cursor: pointer;
-  display: inline-block; /* Ensure the button is on the same line as other links */
+  display: inline-block;
   transition: background-color 0.3s ease;
 }
 
@@ -43,10 +64,10 @@
   font-size: 18px;
   padding: 5px 10px;
   transition: background-color 0.3s ease;
-  display: inline-block; /* Ensure both button and link are on the same line */
+  display: inline-block;
 }
 
-/* Hover effect for links and button */
+/* Hover effect for links and buttons */
 .navbar a:hover,
 .navbar button:hover {
   background-color: #555;
@@ -55,18 +76,24 @@
 
 /* Media query for mobile screens */
 @media (max-width: 768px) {
+  .navbar {
+    justify-content: flex-start; /* Align items to start */
+  }
+
   .navbar ul {
-    flex-direction: row; /* Ensure links are in a single line */
-    justify-content: space-between; /* Spread links across the navbar */
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap;
   }
 
   .navbar li {
-    margin: 0 1px; /* Further reduce the margin between links */
+    margin: 0 5px;
   }
 
   .navbar a,
   .navbar button {
-    font-size: 16px; /* Slightly smaller font size for mobile */
+    font-size: 16px;
   }
 }
 
@@ -74,9 +101,9 @@
 @media (max-width: 480px) {
   .navbar a,
   .navbar button {
-    font-size: 14px; /* Even smaller font size for very small screens */
+    font-size: 14px;
   }
   .navbar li {
-    margin: 0 1px; /* Further reduce the margin between links */
+    margin: 0 3px;
   }
 }
