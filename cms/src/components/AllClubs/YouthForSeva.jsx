@@ -15,6 +15,7 @@ function YouthForSeva() {
   const [uploading, setUploading] = useState(false);
   const [events, setEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
+  const [expandedEventId, setExpandedEventId] = useState(null);
 
   useEffect(() => {
     const userRole = localStorage.getItem("userRole");
@@ -47,6 +48,33 @@ function YouthForSeva() {
     }
   };
 
+  const handleExpandEvent = (eventId) => {
+    setExpandedEventId(expandedEventId === eventId ? null : eventId);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    if (!window.confirm('Are you sure you want to delete this event?')) return;
+
+    try {
+      await axios.delete(`https://finalbackend-8.onrender.com/api/events/${eventId}`);
+      
+      // Update local state to remove the deleted event
+      setEvents({
+        upcoming: events.upcoming.filter(event => event._id !== eventId),
+        past: events.past.filter(event => event._id !== eventId),
+      });
+
+      // Reset expanded event if it was deleted
+      if (expandedEventId === eventId) {
+        setExpandedEventId(null);
+      }
+
+      alert('Event deleted successfully');
+    } catch (err) {
+      console.error('Error deleting event:', err);
+      alert(`Failed to delete event: ${err.response?.data?.message || err.message}`);
+    }
+  };
   
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -97,7 +125,7 @@ function YouthForSeva() {
         date: eventDate,
         description: eventDescription,
         type: eventType,
-        image: imageUrl, // Changed from posterUrl to image to match schema
+        image: imageUrl,
         registrationLink: eventType === 'upcoming' ? registrationLink : undefined
       });
 
@@ -116,41 +144,69 @@ function YouthForSeva() {
     }
   };
 
-  // Define EventCard component above usage
-  const EventCard = ({ event }) => (
-    <div className="event-card">
-      <div className="event-image-container">
-        <img
-          src={event.image || '/placeholder-event.jpg'}
-          alt={event.eventname}
-          className="event-image"
-        />
+  // Render event card with expandable functionality
+  const renderEventCard = (event) => {
+    const isExpanded = expandedEventId === event._id;
+    
+    return (
+      <div 
+        key={event._id} 
+        className={`event-card ${isExpanded ? 'expanded' : ''}`}
+      >
+        <div className="event-card-preview" onClick={() => handleExpandEvent(event._id)}>
+          <div className="event-image-container">
+            <img
+              src={event.image || '/placeholder-event.jpg'}
+              alt={event.eventname}
+              className="event-image"
+            />
+          </div>
+          <div className="event-preview-details">
+            <h3>{event.eventname}</h3>
+            <p className="event-club">{event.club}</p>
+          </div>
+        </div>
+        
+        {isExpanded && (
+          <div className="event-expanded-details">
+          <p>
+            <strong>Date:</strong> {new Date(event.date).toLocaleDateString()}
+          </p>
+          <p>
+            <strong>Club Type:</strong> {event.clubtype}
+          </p>
+          <p>
+            <strong>Description:</strong> {event.description}
+          </p>
+          {event.registrationLink && (
+            <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="registration-link">
+              Register Now
+            </a>
+          )}
+            
+            {/* Show Delete button only for admin or lead of YouthForSeva */}
+            {isLeadForYouthForSeva && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteEvent(event._id);
+                }}
+                className="delete-button"
+              >
+                Delete Event
+              </button>
+            )}
+          </div>
+        )}
       </div>
-      <div className="event-details">
-        <h3>{event.eventname}</h3>
-        <p className="event-description">{event.description}</p>
-        <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-        {new Date(event.date) >= new Date() && event.registrationLink && (
-  <a
-    href={event.registrationLink}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="submit-button"
-    style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none', marginTop: '1rem' }}
-  >
-    Register Now
-  </a>
-)}
-
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="container">
       <div className="footer">
-              <Footerbar />
-            </div>
+        <Footerbar />
+      </div>
       <div className="content">
         <div className="page-content">
           <h1 className="page-title">YouthForSeva Club</h1>
@@ -164,9 +220,7 @@ function YouthForSeva() {
               <div className="error-section">{error}</div>
             ) : events.upcoming.length > 0 ? (
               <div className="events-grid">
-                {events.upcoming.map((event) => (
-                  <EventCard key={event._id} event={event} />
-                ))}
+                {events.upcoming.map(renderEventCard)}
               </div>
             ) : (
               <p>No upcoming events</p>
@@ -182,14 +236,13 @@ function YouthForSeva() {
               <div className="error-section">{error}</div>
             ) : events.past.length > 0 ? (
               <div className="events-grid">
-                {events.past.map((event) => (
-                  <EventCard key={event._id} event={event} />
-                ))}
+                {events.past.map(renderEventCard)}
               </div>
             ) : (
               <p>No past events</p>
             )}
           </div>
+
           {isLeadForYouthForSeva && (
             <div className="form-container">
               <button 
@@ -297,7 +350,6 @@ function YouthForSeva() {
           )}
         </div>
       </div>
-      
     </div>
   );
 }
