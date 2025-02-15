@@ -243,7 +243,7 @@ function GCCC() {
             )}
           </div>
 
-          {isLeadForGCCC && (
+          {(isLeadForGCCC )&& (
             <div className="form-container">
               <button 
                 onClick={() => setShowAddEventForm(!showAddEventForm)}

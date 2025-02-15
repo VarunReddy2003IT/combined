@@ -300,6 +300,7 @@ const Profile = () => {
               value={selectedClub}
               onChange={(e) => setSelectedClub(e.target.value)}
               className="club-select"
+              style={{ width: "250px", padding: "8px", fontSize: "16px" }}
             >
               <option value="">Select a club</option>
               {clubs
@@ -308,6 +309,7 @@ const Profile = () => {
                   <option key={index} value={club}>{club}</option>
                 ))}
             </select>
+
             <button
               onClick={handleClubSelection}
               disabled={!selectedClub}
