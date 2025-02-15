@@ -3,11 +3,33 @@
   background-color: #333;
   padding: 5px;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
   align-items: center;
-  overflow-x: auto; /* Enable horizontal scrolling if needed */
-  white-space: nowrap; /* Prevent text from wrapping */
+  justify-content: center;
+  width: 100%;
+  overflow: hidden; /* Prevents unwanted wrapping */
+}
+
+/* Wrapper for navbar to enable horizontal scrolling */
+.navbar-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Prevents items from wrapping */
+  scrollbar-width: thin; /* Firefox scrollbar */
+  scrollbar-color: #888 transparent; /* Firefox scrollbar colors */
+}
+
+/* WebKit (Chrome, Safari) scrollbar */
+.navbar-wrapper::-webkit-scrollbar {
+  height: 5px; /* Scrollbar height */
+}
+
+.navbar-wrapper::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar color */
+  border-radius: 10px;
+}
+
+.navbar-wrapper::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* List styling for navbar items */
@@ -16,44 +38,27 @@
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: nowrap; /* Keep items in a single row */
+  flex-wrap: nowrap; /* Prevents items from wrapping */
   justify-content: center;
   align-items: center;
-  overflow-x: auto; /* Add horizontal scrolling */
-  white-space: nowrap;
-  scrollbar-width: thin; /* Firefox scrollbar */
-  scrollbar-color: #888 transparent; /* Firefox scrollbar colors */
-}
-
-/* For WebKit (Chrome, Safari) */
-.navbar ul::-webkit-scrollbar {
-  height: 5px; /* Adjust scrollbar height */
-}
-
-.navbar ul::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar color */
-  border-radius: 10px;
-}
-
-.navbar ul::-webkit-scrollbar-track {
-  background: transparent;
+  min-width: max-content; /* Ensures items don't shrink */
 }
 
 /* Styling for each navbar item */
 .navbar li {
-  margin: 5px 10px;
-  flex-shrink: 0; /* Prevent items from shrinking */
+  margin: 5px 10px; /* Reduced margin for closer links */
+  flex-shrink: 0; /* Prevents items from shrinking */
 }
 
 /* Remove all default button styles */
 .navbar button {
-  all: unset;
+  all: unset; /* Unset all default styles */
   color: white;
   text-decoration: none;
   font-size: 18px;
   padding: 5px 10px;
   cursor: pointer;
-  display: inline-block;
+  display: inline-block; /* Ensure the button is on the same line as other links */
   transition: background-color 0.3s ease;
 }
 
@@ -64,7 +69,7 @@
   font-size: 18px;
   padding: 5px 10px;
   transition: background-color 0.3s ease;
-  display: inline-block;
+  display: inline-block; /* Ensure both button and link are on the same line */
 }
 
 /* Hover effect for links and buttons */
@@ -81,19 +86,18 @@
   }
 
   .navbar ul {
-    display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
     overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap;
+    justify-content: flex-start; /* Keep links aligned to the start */
   }
 
   .navbar li {
-    margin: 0 5px;
+    margin: 0 5px; /* Reduce spacing */
   }
 
   .navbar a,
   .navbar button {
-    font-size: 16px;
+    font-size: 16px; /* Slightly smaller font size for mobile */
   }
 }
 
@@ -101,9 +105,10 @@
 @media (max-width: 480px) {
   .navbar a,
   .navbar button {
-    font-size: 14px;
+    font-size: 14px; /* Even smaller font size for very small screens */
   }
+
   .navbar li {
-    margin: 0 3px;
+    margin: 0 3px; /* Further reduce the margin */
   }
 }
