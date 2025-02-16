@@ -28,7 +28,6 @@ function Navbar() {
               <li><Link to="/clubs">{displayText}</Link></li>
               <li><Link to="/profile">Profile</Link></li>
               <li><button onClick={logout}>Logout</button></li> 
-              <li><Link to="/notifications">Notification</Link></li>
             </>
           ) : (
             <>

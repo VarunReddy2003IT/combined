@@ -88,7 +88,6 @@
   .navbar ul {
     flex-direction: row;
     overflow-x: auto; /* Enable horizontal scrolling */
-    justify-content: flex-start; /* Keep links aligned to the start */
   }
 
   .navbar li {
