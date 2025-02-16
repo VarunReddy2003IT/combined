@@ -7,7 +7,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedEventId, setExpandedEventId] = useState(null);
-  const EVENTS_PER_PAGE = 5;
+  const EVENTS_PER_PAGE = 6;
 
   // Retrieve user role (assuming it's stored in localStorage)
   const userRole = localStorage.getItem("userRole");
