@@ -3,12 +3,14 @@ import "./Home.css";
 
 function Home() {
   const [events, setEvents] = useState({ upcoming: [], past: [] });
+  const [displayedEvents, setDisplayedEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedEventId, setExpandedEventId] = useState(null);
+  const EVENTS_PER_PAGE = 5;
 
   // Retrieve user role (assuming it's stored in localStorage)
-  const userRole = localStorage.getItem("userRole"); // Example: "admin" or "user"
+  const userRole = localStorage.getItem("userRole");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -33,6 +35,12 @@ function Home() {
           upcoming: upcomingData,
           past: pastData,
         });
+
+        // Initialize displayed events with first 5 items
+        setDisplayedEvents({
+          upcoming: upcomingData.slice(0, EVENTS_PER_PAGE),
+          past: pastData.slice(0, EVENTS_PER_PAGE),
+        });
       } catch (err) {
         console.error("Error fetching events:", err);
         setError(err.message);
@@ -48,6 +56,16 @@ function Home() {
     setExpandedEventId(expandedEventId === eventId ? null : eventId);
   };
 
+  const handleViewMore = (type) => {
+    const currentLength = displayedEvents[type].length;
+    const allEvents = events[type];
+    
+    setDisplayedEvents(prev => ({
+      ...prev,
+      [type]: allEvents.slice(0, currentLength + EVENTS_PER_PAGE)
+    }));
+  };
+
   const handleDeleteEvent = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
 
@@ -60,13 +78,19 @@ function Home() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // Remove the deleted event from state
-      setEvents({
-        upcoming: events.upcoming.filter((event) => event._id !== eventId),
-        past: events.past.filter((event) => event._id !== eventId),
-      });
+      // Remove the deleted event from both states
+      const updateEvents = (eventList) => eventList.filter((event) => event._id !== eventId);
+      
+      setEvents(prev => ({
+        upcoming: updateEvents(prev.upcoming),
+        past: updateEvents(prev.past),
+      }));
+      
+      setDisplayedEvents(prev => ({
+        upcoming: updateEvents(prev.upcoming),
+        past: updateEvents(prev.past),
+      }));
 
-      // If the deleted event was expanded, reset expandedEventId
       if (expandedEventId === eventId) {
         setExpandedEventId(null);
       }
@@ -110,7 +134,6 @@ function Home() {
               </a>
             )}
 
-            {/* Show Delete button only if the user is an admin */}
             {userRole === "admin" && (
               <button
                 className="delete-button"
@@ -130,7 +153,6 @@ function Home() {
 
   return (
     <div className="home-container">
-      {/* Welcome Section */}
       <section className="welcome-section">
         <h2>Welcome to Gayatri Vidya Parishad College of Engineering</h2>
         <p>
@@ -149,19 +171,33 @@ function Home() {
         </div>
       ) : (
         <>
-          {/* Upcoming Events Section */}
           {events.upcoming.length > 0 && (
             <section className="event-section upcoming-events">
               <h2>Upcoming Events</h2>
-              <div className="events-grid">{events.upcoming.map(renderEvent)}</div>
+              <div className="events-grid">{displayedEvents.upcoming.map(renderEvent)}</div>
+              {displayedEvents.upcoming.length < events.upcoming.length && (
+                <button 
+                  className="view-more-button"
+                  onClick={() => handleViewMore('upcoming')}
+                >
+                  View More Upcoming Events
+                </button>
+              )}
             </section>
           )}
 
-          {/* Past Events Section */}
           {events.past.length > 0 && (
             <section className="event-section past-events">
               <h2>Past Events</h2>
-              <div className="events-grid">{events.past.map(renderEvent)}</div>
+              <div className="events-grid">{displayedEvents.past.map(renderEvent)}</div>
+              {displayedEvents.past.length < events.past.length && (
+                <button 
+                  className="view-more-button"
+                  onClick={() => handleViewMore('past')}
+                >
+                  View More Past Events
+                </button>
+              )}
             </section>
           )}
         </>
