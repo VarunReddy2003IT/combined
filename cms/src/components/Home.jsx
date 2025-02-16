@@ -7,6 +7,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedEventId, setExpandedEventId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const EVENTS_PER_PAGE = 6;
 
   // Retrieve user role (assuming it's stored in localStorage)
@@ -52,17 +53,44 @@ function Home() {
     fetchEvents();
   }, []);
 
+  // Filter events based on search term
+  const filterEvents = (eventsList) => {
+    if (!searchTerm) return eventsList;
+    
+    const search = searchTerm.toLowerCase();
+    return eventsList.filter(event => 
+      event.eventname.toLowerCase().includes(search) ||
+      event.clubtype.toLowerCase().includes(search) ||
+      event.club.toLowerCase().includes(search)
+    );
+  };
+
+  // Update displayed events when search term changes
+  useEffect(() => {
+    const filteredUpcoming = filterEvents(events.upcoming);
+    const filteredPast = filterEvents(events.past);
+    
+    setDisplayedEvents({
+      upcoming: filteredUpcoming.slice(0, EVENTS_PER_PAGE),
+      past: filteredPast.slice(0, EVENTS_PER_PAGE)
+    });
+  }, [searchTerm, events]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   const handleExpandEvent = (eventId) => {
     setExpandedEventId(expandedEventId === eventId ? null : eventId);
   };
 
   const handleViewMore = (type) => {
     const currentLength = displayedEvents[type].length;
-    const allEvents = events[type];
+    const filteredEvents = filterEvents(events[type]);
     
     setDisplayedEvents(prev => ({
       ...prev,
-      [type]: allEvents.slice(0, currentLength + EVENTS_PER_PAGE)
+      [type]: filteredEvents.slice(0, currentLength + EVENTS_PER_PAGE)
     }));
   };
 
@@ -161,6 +189,16 @@ function Home() {
         </p>
       </section>
 
+      <div className="search-section">
+        <input
+          type="text"
+          placeholder="Search events by name, club type, or club..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="search-input"
+        />
+      </div>
+
       {loading ? (
         <div className="loading-section">
           <p>Loading events...</p>
@@ -175,7 +213,7 @@ function Home() {
             <section className="event-section upcoming-events">
               <h2>Upcoming Events</h2>
               <div className="events-grid">{displayedEvents.upcoming.map(renderEvent)}</div>
-              {displayedEvents.upcoming.length < events.upcoming.length && (
+              {displayedEvents.upcoming.length < filterEvents(events.upcoming).length && (
                 <button 
                   className="view-more-button"
                   onClick={() => handleViewMore('upcoming')}
@@ -190,7 +228,7 @@ function Home() {
             <section className="event-section past-events">
               <h2>Past Events</h2>
               <div className="events-grid">{displayedEvents.past.map(renderEvent)}</div>
-              {displayedEvents.past.length < events.past.length && (
+              {displayedEvents.past.length < filterEvents(events.past).length && (
                 <button 
                   className="view-more-button"
                   onClick={() => handleViewMore('past')}

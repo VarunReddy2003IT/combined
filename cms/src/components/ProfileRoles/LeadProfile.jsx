@@ -42,7 +42,6 @@ function LeadsProfile() {
       const data = await response.json();
 
       if (data.success) {
-        // Remove the club from the member's selectedClubs in the frontend
         setMembers((prevMembers) =>
           prevMembers.map((member) =>
             member.email === email
@@ -76,7 +75,7 @@ function LeadsProfile() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center", color: "#333", marginBottom: "20px" }}>
+      <h1 style={{ textAlign: "center", color: "#333", marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}>
         Members of {leadClub}
       </h1>
 
@@ -98,15 +97,13 @@ function LeadsProfile() {
         />
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-          gap: "20px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        gap: "20px",
+        maxWidth: "1200px",
+        margin: "0 auto",
+      }}>
         {filteredUsers().map((user) => (
           <div
             key={user.email}
@@ -130,21 +127,20 @@ function LeadsProfile() {
                     height: "120px",
                     borderRadius: "50%",
                     objectFit: "cover",
+                    margin: "0 auto",
                   }}
                 />
               ) : (
-                <div
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    borderRadius: "50%",
-                    backgroundColor: "#e0e0e0",
-                    margin: "0 auto",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <div style={{
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "50%",
+                  backgroundColor: "#e0e0e0",
+                  margin: "0 auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
                   No Image
                 </div>
               )}
@@ -160,19 +156,51 @@ function LeadsProfile() {
               <div>{user.email}</div>
             </div>
 
-            {/* Render the Delete button for each club in the selectedClubs array */}
+            <div style={{ marginBottom: "10px" }}>
+              <label style={{ fontWeight: "bold", color: "#666" }}>Selected Clubs:</label>
+              <div style={{ marginTop: "5px" }}>
+                {user.selectedClubs.length > 0 ? (
+                  <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+                    {user.selectedClubs.map((club, index) => (
+                      <li key={index}>{club}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span style={{ color: "#666" }}>No selected clubs</span>
+                )}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "10px" }}>
+              <label style={{ fontWeight: "bold", color: "#666" }}>Pending Clubs:</label>
+              <div style={{ marginTop: "5px" }}>
+                {user.pendingClubs.length > 0 ? (
+                  <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+                    {user.pendingClubs.map((club, index) => (
+                      <li key={index}>{club}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span style={{ color: "#666" }}>No pending clubs</span>
+                )}
+              </div>
+            </div>
+
             {user.selectedClubs.includes(leadClub) && (
               <button
                 onClick={() => handleDeleteClub(user.email, leadClub)}
                 style={{
                   padding: "8px 16px",
-                  backgroundColor: "red",
+                  backgroundColor: "#dc3545",
                   color: "white",
                   border: "none",
                   borderRadius: "4px",
                   cursor: "pointer",
                   marginTop: "10px",
+                  transition: "background-color 0.2s",
                 }}
+                onMouseOver={(e) => e.target.style.backgroundColor = "#c82333"}
+                onMouseOut={(e) => e.target.style.backgroundColor = "#dc3545"}
               >
                 Remove from Club
               </button>
