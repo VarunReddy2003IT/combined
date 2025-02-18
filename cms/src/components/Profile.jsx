@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -10,7 +10,12 @@ const Profile = () => {
   const [selectedClubs, setSelectedClubs] = useState([]);
   const [pendingClubs, setPendingClubs] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteOTP, setDeleteOTP] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [deletionError, setDeletionError] = useState(null);
 
+  const navigate = useNavigate();
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
 
@@ -43,7 +48,6 @@ const Profile = () => {
 
         setUserData(result.data);
 
-        // Fetch clubs for both members and leads
         if (role === 'member' || role === 'lead') {
           const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}/${role}`);
           const clubsData = await clubsResponse.json();
@@ -141,6 +145,62 @@ const Profile = () => {
       showNotification(data.message || 'Club request sent successfully. Awaiting approval.');
     } catch (err) {
       showNotification(err.message || 'Error selecting club', 'error');
+    }
+  };
+
+  const requestDeleteOTP = async () => {
+    try {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/profile/request-delete-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send OTP');
+      }
+
+      setOtpSent(true);
+      showNotification('OTP sent to your email');
+    } catch (err) {
+      setDeletionError(err.message);
+      showNotification(err.message, 'error');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/profile/delete-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          role,
+          otp: deleteOTP,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to delete account');
+      }
+
+      localStorage.clear();
+      showNotification('Account deleted successfully');
+      navigate('/');
+    } catch (err) {
+      setDeletionError(err.message);
+      showNotification(err.message, 'error');
     }
   };
 
@@ -250,9 +310,7 @@ const Profile = () => {
           <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
             Role:
           </label>
-          <div>
-            {role}
-          </div>
+          <div>{role}</div>
         </div>
       </div>
 
@@ -321,6 +379,79 @@ const Profile = () => {
         </div>
       )}
 
+      {/* Delete Account Section */}
+      <div className="delete-account-section">
+        <h3 className="section-title">Delete Account</h3>
+        <p className="warning-text">
+          Warning: This action cannot be undone. All your data will be permanently deleted.
+        </p>
+        
+        {!showDeleteConfirm ? (
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="delete-button"
+          >
+            Delete Account
+          </button>
+        ) : (
+          <div className="delete-confirmation">
+            {!otpSent ? (
+              <>
+                <p>Are you sure you want to delete your account?</p>
+                <button
+                  onClick={requestDeleteOTP}
+                  className="confirm-button"
+                >
+                  Yes, send OTP
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeletionError(null);
+                  }}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <p>Please enter the OTP sent to your email:</p>
+                <input
+                  type="text"
+                  value={deleteOTP}
+                  onChange={(e) => setDeleteOTP(e.target.value)}
+                  placeholder="Enter OTP"
+                  className="otp-input"
+                />
+                <button
+                  onClick={handleDeleteAccount}
+                  className="confirm-button"
+                  disabled={!deleteOTP}
+                >
+                  Confirm Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setOtpSent(false);
+                    setDeleteOTP('');
+                    setDeletionError(null);
+                  }}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+            {deletionError && (
+              <p className="error-message">{deletionError}</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Admin/Lead Links */}
       {/* Admin/Lead Links */}
       {role === 'admin' && (
         <Link
@@ -462,6 +593,74 @@ const Profile = () => {
         .no-clubs {
           color: #6c757d;
           font-style: italic;
+        }
+
+        .delete-account-section {
+          margin-top: 30px;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 8px;
+          border: 1px solid #ffcdd2;
+        }
+
+        .warning-text {
+          color: #d32f2f;
+          margin-bottom: 20px;
+        }
+
+        .delete-button {
+          background-color: #d32f2f;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .delete-button:hover {
+          background-color: #b71c1c;
+        }
+
+        .delete-confirmation {
+          margin-top: 20px;
+        }
+
+        .otp-input {
+          width: 200px;
+          padding: 8px;
+          margin: 10px 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+
+        .confirm-button {
+          background-color: #d32f2f;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          margin-right: 10px;
+          cursor: pointer;
+        }
+
+        .confirm-button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+
+        .cancel-button {
+          background-color: #757575;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .error-message {
+          color: #d32f2f;
+          margin-top: 10px;
         }
       `}</style>
     </div>
