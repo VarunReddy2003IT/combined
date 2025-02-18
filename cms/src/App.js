@@ -36,7 +36,7 @@ import Vidyadaan from './components/AllClubs/Vidyadaan';
 
 import AdminProfiles from './components/ProfileRoles/AdminProfile'
 import LeadProfiles from './components/ProfileRoles/LeadProfile'
-
+import Registers from './components/ProfileRoles/Registers';
 
 function App() {
   return (
@@ -154,6 +154,10 @@ function App() {
           <Route
             path="/lead-profile"
             element={<ProtectedRoute element={<LeadProfiles/>} redirectTo="/app" />}
+          />
+          <Route
+            path="/registers/:eventId"
+            element={<ProtectedRoute element={<Registers/>} redirectTo="/app" />}
           />
         </Routes>
       </Router>
