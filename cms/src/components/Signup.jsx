@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 import './Signup.css';
 
 function Signup() {
@@ -16,10 +17,11 @@ function Signup() {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Password visibility state
 
   const clubs = [
-    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract',
-    'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
+    'YES', 'NSS1', 'NSS2', 'YouthForSeva', 'YFS', 'WeAreForHelp', 'HOH', 'Vidyadaan', 'Rotract',
+    'GCCC', 'IEEE', 'CSI', 'AlgoRhythm', 'OpenForge', 'VLSID', 'SEEE', 'Sports'
   ];
 
   const handleInputChange = (e) => {
@@ -28,7 +30,7 @@ function Signup() {
   };
 
   const validateForm = () => {
-    if (!formData.name.trim() || !formData.collegeId.trim() || 
+    if (!formData.name.trim() || !formData.collegeId.trim() ||
         !formData.email.trim() || !formData.password.trim() || !formData.mobilenumber.trim()) {
       setError('Please fill in all fields');
       return false;
@@ -119,6 +121,11 @@ function Signup() {
     }
   };
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="overall">
       <h3>Signup</h3>
@@ -160,14 +167,19 @@ function Signup() {
           maxLength="10"
         />
 
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          placeholder="Enter your password"
-          disabled={loading || showOtpInput}
-        />
+        <div className="password-container">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Enter your password"
+            disabled={loading || showOtpInput}
+          />
+          <span className="eye-icon" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
 
         <select 
           name="role" 

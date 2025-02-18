@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';  // Assuming you have this context set up for authentication
-import './Login.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -10,13 +11,14 @@ function Login() {
   const [role, setRole] = useState('member');
   const [club, setClub] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Password visibility state
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);  // Login function from AuthContext
 
   // List of clubs for the lead role
   const clubs = [
-    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract'
-    ,'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
+    'YES','NSS1','NSS2','YouthForSeva','YFS','WeAreForHelp','HOH','Vidyadaan','Rotract',
+    'GCCC','IEEE','CSI','AlgoRhythm','OpenForge','VLSID','SEEE','Sports'
   ];
 
   // Handle input change for email, password, role, and club
@@ -26,6 +28,11 @@ function Login() {
     else if (name === 'password') setPassword(value);
     else if (name === 'role') setRole(value);
     else if (name === 'club') setClub(value);
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   // Handle form submission
@@ -59,10 +66,10 @@ function Login() {
       // Store the email in localStorage after successful login
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userRole', role);
-      if(role==='lead'){
+      if (role === 'lead') {
         localStorage.setItem('userClub', club);
       }
-      console.log(club);
+
       // Use context login function to store user data
       login(userData);
 
@@ -88,20 +95,21 @@ function Login() {
           placeholder="Email"
           required
         />
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handleInputChange}
-          placeholder="Password"
-          required
-        />
-        <select
-          name="role"
-          value={role}
-          onChange={handleInputChange}
-          required
-        >
+        <div className="password-container">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={password}
+            onChange={handleInputChange}
+            placeholder="Password"
+            required
+          />
+          <span className="eye-icon" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+
+        <select name="role" value={role} onChange={handleInputChange} required>
           <option value="admin">Admin</option>
           <option value="lead">Lead</option>
           <option value="member">Member</option>
@@ -109,12 +117,7 @@ function Login() {
 
         {/* Conditionally render the Club dropdown for leads */}
         {role === 'lead' && (
-          <select
-            name="club"
-            value={club}
-            onChange={handleInputChange}
-            required
-          >
+          <select name="club" value={club} onChange={handleInputChange} required>
             <option value="">Select a Club</option>
             {clubs.map((clubName) => (
               <option key={clubName} value={clubName}>
