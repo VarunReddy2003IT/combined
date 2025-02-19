@@ -126,9 +126,15 @@ function Login() {
             ))}
           </select>
         )}
-
         <button type="submit" className="login-button">
           Login
+        </button>
+        <button 
+          type="button" 
+          onClick={() => navigate('/forgot-password')} 
+          className="forgot-password-button"
+        >
+          Forgot Password?
         </button>
       </form>
     </div>

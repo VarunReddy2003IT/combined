@@ -21,6 +21,7 @@ import VLSID from './components/AllClubs/VLSID'
 import OpenForge from './components/AllClubs/OpenForge'
 import SEEE from './components/AllClubs/SEEE'
 import GCCC from './components/AllClubs/GCCC'
+import ForgotPassword from './components/ForgotPassword';
 
 // Social Club imports
 import YES from './components/AllClubs/YES'
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/app" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/signup"
             element={<ProtectedRoute element={<Signup />} redirectTo="/app" inverse />}
