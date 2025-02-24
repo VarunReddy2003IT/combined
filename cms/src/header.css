@@ -1,23 +1,49 @@
+/* Header container */
 .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-  }
-  
+  display: flex;
+  justify-content: center; /* Center the logo horizontally */
+  align-items: center; /* Center the logo vertically */
+  width: 100%;
+  padding: 15px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Logo styling */
+.gvplogo {
+  max-width: 100%;
+  height: auto;
+  width: 998px;
+  height: 120px;
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2)); /* Slight shadow for better visibility */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Hover effect for banner */
+.header:hover .gvplogo {
+  transform: scale(1.05); /* Slight zoom effect */
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 998px) {
   .gvplogo {
-    width: 15vw;
-    max-width: 150px;
+    width: 90%;
     height: auto;
-    margin-right: 20px;
   }
-  
-  .header h1 {
-    font-size: 3vw;
-    margin: 0;
-    line-height: 1.2;
-    max-width: 80%;
-    word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 0;
   }
-  
+  .gvplogo {
+    width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .gvplogo {
+    width: 95%;
+  }
+}

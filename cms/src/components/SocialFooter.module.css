@@ -1,105 +1,126 @@
-.footerBar {
-  background-color:transparent;
-  width: 100%;
-  left: 0;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  text-align: center; /* Add center alignment */
-  margin-top: 10px;
+/* Color Palette */
+:root {
+  --sky-blue: #8ecae6;
+  --blue-green: #219ebc;
+  --prussian-blue: #023047;
+  --selective-yellow: #ffb703;
+  --ut-orange: #fb8500;
+  --light-bg: #f8f9fa; /* Light background */
+  --hover-bg: #e3f2fd; /* Soft hover background */
 }
 
+/* Main container */
+.footerBar {
+  background: var(--light-bg); /* Light background */
+  padding: 14px 0px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 10;
+  border-bottom: 2px solid var(--blue-green);
+}
+
+/* Scrollable container */
 .footerScrollContainer {
   overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: none;
-  text-align: center; /* Add center alignment */
+  white-space: nowrap;
+  scrollbar-width: none;
 }
 
 .footerScrollContainer::-webkit-scrollbar {
-  height: 6px;
+  display: none;
 }
 
-.footerScrollContainer::-webkit-scrollbar-track {
-  background: #333;
-}
-
-.footerScrollContainer::-webkit-scrollbar-thumb {
-  background-color: none;
-  border-radius: 3px;
-}
-
+/* Navigation bar */
 .footerNav {
-  padding: 15px 20px;
-  min-width: min-content;
-  display: block;
-  margin: 0 auto; /* Add center margin */
-  text-align: center; /* Add center alignment */
-}
-
-.footerList {
-  list-style: none;
-  margin: 0 auto; /* Add center margin */
-  padding: 0;
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: center; /* Add center justification */
-  gap: 40px;
-  white-space: nowrap;
 }
 
-.footerList li {
-  display: inline-block;
-  margin: 0;
+/* Navigation list */
+.footerList {
+  display: flex;
+  gap: 22px;
   padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: nowrap;
 }
 
+/* Navigation links */
 .footerLink {
-  color: white;
-  background-color: #333;
-  border: grey 1px solid;
-  border-radius: 20px;
-  text-decoration: none;
-  font-size: 1.1rem;
-  padding: 8px 12px;
-  transition: color 0.3s ease;
   display: inline-block;
+  text-decoration: none;
+  color: var(--blue-green); /* Blue-Green for contrast */
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Hover effect with gradient */
 .footerLink:hover {
-  transform: translateY(-5px);
-  color: #f1f3f4;
+  color: var(--prussian-blue);
+  background: linear-gradient(90deg, var(--sky-blue), var(--blue-green));
+  box-shadow: 0px 3px 12px rgba(33, 158, 188, 0.2);
+  transform: translateY(-2px);
 }
 
-.footerLink:global(.active) {
-  color: #f1f3f4;
-  font-weight: 500;
+/* Hover underline effect with animated gradient */
+.footerLink::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--selective-yellow), var(--ut-orange));
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
+.footerLink:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Background ripple effect on hover */
+.footerLink::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 183, 3, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease-out, height 0.4s ease-out;
+}
+
+.footerLink:hover::before {
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+}
+
+/* Active Click Effect */
+.footerLink:active {
+  transform: scale(0.95);
+  background: rgba(255, 183, 3, 0.2);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .footerList {
-    gap: 20px;
-  }
-
-  .footerLink {
-    font-size: 1rem;
-    padding: 6px 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .footerNav {
-    padding: 10px;
-  }
-
   .footerList {
     gap: 15px;
   }
 
   .footerLink {
     font-size: 0.9rem;
-    padding: 5px 8px;
+    padding: 8px 12px;
   }
 }

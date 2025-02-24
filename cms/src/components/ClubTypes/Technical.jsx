@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Footerbar from '../TechnicalFootBar';
+import './events.css'
 
 const Technical = () => {
   const [events, setEvents] = useState({ upcoming: [], past: [] });

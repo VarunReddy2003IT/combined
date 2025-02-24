@@ -1,0 +1,269 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #0056b3;  /* Deep Blue */
+    --secondary-color: #f4f6f9; /* Soft Gray */
+    --accent-color: #ffcc00;    /* Professional Yellow */
+    --text-color: #333;
+    --light-text: #555;
+    --white: #fff;
+    --danger: #d9534f;
+    --danger-hover: #c9302c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+/* Social Container */
+.social-container {
+    padding: 0px;
+}
+
+.social-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.social-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    animation: fadeIn 1s ease-in-out;
+    transition: none;
+}
+
+/* technical Container */
+.technical-container {
+    padding: 0px;
+}
+
+.technical-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.technical-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    animation: fadeIn 1s ease-in-out;
+    transition: none;
+}
+
+
+/* Cultural Container */
+.Cultural-container {
+    padding: 0px;
+}
+
+.Cultural-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.Cultural-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    animation: fadeIn 1s ease-in-out;
+    transition: none;
+}
+
+
+/* Event Sections */
+.events-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Event Sections */
+.event-section {
+    margin-bottom: 30px;
+}
+
+.event-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    border-left: 5px solid var(--accent-color);
+    padding-left: 10px;
+    margin-bottom: 15px;
+}
+
+/* Event Grid */
+.events-grid {
+    display: grid;
+    gap: 20px;
+}
+
+/* Single Event: Prevent Stretching */
+.events-grid:only-child {
+    display: flex;
+    justify-content: center;
+}
+
+/* Event Card */
+.event-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    max-width: 400px;  /* Prevents single event from stretching */
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Event Preview */
+.event-card-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    transition: background 0.3s ease;
+}
+
+.event-card-preview:hover {
+    background: var(--secondary-color);
+}
+
+.event-image-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Fix: Keep Social Clubs Heading Visible */
+.event-preview-details {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.event-preview-details h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+.event-preview-details .event-club {
+    font-size: 0.9rem;
+    color: var(--light-text);
+}
+
+/* Expanded Event Details */
+.event-expanded-details {
+    padding: 15px;
+    background: var(--secondary-color);
+    border-top: 2px solid var(--primary-color);
+}
+
+.event-expanded-details p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+/* Buttons */
+.registration-link {
+    display: inline-block;
+    margin-top: 10px;
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.registration-link:hover {
+    background: #00408a;
+}
+
+.delete-button {
+    background: var(--danger);
+    color: var(--white);
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.delete-button:hover {
+    background: var(--danger-hover);
+}
+
+/* No Events */
+.no-events {
+    text-align: center;
+    padding: 20px;
+}
+
+.no-events p {
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+/* Loading & Error Section */
+.loading-section, .error-section {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .social-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .event-section h2 {
+        font-size: 1.3rem;
+    }
+
+    .event-preview-details h3 {
+        font-size: 1.1rem;
+    }
+
+    .event-expanded-details p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
