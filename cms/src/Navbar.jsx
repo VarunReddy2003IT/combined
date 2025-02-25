@@ -5,7 +5,7 @@ import './Navbar.css';
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
-  const [displayText, setDisplayText] = useState("Clubs"); 
+  const [displayText, setDisplayText] = useState("Clubs");
 
   useEffect(() => {
     let currentText = "Clubs";
@@ -17,6 +17,14 @@ function Navbar() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Handle logout with confirmation
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      logout();
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-wrapper">
@@ -27,7 +35,7 @@ function Navbar() {
             <>
               <li><Link to="/clubs">{displayText}</Link></li>
               <li><Link to="/profile">Profile</Link></li>
-              <li><button onClick={logout}>Logout</button></li> 
+              <li><button onClick={handleLogout}>Logout</button></li>
             </>
           ) : (
             <>

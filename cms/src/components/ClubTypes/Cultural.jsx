@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CulturalFooter from '../CulturalFootBar';
+import './events.css'
 
 const Cultural = () => {
   const [events, setEvents] = useState({ upcoming: [], past: [] });

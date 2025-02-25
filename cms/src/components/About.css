@@ -1,114 +1,71 @@
-/* Reset and box-sizing setup for consistent layout */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Ensures padding and border don't cause overflow */
-}
-
-/* General container styling for the About page */
+/* About Page Styles */
 .about-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 2vh auto;
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Prevents any overflow */
-}
-
-/* Title styling for the About page */
-h1 {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
   text-align: center;
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  color: #333;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Description text styling */
-.about-description {
+h1, h2 {
+  color: #0056b3;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.about-description, .mission-statement p, .vision-statement p, .team p {
   font-size: 1.2rem;
-  line-height: 1.6;
-  color: #555;
-  text-align: justify;
-  margin-bottom: 2rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: #444;
 }
 
-/* Mission and Vision sections */
 section {
-  margin-top: 3rem;
+  background: white;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
 }
 
-section h2 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1rem;
+section:hover {
+  transform: scale(1.02);
 }
 
-/* Styling for the content inside each section */
-section p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #666;
-  text-align: justify;
-}
-
-/* Team section styling */
-.team p {
-  font-style: italic;
-  color: #777;
-}
-
-/* Responsive Styles */
-@media (max-width: 1024px) {
-  .about-container {
-    padding: 4vw;
-  }
-
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  section h2 {
-    font-size: 1.8rem;
-  }
-
-  .about-description, section p {
-    font-size: 1rem;
-  }
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
+  .about-container {
+    padding: 15px;
+  }
+
   h1 {
     font-size: 2rem;
   }
 
-  section h2 {
-    font-size: 1.5rem;
+  h2 {
+    font-size: 1.7rem;
   }
 
-  .about-description, section p {
-    font-size: 0.95rem;
+  .about-description, .mission-statement p, .vision-statement p, .team p {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 
-  section h2 {
-    font-size: 1.3rem;
+  h2 {
+    font-size: 1.5rem;
   }
 
-  .about-description, section p {
-    font-size: 0.9rem;
-  }
-
-  .about-container {
-    padding: 6vw;
+  .about-description, .mission-statement p, .vision-statement p, .team p {
+    font-size: 1rem;
   }
 }

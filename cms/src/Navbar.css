@@ -1,30 +1,44 @@
-/* General navbar styling */
+/* General navbar styling with subtle animated gradient */
 .navbar {
-  background-color: #333;
-  padding: 5px;
+  background: linear-gradient(-45deg, #1e3c72, #2a5298, #3b5998, #4a69bd);
+  background-size: 400% 400%;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  overflow: hidden; /* Prevents unwanted wrapping */
+  height: 60px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: smoothFlow 6s ease-in-out infinite alternate;
+}
+/* Gradient animation */
+@keyframes flowGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Wrapper for navbar to enable horizontal scrolling */
 .navbar-wrapper {
   width: 100%;
-  overflow-x: auto; /* Enables horizontal scrolling */
-  white-space: nowrap; /* Prevents items from wrapping */
-  scrollbar-width: thin; /* Firefox scrollbar */
-  scrollbar-color: #888 transparent; /* Firefox scrollbar colors */
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #555 transparent;
 }
 
 /* WebKit (Chrome, Safari) scrollbar */
 .navbar-wrapper::-webkit-scrollbar {
-  height: 5px; /* Scrollbar height */
+  height: 4px;
 }
 
 .navbar-wrapper::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar color */
+  background: #555;
   border-radius: 10px;
 }
 
@@ -32,82 +46,102 @@
   background: transparent;
 }
 
-/* List styling for navbar items */
+/* Navbar list */
 .navbar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: nowrap; /* Prevents items from wrapping */
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  min-width: max-content; /* Ensures items don't shrink */
+  min-width: max-content;
+  position: relative;
+  z-index: 1;
 }
 
-/* Styling for each navbar item */
+/* Navbar list items */
 .navbar li {
-  margin: 5px 10px; /* Reduced margin for closer links */
-  flex-shrink: 0; /* Prevents items from shrinking */
+  margin: 5px 15px;
+  flex-shrink: 0;
 }
 
-/* Remove all default button styles */
+/* Common styling for buttons and links */
+.navbar a,
 .navbar button {
-  all: unset; /* Unset all default styles */
-  color: white;
-  text-decoration: none;
+  all: unset;
+  color: #fff;
   font-size: 18px;
-  padding: 5px 10px;
+  padding: 8px 16px;
   cursor: pointer;
-  display: inline-block; /* Ensure the button is on the same line as other links */
-  transition: background-color 0.3s ease;
+  display: inline-block;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 
-/* Link and button styling */
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  padding: 5px 10px;
-  transition: background-color 0.3s ease;
-  display: inline-block; /* Ensure both button and link are on the same line */
+/* Hover effect with modern underline */
+.navbar a::after,
+.navbar button::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ffcc00;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
 }
 
-/* Hover effect for links and buttons */
+.navbar a:hover::after,
+.navbar button:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Hover effect with background glow */
 .navbar a:hover,
 .navbar button:hover {
-  background-color: #555;
-  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
 }
 
-/* Media query for mobile screens */
+/* Media query for tablets */
 @media (max-width: 768px) {
   .navbar {
-    justify-content: flex-start; /* Align items to start */
+    justify-content: flex-start;
+    padding: 10px;
   }
 
   .navbar ul {
+    overflow-x: auto;
     flex-direction: row;
-    overflow-x: auto; /* Enable horizontal scrolling */
   }
 
   .navbar li {
-    margin: 0 5px; /* Reduce spacing */
+    margin: 0 8px;
   }
 
   .navbar a,
   .navbar button {
-    font-size: 16px; /* Slightly smaller font size for mobile */
+    font-size: 16px;
+    padding: 6px 12px;
   }
 }
 
-/* Media query for very small screens (portrait mobile) */
+/* Media query for small mobile screens */
 @media (max-width: 480px) {
   .navbar a,
   .navbar button {
-    font-size: 14px; /* Even smaller font size for very small screens */
+    font-size: 14px;
+    padding: 5px 10px;
   }
 
   .navbar li {
-    margin: 0 3px; /* Further reduce the margin */
+    margin: 0 5px;
   }
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SocialFooter from '../SocialFooter';
+import './events.css'
 
 const Social = () => {
   const [events, setEvents] = useState({ upcoming: [], past: [] });

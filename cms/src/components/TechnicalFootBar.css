@@ -1,87 +1,137 @@
+/* Color Palette */
+:root {
+  --sky-blue: #8ecae6;
+  --blue-green: #219ebc;
+  --prussian-blue: #023047;
+  --selective-yellow: #ffb703;
+  --ut-orange: #fb8500;
+  --light-bg: #f8f9fa; /* Light background */
+  --hover-bg: #e3f2fd; /* Soft hover background */
+}
+
+/* Footer container */
 .footer-bar {
+  background: var(--light-bg);
+  padding: 14px 0;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
+  border-top: 2px solid var(--blue-green);
+  position: relative;
+  z-index: 10;
   width: 100%;
-  padding: 10px 0;
-  /* bottom: 0; */
-  left: 0;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  margin: 10px 0 10px 0;
-  background-color: transparent;
 }
 
+/* Footer navigation with horizontal scrolling */
 .footer-nav {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-scroll-container {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-scroll-container::-webkit-scrollbar {
-  display: none;
-}
-
-.footer-list {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  display: inline-flex;
-  justify-content: center;
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
   align-items: center;
-  gap: 40px;
-  min-width: min-content;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent items from wrapping */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--blue-green) var(--light-bg);
+  padding: 5px 0;
+  width: 100%;
 }
 
-.footer-list li {
-  margin: 0;
+/* Ensure full-width scrolling works */
+.footer-nav::-webkit-scrollbar {
+  height: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-track {
+  background: var(--light-bg);
+  border-radius: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-thumb {
+  background: var(--blue-green);
+  border-radius: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--prussian-blue);
+}
+
+/* Footer list */
+.footer-list {
+  display: flex;
+  gap: 22px;
   padding: 0;
-  white-space: nowrap;
+  margin: 0;
+  list-style: none;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  min-width: max-content; /* Ensure content doesn't shrink */
 }
 
+/* Footer links */
 .footer-link {
-  text-decoration: none;
-  font-size: 1.1rem;
-  padding: 8px 12px;
-  transition: color 0.3s ease;
   display: inline-block;
-  border: grey 1px solid;
-  border-radius: 20px;
-  margin-top: 5px;
-  background-color: #333;
-    color: #fff;
+  text-decoration: none;
+  color: var(--blue-green);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Hover effect with gradient */
 .footer-link:hover {
-  color: #98da14;
-  transform: translateY(-5px);
-
+  color: var(--prussian-blue);
+  background: linear-gradient(90deg, var(--sky-blue), var(--blue-green));
+  box-shadow: 0px 3px 12px rgba(33, 158, 188, 0.2);
+  transform: translateY(-2px);
 }
 
-.footer-link.active {
-  color: black;
-  font-weight: 500;
+/* Hover underline effect */
+.footer-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--selective-yellow), var(--ut-orange));
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 }
 
+.footer-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Ripple effect on hover */
+.footer-link::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 183, 3, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease-out, height 0.4s ease-out;
+}
+
+.footer-link:hover::before {
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+}
+
+/* Active Click Effect */
+.footer-link:active {
+  transform: scale(0.95);
+  background: rgba(255, 183, 3, 0.2);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .footer-list {
-    gap: 20px;
-  }
-
-  .footer-link {
-    font-size: 1rem;
-    padding: 6px 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-bar {
-    padding: 10px 0;
+  .footer-nav {
+    justify-content: flex-start; /* Ensure left alignment */
   }
 
   .footer-list {
@@ -90,6 +140,6 @@
 
   .footer-link {
     font-size: 0.9rem;
-    padding: 5px 8px;
+    padding: 8px 12px;
   }
 }
