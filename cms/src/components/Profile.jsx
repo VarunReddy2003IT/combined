@@ -14,6 +14,11 @@ const Profile = () => {
   const [deleteOTP, setDeleteOTP] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [deletionError, setDeletionError] = useState(null);
+  
+  // New state variables for editing
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [editedLocation, setEditedLocation] = useState('');
 
   const navigate = useNavigate();
   const role = localStorage.getItem('userRole');
@@ -47,6 +52,9 @@ const Profile = () => {
         }
 
         setUserData(result.data);
+        // Initialize editing states with current values
+        setEditedName(result.data.name || '');
+        setEditedLocation(result.data.location || '');
 
         if (role === 'member' || role === 'lead') {
           const clubsResponse = await fetch(`https://finalbackend-8.onrender.com/api/club-selection/selected-clubs/${email}/${role}`);
@@ -116,6 +124,53 @@ const Profile = () => {
     } finally {
       setUploading(false);
     }
+  };
+
+  // New function to handle profile editing
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
+
+  // New function to save edited profile
+  const handleSaveProfile = async () => {
+    try {
+      const response = await fetch('https://finalbackend-8.onrender.com/api/profile/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          role,
+          name: editedName,
+          location: editedLocation,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to update profile');
+      }
+
+      setUserData((prev) => ({ 
+        ...prev, 
+        name: editedName,
+        location: editedLocation 
+      }));
+      
+      setIsEditing(false);
+      showNotification('Profile updated successfully');
+    } catch (err) {
+      showNotification(err.message || 'Error updating profile', 'error');
+    }
+  };
+
+  // Function to cancel editing
+  const handleCancelEdit = () => {
+    setEditedName(userData?.name || '');
+    setEditedLocation(userData?.location || '');
+    setIsEditing(false);
   };
 
   const handleClubSelection = async () => {
@@ -244,74 +299,136 @@ const Profile = () => {
       )}
 
       {/* Profile Image Section */}
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '20px', position: 'relative' }}>
         {userData?.imageUrl ? (
-          <img
-            src={userData.imageUrl}
-            alt="Profile"
-            style={{
+          <div className="profile-image-container">
+            <img
+              src={userData.imageUrl}
+              alt="Profile"
+              style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
+            <label htmlFor="profile-image-upload" className="change-photo-button">
+              Change Photo
+              <input
+                id="profile-image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                style={{ display: 'none' }}
+              />
+            </label>
+          </div>
+        ) : (
+          <div className="profile-image-container">
+            <div style={{
               width: '120px',
               height: '120px',
               borderRadius: '50%',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <div style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '50%',
-            backgroundColor: '#f0f0f0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto',
-          }}>
-            No Image
+              backgroundColor: '#f0f0f0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto',
+            }}>
+              No Image
+            </div>
+            <label htmlFor="profile-image-upload" className="change-photo-button">
+              Upload Photo
+              <input
+                id="profile-image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                style={{ display: 'none' }}
+              />
+            </label>
           </div>
         )}
+        {uploading && <div style={{ marginTop: '10px' }}>Uploading...</div>}
       </div>
-
-      {/* Image Upload */}
-      {!userData?.imageUrl && (
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            disabled={uploading}
-            style={{ marginBottom: '10px' }}
-          />
-          {uploading && <div>Uploading...</div>}
-        </div>
-      )}
 
       <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>
         {role.charAt(0).toUpperCase() + role.slice(1)} Profile
       </h1>
-
+      
       {/* Profile Information */}
-      <div style={{ marginBottom: '20px' }}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Name:
-          </label>
-          <div>{userData?.name || 'Not available'}</div>
-        </div>
+      <div className="profile-info-section">
+        {!isEditing ? (
+          <>
+            <div className="profile-detail">
+              <label>Name:</label>
+              <div>{userData?.name || 'Not available'}</div>
+            </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Email:
-          </label>
-          <div>{userData?.email || 'Not available'}</div>
-        </div>
+            <div className="profile-detail">
+              <label>Email:</label>
+              <div>{userData?.email || 'Not available'}</div>
+            </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-            Role:
-          </label>
-          <div>{role}</div>
-        </div>
+            <div className="profile-detail">
+              <label>Role:</label>
+              <div>{role}</div>
+            </div>
+
+            <div className="profile-detail">
+              <label>Location:</label>
+              <div>{userData?.location || 'Not available'}</div>
+            </div>
+            
+            <button onClick={handleEditProfile} className="edit-profile-button">
+              Edit Profile
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="profile-detail">
+              <label>Name:</label>
+              <input
+                type="text"
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+                className="edit-input"
+              />
+            </div>
+
+            <div className="profile-detail">
+              <label>Email:</label>
+              <div>{userData?.email || 'Not available'}</div>
+            </div>
+
+            <div className="profile-detail">
+              <label>Role:</label>
+              <div>{role}</div>
+            </div>
+
+            <div className="profile-detail">
+              <label>Location:</label>
+              <input
+                type="text"
+                value={editedLocation}
+                onChange={(e) => setEditedLocation(e.target.value)}
+                className="edit-input"
+                placeholder="Enter your location"
+              />
+            </div>
+            
+            <div className="edit-buttons">
+              <button onClick={handleSaveProfile} className="save-button">
+                Save Changes
+              </button>
+              <button onClick={handleCancelEdit} className="cancel-edit-button">
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Club Selection for Members and Leads */}
@@ -452,7 +569,6 @@ const Profile = () => {
       </div>
 
       {/* Admin/Lead Links */}
-      {/* Admin/Lead Links */}
       {role === 'admin' && (
         <Link
           to="/admin-profile"
@@ -496,6 +612,107 @@ const Profile = () => {
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           border-radius: 8px;
           background-color: white;
+        }
+
+        .profile-image-container {
+          position: relative;
+          display: inline-block;
+        }
+
+        .change-photo-button {
+          position: absolute;
+          bottom: -5px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 12px;
+          padding: 5px 10px;
+          font-size: 0.8rem;
+          cursor: pointer;
+          opacity: 0.8;
+          transition: opacity 0.3s ease;
+        }
+
+        .change-photo-button:hover {
+          opacity: 1;
+        }
+
+        .profile-info-section {
+          margin-bottom: 30px;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+        }
+
+        .profile-detail {
+          margin-bottom: 15px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .profile-detail label {
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: #495057;
+        }
+
+        .edit-input {
+          padding: 8px;
+          border: 1px solid #ced4da;
+          border-radius: 4px;
+          font-size: 1rem;
+          margin-top: 5px;
+        }
+
+        .edit-profile-button {
+          background-color: #28a745;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-top: 10px;
+          transition: background-color 0.2s;
+        }
+
+        .edit-profile-button:hover {
+          background-color: #218838;
+        }
+
+        .edit-buttons {
+          display: flex;
+          gap: 10px;
+          margin-top: 15px;
+        }
+
+        .save-button {
+          background-color: #28a745;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .save-button:hover {
+          background-color: #218838;
+        }
+
+        .cancel-edit-button {
+          background-color: #6c757d;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .cancel-edit-button:hover {
+          background-color: #5a6268;
         }
 
         .club-selection-container {
