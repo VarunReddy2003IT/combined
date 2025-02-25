@@ -17,13 +17,39 @@
   border-top: 2px solid var(--blue-green);
   position: relative;
   z-index: 10;
+  width: 100%;
 }
 
-/* Footer navigation */
+/* Footer navigation with horizontal scrolling */
 .footer-nav {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Align items to the left */
   align-items: center;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent items from wrapping */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--blue-green) var(--light-bg);
+  padding: 5px 0;
+  width: 100%;
+}
+
+/* Ensure full-width scrolling works */
+.footer-nav::-webkit-scrollbar {
+  height: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-track {
+  background: var(--light-bg);
+  border-radius: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-thumb {
+  background: var(--blue-green);
+  border-radius: 8px;
+}
+
+.footer-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--prussian-blue);
 }
 
 /* Footer list */
@@ -33,6 +59,8 @@
   padding: 0;
   margin: 0;
   list-style: none;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  min-width: max-content; /* Ensure content doesn't shrink */
 }
 
 /* Footer links */
@@ -102,6 +130,10 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .footer-nav {
+    justify-content: flex-start; /* Ensure left alignment */
+  }
+
   .footer-list {
     gap: 15px;
   }

@@ -12,29 +12,49 @@
 /* Main container */
 .footerBar {
   background: var(--light-bg); /* Light background */
-  padding: 14px 0px;
+  padding: 5px 0px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 10;
   border-bottom: 2px solid var(--blue-green);
+  width: 100%;
 }
 
 /* Scrollable container */
 .footerScrollContainer {
   overflow-x: auto;
   white-space: nowrap;
-  scrollbar-width: none;
+  scrollbar-width: thin; /* Show scrollbar for better UX */
+  scrollbar-color: var(--blue-green) var(--light-bg);
+  padding: 5px 0;
+  width: 100%;
 }
 
+/* Styled scrollbar */
 .footerScrollContainer::-webkit-scrollbar {
-  display: none;
+  height: 8px;
+}
+
+.footerScrollContainer::-webkit-scrollbar-track {
+  background: var(--light-bg);
+  border-radius: 8px;
+}
+
+.footerScrollContainer::-webkit-scrollbar-thumb {
+  background: var(--blue-green);
+  border-radius: 8px;
+}
+
+.footerScrollContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--prussian-blue);
 }
 
 /* Navigation bar */
 .footerNav {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Left-align for proper scrolling */
   align-items: center;
+  width: max-content; /* Prevent shrinking */
 }
 
 /* Navigation list */
@@ -45,6 +65,7 @@
   margin: 0;
   list-style: none;
   flex-wrap: nowrap;
+  min-width: max-content; /* Ensure list does not shrink */
 }
 
 /* Navigation links */
@@ -116,11 +137,11 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .footerList {
-    gap: 15px;
+    gap: 10px;
   }
 
   .footerLink {
     font-size: 0.9rem;
-    padding: 8px 12px;
+    padding: 5px 12px;
   }
 }

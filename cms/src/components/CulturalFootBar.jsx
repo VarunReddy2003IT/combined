@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from 'react-router-dom'; // Import Link for routing
-import './TechnicalFootBar.css'
 function footer(){
     return(<footer className="footer-bar">
         <nav className="footer-nav">
