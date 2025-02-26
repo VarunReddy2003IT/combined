@@ -5,29 +5,47 @@
   --prussian-blue: #023047;
   --selective-yellow: #ffb703;
   --ut-orange: #fb8500;
-  --light-bg: #f8f9fa; /* Light background */
-  --hover-bg: #e3f2fd; /* Soft hover background */
+  --light-bg: #f8f9fa;
+  --hover-bg: #e3f2fd;
 }
 
 /* Main container */
 .footerBar {
-  background: var(--light-bg); /* Light background */
+  background: var(--light-bg);
   padding: 14px 0px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 10;
   border-bottom: 2px solid var(--blue-green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Scrollable container */
 .footerScrollContainer {
+  width: 100%;
+  max-width: 1200px;
   overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-green) var(--light-bg);
+  display: flex;
+  justify-content: center;
+  scroll-behavior: smooth;
 }
 
+/* Hide scrollbar for Webkit browsers */
 .footerScrollContainer::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+
+.footerScrollContainer::-webkit-scrollbar-thumb {
+  background: var(--blue-green);
+  border-radius: 10px;
+}
+
+.footerScrollContainer::-webkit-scrollbar-track {
+  background: var(--light-bg);
 }
 
 /* Navigation bar */
@@ -51,7 +69,7 @@
 .footerLink {
   display: inline-block;
   text-decoration: none;
-  color: var(--blue-green); /* Blue-Green for contrast */
+  color: var(--blue-green);
   font-size: 1rem;
   font-weight: 600;
   padding: 10px 16px;
@@ -62,7 +80,7 @@
   overflow: hidden;
 }
 
-/* Hover effect with gradient */
+/* Hover effect */
 .footerLink:hover {
   color: var(--prussian-blue);
   background: linear-gradient(90deg, var(--sky-blue), var(--blue-green));
@@ -70,7 +88,7 @@
   transform: translateY(-2px);
 }
 
-/* Hover underline effect with animated gradient */
+/* Hover underline effect */
 .footerLink::after {
   content: "";
   position: absolute;
@@ -87,7 +105,7 @@
   left: 0;
 }
 
-/* Background ripple effect on hover */
+/* Background ripple effect */
 .footerLink::before {
   content: "";
   position: absolute;
@@ -111,16 +129,32 @@
 .footerLink:active {
   transform: scale(0.95);
   background: rgba(255, 183, 3, 0.2);
+  transition: transform 0.1s ease-in-out;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .footerScrollContainer {
+    justify-content: flex-start;
+  }
+
   .footerList {
+    flex-wrap: nowrap;
     gap: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+
+  .footerList::-webkit-scrollbar {
+    opacity: 0;
   }
 
   .footerLink {
     font-size: 0.9rem;
     padding: 8px 12px;
+    scroll-snap-align: center;
   }
 }
