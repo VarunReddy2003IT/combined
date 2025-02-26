@@ -13,13 +13,15 @@
 }
 
 .page-content {
+  text-align: center;
   padding: 1rem;
 }
 
 .page-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  animation: fadeIn 1s ease-in-out;
 }
 
 /* Form container */

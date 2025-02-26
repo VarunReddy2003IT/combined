@@ -18,38 +18,50 @@
   position: relative;
   z-index: 10;
   width: 100%;
-}
-
-/* Footer navigation with horizontal scrolling */
-.footer-nav {
   display: flex;
-  justify-content: flex-start; /* Align items to the left */
+  justify-content: center;
   align-items: center;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent items from wrapping */
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: var(--blue-green) var(--light-bg);
-  padding: 5px 0;
-  width: 100%;
 }
 
-/* Ensure full-width scrolling works */
-.footer-nav::-webkit-scrollbar {
+/* Scrollable container */
+.footer-scroll-container {
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-green) var(--sky-blue);
+  display: flex;
+  justify-content: center;
+  scroll-behavior: smooth;
+}
+
+/* Webkit scrollbar styling */
+.footer-scroll-container::-webkit-scrollbar {
   height: 8px;
 }
 
-.footer-nav::-webkit-scrollbar-track {
-  background: var(--light-bg);
-  border-radius: 8px;
-}
-
-.footer-nav::-webkit-scrollbar-thumb {
+.footer-scroll-container::-webkit-scrollbar-thumb {
   background: var(--blue-green);
-  border-radius: 8px;
+  border-radius: 10px;
+  border: 2px solid var(--prussian-blue);
 }
 
-.footer-nav::-webkit-scrollbar-thumb:hover {
+.footer-scroll-container::-webkit-scrollbar-thumb:hover {
   background: var(--prussian-blue);
+}
+
+.footer-scroll-container::-webkit-scrollbar-track {
+  background: var(--sky-blue);
+  border-radius: 10px;
+}
+
+/* Footer navigation */
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* Footer list */
@@ -59,8 +71,8 @@
   padding: 0;
   margin: 0;
   list-style: none;
-  flex-wrap: nowrap; /* Prevent wrapping */
-  min-width: max-content; /* Ensure content doesn't shrink */
+  flex-wrap: nowrap;
+  justify-content: center;
 }
 
 /* Footer links */
@@ -73,11 +85,12 @@
   padding: 10px 16px;
   border-radius: 8px;
   transition: all 0.3s ease-in-out;
+  white-space: nowrap;
   position: relative;
   overflow: hidden;
 }
 
-/* Hover effect with gradient */
+/* Hover effect */
 .footer-link:hover {
   color: var(--prussian-blue);
   background: linear-gradient(90deg, var(--sky-blue), var(--blue-green));
@@ -102,7 +115,7 @@
   left: 0;
 }
 
-/* Ripple effect on hover */
+/* Ripple effect */
 .footer-link::before {
   content: "";
   position: absolute;
@@ -126,20 +139,28 @@
 .footer-link:active {
   transform: scale(0.95);
   background: rgba(255, 183, 3, 0.2);
+  transition: transform 0.1s ease-in-out;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .footer-nav {
-    justify-content: flex-start; /* Ensure left alignment */
+  .footer-scroll-container {
+    justify-content: flex-start;
   }
 
   .footer-list {
     gap: 15px;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+
+  .footer-list::-webkit-scrollbar {
+    opacity: 0;
   }
 
   .footer-link {
     font-size: 0.9rem;
     padding: 8px 12px;
+    scroll-snap-align: center;
   }
 }

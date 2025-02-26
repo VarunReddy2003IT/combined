@@ -39,7 +39,6 @@ body {
     font-weight: 600;
     color: var(--primary-color);
     animation: fadeIn 1s ease-in-out;
-    transition: none;
 }
 
 /* technical Container */
@@ -57,7 +56,6 @@ body {
     font-weight: 600;
     color: var(--primary-color);
     animation: fadeIn 1s ease-in-out;
-    transition: none;
 }
 
 
@@ -80,6 +78,10 @@ body {
 }
 
 
+section:hover {
+    transform: scale(1.01);
+  }
+  
 /* Event Sections */
 .events-section {
     max-width: 1200px;
@@ -246,6 +248,7 @@ body {
     .event-section h2 {
         font-size: 1.3rem;
     }
+    
 
     .event-preview-details h3 {
         font-size: 1.1rem;
@@ -254,6 +257,10 @@ body {
     .event-expanded-details p {
         font-size: 0.9rem;
     }
+    section:hover {
+        transform: scale(1);
+      }
+      
 }
 
 /* Fade-in Animation */

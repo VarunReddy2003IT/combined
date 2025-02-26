@@ -24,26 +24,29 @@
   transform: scale(1.05); /* Slight zoom effect */
   opacity: 0.9;
 }
-
-/* Responsive adjustments */
-@media (max-width: 998px) {
-  .gvplogo {
-    width: 90%;
-    height: auto;
-  }
-}
-
 @media (max-width: 768px) {
   .header {
-    padding: 10px 0;
+    padding: 20px 0; /* Increased padding for more height */
   }
   .gvplogo {
-    width: 85%;
+    width: 100%;
+    height: 85px; /* Increased height */
   }
+
 }
 
 @media (max-width: 480px) {
-  .gvplogo {
-    width: 95%;
+  .header {
+    padding: 25px 0; /* Further increased padding for very small screens */
   }
+  .gvplogo {
+    width: 100%;
+    height: 80px; /* Further increased height */
+
+  }
+  /* Hover effect for banner */
+.header:hover .gvplogo {
+  transform: scale(1.01); /* Slight zoom effect */
+  opacity: 1;
+}
 }
