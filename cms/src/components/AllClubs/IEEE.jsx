@@ -375,7 +375,7 @@ function IEEE() {
                 </button>
               )}
             </div>
-            <h1 className="page-title">IEEE Club</h1>
+            <h1 className="page-title">IEEE</h1>
           </div>
 
           {/* Editing Panels - Only shown when in edit mode */}
@@ -477,7 +477,6 @@ function IEEE() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About IEEE</h2>
               {isLeadForIEEE && (
                 <button 
                   className="edit-icon-button" 
@@ -502,7 +501,6 @@ function IEEE() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForIEEE && (
                 <button 
                   className="edit-icon-button" 

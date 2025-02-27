@@ -375,7 +375,7 @@ function NSS1() {
                 </button>
               )}
             </div>
-            <h1 className="page-title">NSS1 Club</h1>
+            <h1 className="page-title">NSS1</h1>
           </div>
 
           {/* Editing Panels - Only shown when in edit mode */}
@@ -477,7 +477,6 @@ function NSS1() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About NSS1</h2>
               {isLeadForNSS1 && (
                 <button 
                   className="edit-icon-button" 
@@ -502,7 +501,6 @@ function NSS1() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForNSS1 && (
                 <button 
                   className="edit-icon-button" 

@@ -375,7 +375,7 @@ function SEEE() {
                 </button>
               )}
             </div>
-            <h1 className="page-title">SEEE Club</h1>
+            <h1 className="page-title">SEEE</h1>
           </div>
 
           {/* Editing Panels - Only shown when in edit mode */}
@@ -477,7 +477,6 @@ function SEEE() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About SEEE</h2>
               {isLeadForSEEE && (
                 <button 
                   className="edit-icon-button" 
@@ -502,7 +501,6 @@ function SEEE() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForSEEE && (
                 <button 
                   className="edit-icon-button" 

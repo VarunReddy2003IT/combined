@@ -375,7 +375,7 @@ function GCCC() {
                 </button>
               )}
             </div>
-            <h1 className="page-title">GCCC Club</h1>
+            <h1 className="page-title">GCCC</h1>
           </div>
 
           {/* Editing Panels - Only shown when in edit mode */}
@@ -477,7 +477,6 @@ function GCCC() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About GCCC</h2>
               {isLeadForGCCC && (
                 <button 
                   className="edit-icon-button" 
@@ -502,7 +501,6 @@ function GCCC() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForGCCC && (
                 <button 
                   className="edit-icon-button" 

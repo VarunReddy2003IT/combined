@@ -376,7 +376,7 @@ function OpenForge() {
                 </button>
               )}
             </div>
-            <h1 className="page-title">OpenForge Club</h1>
+            <h1 className="page-title">OpenForge</h1>
           </div>
 
           {/* Editing Panels - Only shown when in edit mode */}
@@ -411,7 +411,7 @@ function OpenForge() {
               {/* Description Edit Panel */}
               {editingDescription && (
                 <div className="edit-panel">
-                  <h3>Edit Club Description <FaTimes className="close-icon" onClick={() => setEditingDescription(false)} /></h3>
+                  <FaTimes className="close-icon" onClick={() => setEditingDescription(false)} />
                   <textarea
                     className="club-description-input"
                     placeholder="Enter a detailed description about the club, its activities, mission, etc."
@@ -430,7 +430,7 @@ function OpenForge() {
               {/* Labels Edit Panel */}
               {editingLabels && (
                 <div className="edit-panel">
-                  <h3>Edit Club Information <FaTimes className="close-icon" onClick={() => setEditingLabels(false)} /></h3>
+                  <FaTimes className="close-icon" onClick={() => setEditingLabels(false)} />
                   <div className="labels-container">
                     {labels.map((label, index) => (
                       <div key={index} className="label-row">
@@ -478,7 +478,6 @@ function OpenForge() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About OpenForge</h2>
               {isLeadForOpenForge && (
                 <button 
                   className="edit-icon-button" 
@@ -503,7 +502,6 @@ function OpenForge() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForOpenForge && (
                 <button 
                   className="edit-icon-button" 

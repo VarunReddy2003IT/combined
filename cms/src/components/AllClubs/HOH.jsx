@@ -477,7 +477,6 @@ function HOH() {
           {/* Display club information for all users */}
           <div className="club-info-display">
             <div className="section-header">
-              <h2>About HOH</h2>
               {isLeadForHOH && (
                 <button 
                   className="edit-icon-button" 
@@ -502,7 +501,6 @@ function HOH() {
             
             {/* Display club labels if available */}
             <div className="section-header">
-              <h3>Club Information</h3>
               {isLeadForHOH && (
                 <button 
                   className="edit-icon-button" 
