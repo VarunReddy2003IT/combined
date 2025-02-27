@@ -146,18 +146,21 @@ const Profile = () => {
           location: editedLocation,
         }),
       });
-
+  
       const result = await response.json();
-
+  
       if (!result.success) {
         throw new Error(result.message || 'Failed to update profile');
       }
-
-      setUserData((prev) => ({ 
-        ...prev, 
-        name: editedName,
-        location: editedLocation 
-      }));
+  
+      // Check that the data returned actually has the location
+      console.log("Result data:", result.data);
+      
+      setUserData({
+        ...userData,
+        name: result.data.name,
+        location: result.data.location || 'Not available'
+      });
       
       setIsEditing(false);
       showNotification('Profile updated successfully');
@@ -165,7 +168,6 @@ const Profile = () => {
       showNotification(err.message || 'Error updating profile', 'error');
     }
   };
-
   // Function to cancel editing
   const handleCancelEdit = () => {
     setEditedName(userData?.name || '');

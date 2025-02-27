@@ -11,6 +11,7 @@ const Registers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const userRole = localStorage.getItem('userRole');
   const userClub = localStorage.getItem('userClub');
+  const [actionLoading, setActionLoading] = useState(null); // Track which profile is being updated
 
   useEffect(() => {
     if (eventId) {
@@ -52,53 +53,40 @@ const Registers = () => {
   const markAsParticipated = async (email) => {
     try {
       if (!event) return;
+      setActionLoading(email);
       
       const eventDetails = `${event.eventname}-${event.club}`;
       
-      await axios.post(`https://finalbackend-8.onrender.com/api/events/mark-participation/${eventId}`, {
+      const response = await axios.post(`https://finalbackend-8.onrender.com/api/events/mark-participation/${eventId}`, {
         userEmail: email,
         participated: true,
         eventDetails: eventDetails
       });
       
-      // Update the local state
-      setProfiles(profiles.map(profile => 
-        profile.email === email 
-          ? { ...profile, participationStatus: 'participated' } 
-          : profile
-      ));
+      if (response.data.success) {
+        // Update the local state
+        setProfiles(profiles.map(profile => 
+          profile.email === email 
+            ? { ...profile, participationStatus: 'participated' } 
+            : profile
+        ));
+      } else {
+        // If the backend indicates the update wasn't successful
+        console.warn("Backend reported no updates:", response.data);
+        alert(`Note: Profile was found in ${response.data.userFound} collection but participation may not have been recorded properly.`);
+      }
     } catch (err) {
-      alert('Failed to mark participation status');
-      console.error(err);
+      console.error("Failed to mark participation:", err);
+      alert(`Failed to mark participation: ${err.response?.data?.error || err.message}`);
+    } finally {
+      setActionLoading(null);
     }
   };
 
-  const markAsNotParticipated = async (email) => {
-    try {
-      if (!event) return;
-      
-      const eventDetails = `${event.eventname}-${event.club}`;
-      
-      await axios.post(`https://finalbackend-8.onrender.com/api/events/mark-participation/${eventId}`, {
-        userEmail: email,
-        participated: false,
-        eventDetails: eventDetails  // Include this even for not-participated
-      });
-      
-      // Update the local state
-      setProfiles(profiles.map(profile => 
-        profile.email === email 
-          ? { ...profile, participationStatus: 'not-participated' } 
-          : profile
-      ));
-    } catch (err) {
-      alert('Failed to mark participation status');
-      console.error(err);
-    }
-  };
-
+  
   const removeRegistration = async (email) => {
     try {
+      setActionLoading(email);
       await axios.post(`https://finalbackend-8.onrender.com/api/events/remove-registration/${eventId}`, {
         userEmail: email
       });
@@ -106,8 +94,10 @@ const Registers = () => {
       // Update the local state
       setProfiles(profiles.filter(profile => profile.email !== email));
     } catch (err) {
-      alert('Failed to remove registration');
-      console.error(err);
+      console.error("Failed to remove registration:", err);
+      alert(`Failed to remove registration: ${err.response?.data?.error || err.message}`);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -235,85 +225,85 @@ const Registers = () => {
               justifyContent: 'center',
               flexWrap: 'wrap' 
             }}>
-              {profile.participationStatus !== 'participated' && profile.participationStatus !== 'not-participated' && (
+              {actionLoading === profile.email ? (
+                <div style={{ 
+                  padding: '8px 15px',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}>
+                  Processing...
+                </div>
+              ) : (
                 <>
-                  <button
-                    onClick={() => markAsParticipated(profile.email)}
-                    style={{
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
+                  {profile.participationStatus !== 'participated' && profile.participationStatus !== 'not-participated' && (
+                    <>
+                      <button
+                        onClick={() => markAsParticipated(profile.email)}
+                        style={{
+                          backgroundColor: '#28a745',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '8px 15px',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          fontSize: '14px',
+                        }}
+                      >
+                        Participated
+                      </button>
+                    </>
+                  )}
+
+                  {profile.participationStatus === 'participated' && (
+                    <div style={{ 
+                      backgroundColor: '#e8f5e9', 
+                      borderRadius: '4px', 
                       padding: '8px 15px',
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                    }}
-                  >
-                    Participated
-                  </button>
-                  <button
-                    onClick={() => markAsNotParticipated(profile.email)}
-                    style={{
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      <span style={{ color: '#28a745', fontWeight: 'bold' }}>✓</span>
+                      <span>Participated</span>
+                    </div>
+                  )}
+
+                  {profile.participationStatus === 'not-participated' && (
+                    <div style={{ 
+                      backgroundColor: '#ffebee', 
+                      borderRadius: '4px', 
                       padding: '8px 15px',
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                    }}
-                  >
-                    Not Participated
-                  </button>
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      <span style={{ color: '#dc3545', fontWeight: 'bold' }}>✕</span>
+                      <span>Not Participated</span>
+                    </div>
+                  )}
+
+                  {profile.participationStatus !== 'participated' && (
+                    <button
+                      onClick={() => removeRegistration(profile.email)}
+                      style={{
+                        backgroundColor: '#6c757d',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '8px 15px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                      }}
+                    >
+                      Remove
+                    </button>
+                  )}
                 </>
-              )}
-
-              {profile.participationStatus === 'participated' && (
-                <div style={{ 
-                  backgroundColor: '#e8f5e9', 
-                  borderRadius: '4px', 
-                  padding: '8px 15px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}>
-                  <span style={{ color: '#28a745', fontWeight: 'bold' }}>✓</span>
-                  <span>Participated</span>
-                </div>
-              )}
-
-              {profile.participationStatus === 'not-participated' && (
-                <div style={{ 
-                  backgroundColor: '#ffebee', 
-                  borderRadius: '4px', 
-                  padding: '8px 15px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}>
-                  <span style={{ color: '#dc3545', fontWeight: 'bold' }}>✕</span>
-                  <span>Not Participated</span>
-                </div>
-              )}
-
-              {profile.participationStatus !== 'participated' && (
-                <button
-                  onClick={() => removeRegistration(profile.email)}
-                  style={{
-                    backgroundColor: '#6c757d',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    padding: '8px 15px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    fontSize: '14px',
-                  }}
-                >
-                  Remove
-                </button>
               )}
             </div>
           </div>

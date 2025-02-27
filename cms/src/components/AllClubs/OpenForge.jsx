@@ -13,12 +13,10 @@ function OpenForge() {
   const [eventDescription, setEventDescription] = useState('');
   const [error, setError] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [qrImageUrl, setQrImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
   const [events, setEvents] = useState({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
   const [expandedEventId, setExpandedEventId] = useState(null);
-  const [paymentRequired, setPaymentRequired] = useState(false);
   const [documentUploading, setDocumentUploading] = useState(false);
 
   // Get user info from localStorage
@@ -78,36 +76,6 @@ function OpenForge() {
     }
   };
 
-  const handleQRUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    setUploading(true);
-    setError('');
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'ml_default');
-
-    try {
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dc2qstjvr/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const cloudinaryData = await cloudinaryResponse.json();
-      if (!cloudinaryData.secure_url) {
-        throw new Error('Failed to upload QR code');
-      }
-
-      setQrImageUrl(cloudinaryData.secure_url);
-    } catch (err) {
-      setError('Error uploading QR code: ' + err.message);
-    } finally {
-      setUploading(false);
-    }
-  };
-
   const handleDocumentUpload = async (event, eventId) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -150,14 +118,6 @@ function OpenForge() {
       return;
     }
 
-    const today = new Date().toISOString().split("T")[0];
-    const isUpcoming = eventDate >= today;
-
-    if (isUpcoming && paymentRequired && !qrImageUrl) {
-      setError("Payment QR code is required when payment is enabled.");
-      return;
-    }
-
     try {
       await axios.post("https://finalbackend-8.onrender.com/api/events/add", {
         eventname: eventName,
@@ -165,10 +125,7 @@ function OpenForge() {
         club: "OpenForge",
         date: eventDate,
         description: eventDescription,
-        type: isUpcoming ? 'upcoming' : 'past',
         image: imageUrl,
-        paymentRequired,
-        paymentQR: paymentRequired ? qrImageUrl : undefined,
         registeredEmails: []
       });
 
@@ -176,8 +133,6 @@ function OpenForge() {
       setEventName('');
       setEventDate('');
       setEventDescription('');
-      setPaymentRequired(false);
-      setQrImageUrl('');
       setImageUrl('');
       setShowAddEventForm(false);
       setError('');
@@ -222,11 +177,6 @@ function OpenForge() {
             <p><strong>Description:</strong> {event.description}</p>
             {isUpcoming ? (
               <div className="event-actions">
-                {event.paymentRequired && (
-                  <div className="qr-code-container">
-                    <img src={event.paymentQR} alt="Payment QR Code" className="qr-code" />
-                  </div>
-                )}
                 <button
                   onClick={() => handleRegistration(event._id)}
                   className="register-button"
@@ -387,39 +337,6 @@ function OpenForge() {
                           </div>
                         )}
                       </div>
-
-                      {eventDate && new Date(eventDate) >= new Date() && (
-                        <>
-                          <div className="form-group">
-                            <label>Payment Required</label>
-                            <select
-                              value={paymentRequired}
-                              onChange={(e) => setPaymentRequired(e.target.value === 'true')}
-                            >
-                              <option value="false">No</option>
-                              <option value="true">Yes</option>
-                            </select>
-                          </div>
-
-                          {paymentRequired && (
-                            <div className="form-group">
-                              <label>Payment QR Code</label>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleQRUpload}
-                                disabled={uploading}
-                              />
-                              {uploading && <p className="upload-status">Uploading QR code...</p>}
-                              {qrImageUrl && (
-                                <div className="qr-preview">
-                                  <img src={qrImageUrl} alt="Payment QR code preview" />
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </>
-                      )}
 
                       {error && (
                         <div className="error-message">
