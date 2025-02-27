@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footerbar from '../TechnicalFootBar';
 import axios from "axios";
+import './OpenForge.css';
 import { Link } from "react-router-dom";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa"; // Import icons
 
