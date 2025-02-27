@@ -63,7 +63,7 @@ input, select {
 }
 
 button {
-  width: 100%;
+  width: fit-content;
   padding: 12px;
   background-color: #007BFF;
   color: white;
