@@ -156,7 +156,7 @@ function Home() {
             <p>
               <strong>Description:</strong> {event.description}
             </p>
-            {event.registrationLink && (
+            {events.upcoming.some(upcomingEvent => upcomingEvent._id === event._id)&&event.registrationLink && (
               <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="registration-link">
                 Register Now
               </a>
