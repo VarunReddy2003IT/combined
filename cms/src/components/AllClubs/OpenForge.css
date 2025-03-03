@@ -232,7 +232,7 @@ body {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
-
+.view-profiles-link,
 .submit-button {
   width: 100%;
   background-color: #10b981; /* Green */
@@ -242,8 +242,9 @@ body {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
 }
-
+.view-profiles-link,
 .submit-button:hover {
   background-color: #059669;
   transform: translateY(-2px);
